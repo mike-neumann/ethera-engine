@@ -83,7 +83,8 @@ Please refer to the wiki for detailed information on how to use each Anima compo
 If your looking for an example project, you can take a look into the `/tests` directory, there you can find a fully
 working example on how you might implement Anima!
 
-Before you start, make sure your environment is set to support JDK 21!  
+Before you start, make sure your environment is set to support JDK 21, and build one time using gradle!  
+If startup fails, and you are using IDEA, you can also manually start the game by clicking the play button in the test game class `TestGame`  
 
 If you're using IDEA you can simply use the provided run configuration `run test` to run the test game and see for
 yourself.
