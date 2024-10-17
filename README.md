@@ -83,6 +83,11 @@ Please refer to the wiki for detailed information on how to use each Anima compo
 If your looking for an example project, you can take a look into the `/tests` directory, there you can find a fully
 working example on how you might implement Anima!
 
+Before you start, make sure your environment is set to support JDK 21!  
+
+If you're using IDEA you can simply use the provided run configuration `run test` to run the test game and see for
+yourself.
+
 ## Endnote
 
 Keep in mind that Anima is still under development and may change from time to time.
