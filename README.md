@@ -1,4 +1,4 @@
-# Anima
+# Ethera-Engine
 
 ## TechStack
 
@@ -10,18 +10,18 @@
 
 ## General
 
-Anima is a lightweight code based game engine designed to develop 2D gaming experiences.  
-With SpringBoot 3 at its core, Anima supports all mayor Java developing patterns used in enterprise solutions.
+Ethera is a lightweight code based game engine designed to develop 2D gaming experiences.  
+With SpringBoot 3 at its core, Ethera supports all mayor Java developing patterns used in enterprise solutions.
 
 ## How to implement
 
-To implement the Anima core into your projects, you must follow these simple steps:
+To implement the Ethera core into your projects, you must follow these simple steps:
 
-1. Clone the Anima project via git
+1. Clone the Ethera project via git
 2. Publish the project locally using gradle  
    via the gradle wrapper: `./gradlew publishToMavenLocal`  
    or using the IDEA run configuration: `publishToMavenLocal`
-3. Implement Anima as a dependency in your target project  
+3. Implement Ethera as a dependency in your target project  
    Gradle (Kotlin DSL)
 
 ```kotlin
@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    implementation("me.animaengine:anima:1.0-SNAPSHOT")
+    implementation("me.etheraengine:ethera:1.0-SNAPSHOT")
 }
 ```
 
@@ -48,7 +48,7 @@ repositories {
 }
 
 dependencies {
-    implementation "me.animaengine:anima:1.0-SNAPSHOT"
+    implementation "me.etheraengine:ethera:1.0-SNAPSHOT"
 }
 ```
 
@@ -58,30 +58,30 @@ Maven
 
 <dependencies>
     <dependency>
-        <groupId>me.animaengine</groupId>
-        <artifactId>anima</artifactId>
+        <groupId>me.etheraengine</groupId>
+        <artifactId>ethera</artifactId>
         <version>1.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
 
-4. Use Anima!
+4. Use Ethera!
 
 ## How to use
 
-To use Anima you simply run Animas main core using
+To use Ethera you simply run Etheras main core using
 
 ```kotlin
-Anima.run(YourMainClassAnnotatedWithSpringBootApplicationAnnotation, "Window title")
+Ethera.run(YourMainClassAnnotatedWithSpringBootApplicationAnnotation, "Window title")
 ```
 
-And your good to go, now anima is running, and you can start coding up your game.  
-Please refer to the wiki for detailed information on how to use each Anima component.
+And your good to go, now ethera is running, and you can start coding up your game.  
+Please refer to the wiki for detailed information on how to use each Ethera component.
 
 ## Examples
 
 If your looking for an example project, you can take a look into the `example` module, there you can find a fully
-working example on how you might implement Anima!
+working example on how you might implement Ethera!
 
 Before you start, make sure your environment is set to support JDK 21, and build one time using gradle!  
 If startup fails, and you are using IDEA, you can also manually start the game by clicking the play button in the example game class `ExampleGame`  
@@ -91,4 +91,4 @@ yourself.
 
 ## Endnote
 
-Keep in mind that Anima is still under development and may change from time to time.
+Keep in mind that Ethera is still under development and may change from time to time.

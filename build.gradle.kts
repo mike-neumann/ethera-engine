@@ -1,4 +1,4 @@
-group = "me.animaengine"
+group = "me.etheraengine"
 version = "1.0-SNAPSHOT"
 
 plugins {

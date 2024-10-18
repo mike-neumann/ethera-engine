@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm")
 }
 
-group = "me.animaengine"
+group = "me.etheraengine"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("me.animaengine:anima:1.0-SNAPSHOT")
+    implementation("me.etheraengine:ethera:1.0-SNAPSHOT")
 }
 
 tasks.test {
