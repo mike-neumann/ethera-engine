@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    implementation("me.animaengine:anima:1.0")
+    implementation("me.animaengine:anima:1.0-SNAPSHOT")
 }
 ```
 
@@ -48,7 +48,7 @@ repositories {
 }
 
 dependencies {
-    implementation "me.animaengine:anima:1.0"
+    implementation "me.animaengine:anima:1.0-SNAPSHOT"
 }
 ```
 
@@ -60,7 +60,7 @@ Maven
     <dependency>
         <groupId>me.animaengine</groupId>
         <artifactId>anima</artifactId>
-        <version>1.0</version>
+        <version>1.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
 ```
@@ -80,13 +80,13 @@ Please refer to the wiki for detailed information on how to use each Anima compo
 
 ## Examples
 
-If your looking for an example project, you can take a look into the `/tests` directory, there you can find a fully
+If your looking for an example project, you can take a look into the `example` module, there you can find a fully
 working example on how you might implement Anima!
 
 Before you start, make sure your environment is set to support JDK 21, and build one time using gradle!  
-If startup fails, and you are using IDEA, you can also manually start the game by clicking the play button in the test game class `TestGame`  
+If startup fails, and you are using IDEA, you can also manually start the game by clicking the play button in the example game class `ExampleGame`  
 
-If you're using IDEA you can simply use the provided run configuration `run test` to run the test game and see for
+If you're using IDEA you can simply use the provided run configuration `run example` to run the test game and see for
 yourself.
 
 ## Endnote

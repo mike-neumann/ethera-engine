@@ -16,8 +16,7 @@ repositories {
 
 dependencies {
     api("org.springframework.boot:spring-boot-starter:3.3.1")
-
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
+    api("org.jetbrains.kotlin:kotlin-stdlib")
 
 //    implementation("org.lwjgl:lwjgl:3.3.1")
 //    implementation("org.lwjgl:lwjgl-opengl:3.3.1")

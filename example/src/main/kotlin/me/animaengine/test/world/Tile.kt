@@ -10,7 +10,7 @@ class Tile(
     y: Float,
 ) : Entity() {
     init {
-        addComponents(Position(x, y, TestWorld.tileSize, TestWorld.tileSize))
+        addComponents(Position(x, y, ExampleWorld.tileSize, ExampleWorld.tileSize))
 
         if (tileType.sprite != null) {
             addComponents(tileType.sprite)
@@ -20,8 +20,8 @@ class Tile(
             val animations = Animations2D(
                 tileType.animations.keys.firstOrNull() ?: "",
                 tileType.animations,
-                TestWorld.tileSize,
-                TestWorld.tileSize
+                ExampleWorld.tileSize,
+                ExampleWorld.tileSize
             )
 
             addComponents(animations)

@@ -11,7 +11,7 @@ import me.animaengine.test.entity.Player
 import me.animaengine.test.entity.component.EnemyAI
 import me.animaengine.test.listener.PlayerKeyListener
 import me.animaengine.test.system.*
-import me.animaengine.test.world.TestWorld
+import me.animaengine.test.world.ExampleWorld
 import me.animaengine.test.world.Tile
 import org.springframework.stereotype.Component
 import java.awt.Color
@@ -20,7 +20,7 @@ import java.awt.Graphics
 import kotlin.system.exitProcess
 
 @Component
-class TestScene(
+class ExampleScene(
     private val animaConfig: AnimaConfig,
 
     private val player: Player,
@@ -59,10 +59,10 @@ class TestScene(
             entityAnimationSystem
         )
 
-        val tiles = TestWorld.tileTypeMask.mapIndexed { yIndex, tileTypes ->
+        val tiles = ExampleWorld.tileTypeMask.mapIndexed { yIndex, tileTypes ->
             tileTypes.mapIndexed { xIndex, tileType ->
-                val tileX = xIndex * TestWorld.tileSize
-                val tileY = yIndex * TestWorld.tileSize
+                val tileX = xIndex * ExampleWorld.tileSize
+                val tileY = yIndex * ExampleWorld.tileSize
 
                 Tile(tileType, tileX.toFloat(), tileY.toFloat())
             }
