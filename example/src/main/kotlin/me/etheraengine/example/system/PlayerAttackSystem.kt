@@ -2,13 +2,16 @@ package me.etheraengine.example.system
 
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
+import me.etheraengine.example.entity.EntityState
+import me.etheraengine.example.entity.Player
+import me.etheraengine.example.entity.component.Attack
+import me.etheraengine.example.entity.component.Direction
+import me.etheraengine.example.entity.component.Health
+import me.etheraengine.example.entity.component.Position
 import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.g2d.util.CollisionUtils
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
-import me.etheraengine.example.entity.EntityState
-import me.etheraengine.example.entity.Player
-import me.etheraengine.example.entity.component.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -55,9 +58,12 @@ class PlayerAttackSystem : LogicSystem {
                     .forEach {
                         val health = it.getComponent<Health>()!!
 
-                        if (now - health.lastDamageTime >= health.cooldown) {
-                            health.health -= attack.damage
+                        if (now - health.lastDamageTime < health.cooldown) {
+                            return@forEach
                         }
+
+                        attack.lastAttackHitTime = System.currentTimeMillis()
+                        health.health -= attack.damage
 
                         val movement = it.getComponent<Movement2D>()
 
@@ -69,7 +75,6 @@ class PlayerAttackSystem : LogicSystem {
                                     Direction.RIGHT -> attack.knockback
                                 }
                         }
-
                     }
             }
     }

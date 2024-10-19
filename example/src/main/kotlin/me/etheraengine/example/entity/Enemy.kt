@@ -2,10 +2,10 @@ package me.etheraengine.example.entity
 
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
-import me.etheraengine.g2d.entity.component.Animations2D
-import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.example.graphics.entity.*
+import me.etheraengine.g2d.entity.component.Animations2D
+import me.etheraengine.g2d.entity.component.Movement2D
 
 class Enemy(
     x: Float,
@@ -17,7 +17,7 @@ class Enemy(
             Movement2D(300f),
             Position(x, y, 50, 50),
             Attack(1f, 40f, 400, 40f),
-            Health(5f, 1_000),
+            Health(5f, 1_500),
             EnemyAI(null),
             Collideable(),
             Animations2D(

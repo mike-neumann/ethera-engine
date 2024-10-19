@@ -44,7 +44,7 @@ class ExampleScene(
     override fun onEnable() {
         addKeyListeners(playerKeyListener)
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
-        addRenderingSystems(bounds2DRenderingSystem, entityHealthHudRenderingSystem)
+        addRenderingSystems(/*bounds2DRenderingSystem, */entityHealthHudRenderingSystem)
         addLogicSystems(
             playerAttackSystem,
             entityPositionMovementSystem,

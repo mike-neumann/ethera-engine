@@ -12,6 +12,6 @@ class PlayerAttackRightAnimation : Animation2D(
         1,
         30
     ),
-    150,
+    75,
     false
 )

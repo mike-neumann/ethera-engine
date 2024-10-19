@@ -2,18 +2,21 @@ package me.etheraengine.example.system
 
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
-import me.etheraengine.g2d.entity.component.Movement2D
-import me.etheraengine.scene.Scene
-import me.etheraengine.system.LogicSystem
 import me.etheraengine.example.entity.EntityState
 import me.etheraengine.example.entity.component.Attack
 import me.etheraengine.example.entity.component.Direction
 import me.etheraengine.example.entity.component.Health
 import me.etheraengine.example.entity.component.Position
+import me.etheraengine.g2d.entity.component.Movement2D
+import me.etheraengine.scene.Scene
+import me.etheraengine.service.SoundService
+import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
 
 @Component
-class EntityStateSystem : LogicSystem {
+class EntityStateSystem(
+    private val soundService: SoundService
+) : LogicSystem {
     override fun update(deltaTime: Long, scene: Scene, entities: List<Entity>) {
         entities
             .filter { it.hasComponent<State>() }
@@ -41,7 +44,7 @@ class EntityStateSystem : LogicSystem {
 
                     if (health.health <= 0 && state.state != EntityState.DYING && state.state != EntityState.DEAD) {
                         state.state = EntityState.DYING
-                        state.lock(2_000)
+                        state.lock(4_000)
 
                         return@forEach
                     }
@@ -60,7 +63,8 @@ class EntityStateSystem : LogicSystem {
 
                     if (attack.isAttacking && state.state != EntityState.ATTACK) {
                         state.state = EntityState.ATTACK
-                        state.lock(1_000)
+                        soundService.playSound("attack.wav")
+                        state.lock(750)
 
                         return@forEach
                     }

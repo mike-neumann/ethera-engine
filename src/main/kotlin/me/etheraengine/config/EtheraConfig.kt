@@ -2,6 +2,7 @@ package me.etheraengine.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
+import org.springframework.util.ResourceUtils
 
 /**
  * Defines internal and external configurations for Ethera
@@ -52,4 +53,7 @@ open class EtheraConfig {
      */
     @Value("\${settings.sound-volume}")
     var soundVolume = 1f
+
+    @Value("\${settings.sounds-url}")
+    var soundUrl = ResourceUtils.getURL("classpath:")
 }

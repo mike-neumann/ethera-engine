@@ -12,6 +12,6 @@ class PlayerDieLeftAnimation : Animation2D(
         1,
         30
     ),
-    250,
+    300,
     false
 )

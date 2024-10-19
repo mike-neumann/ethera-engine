@@ -6,6 +6,7 @@ data class Attack(
     var damageDelay: Long,
     var knockback: Float
 ) {
+    var lastAttackHitTime: Long = 0
     var lastAttackTime: Long = 0
         private set
     var isAttacking = false
