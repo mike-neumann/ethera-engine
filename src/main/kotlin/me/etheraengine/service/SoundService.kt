@@ -31,7 +31,12 @@ class SoundService(
     fun getSound(key: String) =
         sounds.computeIfAbsent(key) {
             log.info("Loading sound {}", key)
-            ResourceUtils.getFile("${etheraConfig.soundUrl}/$key")
+
+            val file = ResourceUtils.getFile("${etheraConfig.soundUrl}/$key")
+
+            // First call to cache the next calls
+            AudioSystem.getAudioInputStream(file)
+            file
         }
 
     fun playSound(key: String) {
