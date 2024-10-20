@@ -15,7 +15,6 @@ class Sound(
                 stop()
             }
         }
-        println("length: ${clip.microsecondLength}")
     }
 
     fun start() {
