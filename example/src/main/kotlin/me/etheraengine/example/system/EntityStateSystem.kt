@@ -31,6 +31,7 @@ class EntityStateSystem(
 
                 if (state.state == EntityState.DYING) {
                     state.state = EntityState.DEAD
+                    soundService.playSound("despawn.wav", false)
                     state.lock(450)
 
                     return@forEach

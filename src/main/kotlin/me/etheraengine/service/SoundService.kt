@@ -3,6 +3,7 @@ package me.etheraengine.service
 import jakarta.annotation.PostConstruct
 import me.etheraengine.config.EtheraConfig
 import me.etheraengine.logger
+import me.etheraengine.sound.Sound.Sound
 import org.springframework.stereotype.Service
 import org.springframework.util.ResourceUtils
 import java.io.File
@@ -15,6 +16,7 @@ class SoundService(
 ) {
     private val log = logger<SoundService>()
     private val sounds = mutableMapOf<String, File>()
+    private val activeSounds = mutableListOf<Sound>()
 
     @PostConstruct
     fun init() {
@@ -39,6 +41,8 @@ class SoundService(
             file
         }
 
+    fun isPlaying(key: String) = activeSounds.any { it.name == key }
+
     fun playSound(key: String, loop: Boolean) {
         val clip = AudioSystem.getClip()
 
@@ -54,6 +58,18 @@ class SoundService(
                 clip.start()
             }
         }
+        activeSounds.add(Sound(key, clip))
         clip.start()
+    }
+
+    fun stopSound(key: String) {
+        val sounds = activeSounds
+            .filter { it.name == key }
+
+        sounds.forEach {
+            it.clip.stop()
+            it.clip.close()
+        }
+        activeSounds.removeAll(sounds)
     }
 }

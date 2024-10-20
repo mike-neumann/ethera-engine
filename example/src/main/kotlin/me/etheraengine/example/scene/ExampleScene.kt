@@ -110,8 +110,18 @@ class ExampleScene(
     override fun onUpdate(deltaTime: Long) {
         val state = player.getComponent<State>()!!
 
-        if (state.state == EntityState.DESPAWN) {
-            exitProcess(0)
+        when (state.state) {
+            EntityState.DYING -> {
+                soundService.stopSound("main_loop.wav")
+
+                if (!soundService.isPlaying("game_over.wav")) {
+                    soundService.playSound("game_over.wav", false)
+                }
+            }
+
+            EntityState.DESPAWN -> {
+                exitProcess(0)
+            }
         }
     }
 }
