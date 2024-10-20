@@ -22,13 +22,13 @@ class EntityHealthHudRenderingSystem : RenderingSystem {
                 g.color = Color.RED
                 g.drawRect(
                     position.x.toInt(),
-                    position.y.toInt() - 15,
+                    position.y.toInt() - 40,
                     position.width,
                     10
                 )
                 g.fillRect(
                     position.x.toInt(),
-                    position.y.toInt() - 15,
+                    position.y.toInt() - 40,
                     ((health.health / health.maxHealth * 100) / 100 * position.width).toInt(),
                     10
                 )

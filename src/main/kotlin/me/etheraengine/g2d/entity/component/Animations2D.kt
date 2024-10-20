@@ -7,7 +7,8 @@ open class Animations2D(
     var animations: Map<String, Animation2D>,
     var renderWidth: Int,
     var renderHeight: Int,
-    var renderOffset: Int = 0
+    var renderOffsetX: Int = 0,
+    var renderOffsetY: Int = 0
 ) {
     var lastAnimation = ""
         private set

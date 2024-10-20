@@ -21,7 +21,7 @@ class PlayerKeyListener(
         val playerMovement = player.getComponent<PlayerMovement>()!!
 
         when (e.keyCode) {
-            KeyEvent.VK_W -> {
+            KeyEvent.VK_Q -> {
                 val health = player.getComponent<Health>()!!
 
                 health.health -= 1
@@ -31,19 +31,19 @@ class PlayerKeyListener(
                 attack.isAttacking = true
             }
 
-            KeyEvent.VK_UP -> {
+            KeyEvent.VK_UP, KeyEvent.VK_W -> {
                 playerMovement.isMovingUp = true
             }
 
-            KeyEvent.VK_DOWN -> {
+            KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
                 playerMovement.isMovingDown = true
             }
 
-            KeyEvent.VK_LEFT -> {
+            KeyEvent.VK_LEFT, KeyEvent.VK_A -> {
                 playerMovement.isMovingLeft = true
             }
 
-            KeyEvent.VK_RIGHT -> {
+            KeyEvent.VK_RIGHT, KeyEvent.VK_D -> {
                 playerMovement.isMovingRight = true
             }
         }
@@ -58,19 +58,19 @@ class PlayerKeyListener(
                 attack.isAttacking = false
             }
 
-            KeyEvent.VK_UP -> {
+            KeyEvent.VK_UP, KeyEvent.VK_W -> {
                 playerMovement.isMovingUp = false
             }
 
-            KeyEvent.VK_DOWN -> {
+            KeyEvent.VK_DOWN, KeyEvent.VK_S -> {
                 playerMovement.isMovingDown = false
             }
 
-            KeyEvent.VK_LEFT -> {
+            KeyEvent.VK_LEFT, KeyEvent.VK_A -> {
                 playerMovement.isMovingLeft = false
             }
 
-            KeyEvent.VK_RIGHT -> {
+            KeyEvent.VK_RIGHT, KeyEvent.VK_D -> {
                 playerMovement.isMovingRight = false
             }
         }

@@ -15,7 +15,7 @@ class Player : Entity() {
             State(EntityState.IDLE),
             Movement2D(300f),
             PlayerMovement(),
-            Position(400f, 400f, 50, 50),
+            Position(400f, 400f, 50, 25),
             Attack(1f, 40f, 250, 100, 40f),
             Health(10f, 1_000),
             Collideable(),
@@ -35,7 +35,8 @@ class Player : Entity() {
                 ),
                 100,
                 100,
-                -25
+                -25,
+                -50
             )
         )
     }

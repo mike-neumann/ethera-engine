@@ -15,7 +15,7 @@ class Enemy(
         addComponents(
             State(EntityState.IDLE),
             Movement2D(300f),
-            Position(x, y, 50, 50),
+            Position(x, y, 50, 25),
             Attack(1f, 40f, 400, 10, 40f),
             Health(5f, 100),
             EnemyAI(null),
@@ -36,7 +36,8 @@ class Enemy(
                 ),
                 100,
                 100,
-                -25
+                -25,
+                -50
             )
         )
     }

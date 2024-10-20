@@ -84,9 +84,9 @@ class ExampleScene(
     override fun onRender(g: Graphics) {
         g.font = FONT
         g.color = Color.WHITE
-        g.drawString("Arrow keys to move", 0, 30)
+        g.drawString("WASD or Arrow keys to move", 0, 30)
         g.drawString("Space to attack", 0, 75)
-        g.drawString("W to take damage", 0, 125)
+        g.drawString("Q to take damage", 0, 125)
 
         val state = player.getComponent<State>()!!
 

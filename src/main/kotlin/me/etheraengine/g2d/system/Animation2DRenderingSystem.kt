@@ -44,8 +44,8 @@ class Animation2DRenderingSystem : RenderingSystem {
 
                 g.drawImage(
                     currentSprite,
-                    position.x.toInt() + animations.renderOffset,
-                    position.y.toInt() + animations.renderOffset,
+                    position.x.toInt() + animations.renderOffsetX,
+                    position.y.toInt() + animations.renderOffsetY,
                     animations.renderWidth,
                     animations.renderHeight,
                     null

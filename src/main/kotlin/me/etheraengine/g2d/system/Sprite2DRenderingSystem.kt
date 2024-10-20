@@ -23,8 +23,8 @@ class Sprite2DRenderingSystem : RenderingSystem {
 
                 g.drawImage(
                     sprite.image,
-                    position.x.toInt(),
-                    position.y.toInt(),
+                    position.x.toInt() + sprite.renderOffsetX,
+                    position.y.toInt() + sprite.renderOffsetY,
                     position.width,
                     position.height,
                     null
