@@ -31,9 +31,18 @@ class EntityStateSystem(
 
                 if (state.state == EntityState.DYING) {
                     state.state = EntityState.DEAD
+                    state.lock(450)
+
+                    return@forEach
                 }
 
                 if (state.state == EntityState.DEAD) {
+                    state.state = EntityState.DESPAWN
+
+                    return@forEach
+                }
+
+                if (state.state == EntityState.DESPAWN) {
                     scene.removeEntities(it)
 
                     return@forEach
@@ -42,17 +51,19 @@ class EntityStateSystem(
                 if (it.hasComponent<Health>()) {
                     val health = it.getComponent<Health>()!!
 
-                    if (health.health <= 0 && state.state != EntityState.DYING && state.state != EntityState.DEAD) {
-                        state.state = EntityState.DYING
-                        state.lock(4_000)
+                    if (health.health < health.lastHealth && state.state != EntityState.DAMAGE) {
+                        health.lastHealth = health.health
+                        state.state = EntityState.DAMAGE
+                        soundService.playSound("damage.wav", false)
+                        state.lock(600)
 
                         return@forEach
                     }
 
-                    if (health.health < health.lastHealth && state.state != EntityState.DAMAGE) {
-                        health.lastHealth = health.health
-                        state.state = EntityState.DAMAGE
-                        state.lock(600)
+                    if (health.health <= 0 && state.state != EntityState.DYING && state.state != EntityState.DEAD) {
+                        state.state = EntityState.DYING
+                        soundService.playSound("death.wav", false)
+                        state.lock(4_000)
 
                         return@forEach
                     }
@@ -64,7 +75,7 @@ class EntityStateSystem(
                     if (attack.isAttacking && state.state != EntityState.ATTACK) {
                         attack.lastAttackTime = System.currentTimeMillis()
                         state.state = EntityState.ATTACK
-                        soundService.playSound("attack.wav")
+                        soundService.playSound("attack.wav", false)
                         state.lock(750)
 
                         return@forEach

@@ -11,4 +11,5 @@ object EntityAnimation {
     const val DAMAGE_RIGHT = "DAMAGE_RIGHT"
     const val DIE_LEFT = "DIE_LEFT"
     const val DIE_RIGHT = "DIE_RIGHT"
+    const val DEAD = "DEAD"
 }

@@ -7,4 +7,5 @@ object EntityState {
     const val DAMAGE = "DAMAGE"
     const val DYING = "DYING"
     const val DEAD = "DEAD"
+    const val DESPAWN = "DESPAWN"
 }

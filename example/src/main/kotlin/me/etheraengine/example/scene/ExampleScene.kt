@@ -12,6 +12,7 @@ import me.etheraengine.example.world.ExampleWorld
 import me.etheraengine.example.world.Tile
 import me.etheraengine.g2d.system.Bounds2DRenderingSystem
 import me.etheraengine.scene.Scene
+import me.etheraengine.service.SoundService
 import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Font
@@ -35,7 +36,8 @@ class ExampleScene(
     private val entityCollisionSystem: EntityCollisionSystem,
 
     private val bounds2DRenderingSystem: Bounds2DRenderingSystem,
-    private val entityHealthHudRenderingSystem: EntityHealthHudRenderingSystem
+    private val entityHealthHudRenderingSystem: EntityHealthHudRenderingSystem,
+    private val soundService: SoundService
 ) : Scene() {
     companion object {
         private val FONT = Font(Font.SERIF, Font.BOLD, 50)
@@ -75,6 +77,8 @@ class ExampleScene(
 
         // player needs to be added last (render layer principal)
         addEntities(*tiles, *enemies, player)
+
+        soundService.playSound("main_loop.wav", true)
     }
 
     override fun onDisable() {
@@ -106,7 +110,7 @@ class ExampleScene(
     override fun onUpdate(deltaTime: Long) {
         val state = player.getComponent<State>()!!
 
-        if (state.state == EntityState.DEAD) {
+        if (state.state == EntityState.DESPAWN) {
             exitProcess(0)
         }
     }

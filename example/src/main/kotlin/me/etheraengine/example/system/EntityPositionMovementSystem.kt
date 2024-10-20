@@ -2,11 +2,11 @@ package me.etheraengine.example.system
 
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
+import me.etheraengine.example.entity.EntityState
+import me.etheraengine.example.entity.component.Position
 import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
-import me.etheraengine.example.entity.EntityState
-import me.etheraengine.example.entity.component.Position
 import org.springframework.stereotype.Component
 
 @Component
@@ -21,7 +21,7 @@ class EntityPositionMovementSystem : LogicSystem {
             .forEach {
                 val state = it.getComponent<State>()!!
 
-                if (state.state == EntityState.DYING) {
+                if (state.state == EntityState.DYING || state.state == EntityState.DESPAWN || state.state == EntityState.DEAD) {
                     return@forEach
                 }
 

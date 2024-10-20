@@ -2,13 +2,13 @@ package me.etheraengine.example.system
 
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
-import me.etheraengine.g2d.entity.component.Animations2D
-import me.etheraengine.scene.Scene
-import me.etheraengine.system.LogicSystem
 import me.etheraengine.example.entity.EntityAnimation
 import me.etheraengine.example.entity.EntityState
 import me.etheraengine.example.entity.component.Direction
 import me.etheraengine.example.entity.component.Position
+import me.etheraengine.g2d.entity.component.Animations2D
+import me.etheraengine.scene.Scene
+import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
 
 @Component
@@ -62,6 +62,10 @@ class EntityAnimationSystem : LogicSystem {
                                 Direction.LEFT -> EntityAnimation.DIE_LEFT
                                 Direction.RIGHT -> EntityAnimation.DIE_RIGHT
                             }
+                    }
+
+                    EntityState.DEAD -> {
+                        animations.currentAnimation = EntityAnimation.DEAD
                     }
                 }
             }

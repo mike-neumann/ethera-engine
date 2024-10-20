@@ -39,7 +39,7 @@ class SoundService(
             file
         }
 
-    fun playSound(key: String) {
+    fun playSound(key: String, loop: Boolean) {
         val clip = AudioSystem.getClip()
 
         clip.open(AudioSystem.getAudioInputStream(getSound(key)))
@@ -47,6 +47,11 @@ class SoundService(
             if (clip.framePosition == clip.frameLength) {
                 clip.drain()
                 clip.stop()
+            }
+
+            if (loop) {
+                clip.framePosition = 0
+                clip.start()
             }
         }
         clip.start()

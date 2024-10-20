@@ -15,7 +15,7 @@ class Enemy(
         addComponents(
             State(EntityState.IDLE),
             Movement2D(300f),
-            Position(x, y, 50, 25),
+            Position(x, y, 50, 35),
             Attack(1f, 40f, 400, 10, 40f),
             Health(5f, 100),
             EnemyAI(null),
@@ -32,12 +32,13 @@ class Enemy(
                     EntityAnimation.DAMAGE_LEFT to PlayerDamageLeftAnimation(),
                     EntityAnimation.DAMAGE_RIGHT to PlayerDamageRightAnimation(),
                     EntityAnimation.DIE_LEFT to PlayerDieLeftAnimation(),
-                    EntityAnimation.DIE_RIGHT to PlayerDieRightAnimation()
+                    EntityAnimation.DIE_RIGHT to PlayerDieRightAnimation(),
+                    EntityAnimation.DEAD to EntityDespawnAnimation()
                 ),
                 100,
                 100,
                 -25,
-                -50
+                -40
             )
         )
     }

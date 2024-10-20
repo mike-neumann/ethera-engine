@@ -2,10 +2,10 @@ package me.etheraengine.example.entity
 
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
-import me.etheraengine.g2d.entity.component.Animations2D
-import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.example.graphics.entity.*
+import me.etheraengine.g2d.entity.component.Animations2D
+import me.etheraengine.g2d.entity.component.Movement2D
 import org.springframework.stereotype.Component
 
 @Component
@@ -15,7 +15,7 @@ class Player : Entity() {
             State(EntityState.IDLE),
             Movement2D(300f),
             PlayerMovement(),
-            Position(400f, 400f, 50, 25),
+            Position(400f, 400f, 50, 35),
             Attack(1f, 40f, 250, 100, 40f),
             Health(10f, 1_000),
             Collideable(),
@@ -31,12 +31,13 @@ class Player : Entity() {
                     EntityAnimation.DAMAGE_LEFT to PlayerDamageLeftAnimation(),
                     EntityAnimation.DAMAGE_RIGHT to PlayerDamageRightAnimation(),
                     EntityAnimation.DIE_LEFT to PlayerDieLeftAnimation(),
-                    EntityAnimation.DIE_RIGHT to PlayerDieRightAnimation()
+                    EntityAnimation.DIE_RIGHT to PlayerDieRightAnimation(),
+                    EntityAnimation.DEAD to EntityDespawnAnimation()
                 ),
                 100,
                 100,
                 -25,
-                -50
+                -40
             )
         )
     }
