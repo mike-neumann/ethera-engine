@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class PlayerCollisionSystem : LogicSystem {
-    override fun update(deltaTime: Long, scene: Scene, entities: List<Entity>) {
+    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
         entities
             .filterIsInstance<Player>()
             .forEach {

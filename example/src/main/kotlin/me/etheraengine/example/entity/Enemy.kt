@@ -16,8 +16,8 @@ class Enemy(
             State(EntityState.IDLE),
             Movement2D(300f),
             Position(x, y, 50, 50),
-            Attack(1f, 40f, 400, 40f),
-            Health(5f, 1_500),
+            Attack(1f, 40f, 400, 10, 40f),
+            Health(5f, 100),
             EnemyAI(null),
             Collideable(),
             Animations2D(

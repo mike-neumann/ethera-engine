@@ -16,16 +16,15 @@ import org.springframework.stereotype.Component
 
 @Component
 class PlayerAttackSystem : LogicSystem {
-    override fun update(deltaTime: Long, scene: Scene, entities: List<Entity>) {
+    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
         entities
             .filterIsInstance<Player>()
             .forEach { player ->
                 val state = player.getComponent<State>()!!
                 val playerPosition = player.getComponent<Position>()!!
                 val attack = player.getComponent<Attack>()!!
-                val now = System.currentTimeMillis()
 
-                if (state.state != EntityState.ATTACK || now - attack.lastAttackTime < attack.damageDelay) {
+                if (state.state != EntityState.ATTACK || now - attack.lastAttackTime < attack.damageDelay || now - attack.lastAttackTime - attack.damageDelay > attack.damageTimeRange) {
                     return@forEach
                 }
 
@@ -62,7 +61,6 @@ class PlayerAttackSystem : LogicSystem {
                             return@forEach
                         }
 
-                        attack.lastAttackHitTime = System.currentTimeMillis()
                         health.health -= attack.damage
 
                         val movement = it.getComponent<Movement2D>()

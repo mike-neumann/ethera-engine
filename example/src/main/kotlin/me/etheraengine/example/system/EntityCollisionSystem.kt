@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class EntityCollisionSystem : LogicSystem {
-    override fun update(deltaTime: Long, scene: Scene, entities: List<Entity>) {
+    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<Position2D>() }
             .filter { it.hasComponent<Collideable>() }

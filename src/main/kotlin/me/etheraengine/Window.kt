@@ -14,6 +14,8 @@ import javax.swing.JPanel
 class Window(
     private val sceneService: SceneService
 ) : JPanel(), FocusListener, KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
+    private var lastFrameTime = 0L
+
     init {
         isDoubleBuffered = true
     }
@@ -21,9 +23,10 @@ class Window(
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
-        sceneService.render(g)
+        sceneService.render(g, System.currentTimeMillis() - lastFrameTime)
 
         Toolkit.getDefaultToolkit().sync()
+        lastFrameTime = System.currentTimeMillis()
     }
 
     override fun keyTyped(e: KeyEvent) {

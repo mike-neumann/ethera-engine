@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class EntityPositionMovementSystem : LogicSystem {
-    override fun update(deltaTime: Long, scene: Scene, entities: List<Entity>) {
+    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
         val deltaSeconds = deltaTime / 1_000f
 
         entities

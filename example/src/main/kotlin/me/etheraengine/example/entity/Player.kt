@@ -16,7 +16,7 @@ class Player : Entity() {
             Movement2D(300f),
             PlayerMovement(),
             Position(400f, 400f, 50, 50),
-            Attack(1f, 40f, 250, 40f),
+            Attack(1f, 40f, 250, 100, 40f),
             Health(10f, 1_000),
             Collideable(),
             Animations2D(

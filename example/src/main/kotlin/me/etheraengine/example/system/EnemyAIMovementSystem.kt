@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class EnemyAIMovementSystem : LogicSystem {
-    override fun update(deltaTime: Long, scene: Scene, entities: List<Entity>) {
+    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<EnemyAI>() }
             .filter { it.hasComponent<Position>() }

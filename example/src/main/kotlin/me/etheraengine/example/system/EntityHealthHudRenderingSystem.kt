@@ -11,7 +11,7 @@ import java.awt.Graphics
 
 @Component
 class EntityHealthHudRenderingSystem : RenderingSystem {
-    override fun render(g: Graphics, scene: Scene, entities: List<Entity>) {
+    override fun render(scene: Scene, entities: List<Entity>, g: Graphics, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<Position>() }
             .filter { it.hasComponent<Health>() }

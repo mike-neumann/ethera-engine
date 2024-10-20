@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 class EntityStateSystem(
     private val soundService: SoundService
 ) : LogicSystem {
-    override fun update(deltaTime: Long, scene: Scene, entities: List<Entity>) {
+    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<State>() }
             .forEach {
@@ -62,6 +62,7 @@ class EntityStateSystem(
                     val attack = it.getComponent<Attack>()!!
 
                     if (attack.isAttacking && state.state != EntityState.ATTACK) {
+                        attack.lastAttackTime = System.currentTimeMillis()
                         state.state = EntityState.ATTACK
                         soundService.playSound("attack.wav")
                         state.lock(750)

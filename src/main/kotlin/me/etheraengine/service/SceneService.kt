@@ -30,7 +30,7 @@ class SceneService {
         currentScene?.update(deltaTime)
     }
 
-    fun render(g: Graphics) {
-        currentScene?.render(g)
+    fun render(g: Graphics, deltaTime: Long) {
+        currentScene?.render(g, deltaTime)
     }
 }

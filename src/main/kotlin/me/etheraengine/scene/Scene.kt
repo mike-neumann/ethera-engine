@@ -1,6 +1,7 @@
 package me.etheraengine.scene
 
 import jakarta.annotation.PostConstruct
+import me.etheraengine.Ethera
 import me.etheraengine.entity.Entity
 import me.etheraengine.g2d.system.Animation2DRenderingSystem
 import me.etheraengine.g2d.system.Sprite2DRenderingSystem
@@ -110,16 +111,16 @@ abstract class Scene {
         this.mouseListeners.removeAll(mouseListeners.toSet())
     }
 
-    fun render(g: Graphics) {
+    fun render(g: Graphics, deltaTime: Long) {
         renderingSystems.forEach {
-            it.render(g, this, entities)
+            it.render(this, entities, g, System.currentTimeMillis(), deltaTime)
         }
         onRender(g)
     }
 
     fun update(deltaTime: Long) {
         logicSystems.forEach {
-            it.update(deltaTime, this, entities)
+            it.update(this, entities, System.currentTimeMillis(), deltaTime)
         }
         onUpdate(deltaTime)
     }
