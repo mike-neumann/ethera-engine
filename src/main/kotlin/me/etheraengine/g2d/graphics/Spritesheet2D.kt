@@ -4,7 +4,10 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
-data class Spritesheet2D(
+/**
+ * Class to load a 2D spritesheet for later use for rendering via an animation system
+ */
+open class Spritesheet2D(
     val file: File,
     val gridWidth: Int,
     val gridHeight: Int,

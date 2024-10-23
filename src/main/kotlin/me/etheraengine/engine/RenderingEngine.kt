@@ -1,6 +1,6 @@
 package me.etheraengine.engine
 
-import me.etheraengine.Window
+import me.etheraengine.Screen
 import me.etheraengine.config.EtheraConfig
 import me.etheraengine.system.RenderingSystem
 import org.springframework.boot.CommandLineRunner
@@ -13,7 +13,7 @@ import kotlin.system.measureTimeMillis
 @Component
 class RenderingEngine(
     etheraConfig: EtheraConfig,
-    private val window: Window
+    private val screen: Screen
 ) : Thread("RenderingEngine"), CommandLineRunner {
     private val log = me.etheraengine.logger<RenderingSystem>()
     private val frameDuration = 1_000 / etheraConfig.maxFps
@@ -21,7 +21,7 @@ class RenderingEngine(
     override fun run() {
         while (true) {
             val elapsedTime = measureTimeMillis {
-                window.repaint()
+                screen.repaint()
             }
 
             if (elapsedTime < frameDuration) {

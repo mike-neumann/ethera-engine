@@ -1,11 +1,10 @@
 package me.etheraengine.example.entity.component
 
-import me.etheraengine.g2d.entity.component.Position2D
+import java.awt.geom.Point2D
+
 
 class Position(
-    x: Float,
-    y: Float,
-    width: Int,
-    height: Int,
+    x: kotlin.Double,
+    y: kotlin.Double,
     var direction: Direction = Direction.LEFT
-) : Position2D(x, y, width, height)
+) : Point2D.Double(x, y)

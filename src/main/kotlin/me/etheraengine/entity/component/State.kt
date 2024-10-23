@@ -26,6 +26,7 @@ open class State(
         lockTime = System.currentTimeMillis()
         lockedTime = millis
     }
+
     /**
      * Unlocks this state
      */

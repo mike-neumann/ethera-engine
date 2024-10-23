@@ -11,7 +11,7 @@ import javax.swing.JPanel
  * The actual window which is rendered and shown to the user, handles basic rendering and events, and passes them to the currently active scene for further processing
  */
 @Component
-class Window(
+class Screen(
     private val sceneService: SceneService
 ) : JPanel(), FocusListener, KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
     private var lastFrameTime = 0L

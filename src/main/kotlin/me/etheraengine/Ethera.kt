@@ -18,42 +18,54 @@ import javax.swing.SwingUtilities
 @SpringBootApplication(scanBasePackages = ["me.etheraengine"])
 open class Ethera(
     private val etheraConfig: EtheraConfig,
-    private val window: Window
+    private val screen: Screen
 ) : CommandLineRunner {
     companion object {
-        private lateinit var windowTitle: String
+        lateinit var windowTitle: String
+            private set
+
         lateinit var context: ConfigurableApplicationContext
             private set
-        lateinit var frame: JFrame
 
-        /**
-         * Initializes the Ethera using Spring Boot
-         */
-        fun run(game: Class<*>, title: String) {
+        lateinit var frame: JFrame
+            private set
+
+        @PublishedApi
+        internal fun <T> run(type: Class<T>, title: String): T {
             SwingUtilities.invokeLater {
                 // wait until AWT and Swing is ready
             }
 
             windowTitle = title
             context =
-                SpringApplicationBuilder().sources(Ethera::class.java, game)
+                SpringApplicationBuilder().sources(Ethera::class.java, type)
                     .banner(EtheraBanner())
                     .run()
+
+            return context.getBean(type)
         }
+
+        /**
+         * Initializes Ethera using Spring Boot
+         */
+        inline fun <reified T : Any> run(title: String) = run(T::class.java, title)
     }
 
     override fun run(vararg args: String) {
         frame = JFrame(windowTitle)
-        frame.add(window)
+        frame.add(screen)
         frame.size = Dimension(etheraConfig.width, etheraConfig.height)
         frame.isVisible = true
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-        frame.addFocusListener(window)
-        frame.addKeyListener(window)
-        frame.addMouseMotionListener(window)
-        frame.addMouseListener(window)
-        frame.addMouseWheelListener(window)
+        frame.addFocusListener(screen)
+        frame.addKeyListener(screen)
+        frame.addMouseMotionListener(screen)
+        frame.addMouseListener(screen)
+        frame.addMouseWheelListener(screen)
     }
 }
 
+/**
+ * Utility function to retrieve a typed logger instance
+ */
 inline fun <reified T> logger(): Logger = LoggerFactory.getLogger(T::class.java)

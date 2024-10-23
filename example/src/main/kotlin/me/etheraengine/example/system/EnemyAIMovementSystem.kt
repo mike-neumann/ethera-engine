@@ -1,11 +1,11 @@
 package me.etheraengine.example.system
 
 import me.etheraengine.entity.Entity
+import me.etheraengine.example.entity.component.EnemyAI
+import me.etheraengine.example.entity.component.Position
 import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
-import me.etheraengine.example.entity.component.EnemyAI
-import me.etheraengine.example.entity.component.Position
 import org.springframework.stereotype.Component
 
 @Component

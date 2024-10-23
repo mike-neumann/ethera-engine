@@ -3,37 +3,38 @@ package me.etheraengine.example.entity
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
 import me.etheraengine.example.entity.component.*
-import me.etheraengine.example.graphics.entity.*
 import me.etheraengine.g2d.entity.component.Animations2D
 import me.etheraengine.g2d.entity.component.Movement2D
+import java.awt.Dimension
 
 class Enemy(
-    x: Float,
-    y: Float
+    x: Double,
+    y: Double
 ) : Entity() {
     init {
         addComponents(
             State(EntityState.IDLE),
-            Movement2D(300f),
-            Position(x, y, 50, 35),
-            Attack(1f, 40f, 400, 10, 40f),
-            Health(5f, 100),
+            Movement2D(300.0),
+            Position(x, y),
+            Dimension(50, 35),
+            Attack(1.0, 40.0, 400, 10, 40.0),
+            Health(5.0, 100),
             EnemyAI(null),
             Collideable(),
             Animations2D(
                 EntityAnimation.IDLE_LEFT,
                 mapOf(
-                    EntityAnimation.IDLE_LEFT to PlayerIdleLeftAnimation(),
-                    EntityAnimation.IDLE_RIGHT to PlayerIdleRightAnimation(),
-                    EntityAnimation.WALK_LEFT to PlayerWalkLeftAnimation(),
-                    EntityAnimation.WALK_RIGHT to PlayerWalkRightAnimation(),
-                    EntityAnimation.ATTACK_LEFT to PlayerAttackLeftAnimation(),
-                    EntityAnimation.ATTACK_RIGHT to PlayerAttackRightAnimation(),
-                    EntityAnimation.DAMAGE_LEFT to PlayerDamageLeftAnimation(),
-                    EntityAnimation.DAMAGE_RIGHT to PlayerDamageRightAnimation(),
-                    EntityAnimation.DIE_LEFT to PlayerDieLeftAnimation(),
-                    EntityAnimation.DIE_RIGHT to PlayerDieRightAnimation(),
-                    EntityAnimation.DEAD to EntityDespawnAnimation()
+                    EntityAnimation.IDLE_LEFT to Player.Animation.IdleLeft(),
+                    EntityAnimation.IDLE_RIGHT to Player.Animation.IdleRight(),
+                    EntityAnimation.WALK_LEFT to Player.Animation.WalkLeft(),
+                    EntityAnimation.WALK_RIGHT to Player.Animation.WalkRight(),
+                    EntityAnimation.ATTACK_LEFT to Player.Animation.AttackLeft(),
+                    EntityAnimation.ATTACK_RIGHT to Player.Animation.AttackRight(),
+                    EntityAnimation.DAMAGE_LEFT to Player.Animation.DamageLeft(),
+                    EntityAnimation.DAMAGE_RIGHT to Player.Animation.DamageRight(),
+                    EntityAnimation.DIE_LEFT to Player.Animation.DieLeft(),
+                    EntityAnimation.DIE_RIGHT to Player.Animation.DieRight(),
+                    EntityAnimation.DEAD to Player.Animation.Despawn()
                 ),
                 100,
                 100,

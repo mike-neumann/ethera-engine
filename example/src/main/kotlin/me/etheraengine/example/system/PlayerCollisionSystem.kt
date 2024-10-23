@@ -2,12 +2,13 @@ package me.etheraengine.example.system
 
 import me.etheraengine.Ethera
 import me.etheraengine.entity.Entity
+import me.etheraengine.example.entity.Player
 import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
-import me.etheraengine.example.entity.Player
-import me.etheraengine.example.entity.component.Position
 import org.springframework.stereotype.Component
+import java.awt.geom.Dimension2D
+import java.awt.geom.Point2D
 
 @Component
 class PlayerCollisionSystem : LogicSystem {
@@ -16,27 +17,40 @@ class PlayerCollisionSystem : LogicSystem {
             .filterIsInstance<Player>()
             .forEach {
                 val movement = it.getComponent<Movement2D>()!!
-                val position = it.getComponent<Position>()!!
+                val position = it.getComponent<Point2D>()!!
+                val dimension = it.getComponent<Dimension2D>()!!
 
                 // top collision
                 if (position.y < 0) {
-                    position.y = 0f
+                    position.setLocation(
+                        0.0,
+                        position.x
+                    )
                 }
 
                 // bottom collision
-                if (position.y + position.height > Ethera.frame.height) {
-                    movement.vy = 0f
-                    position.y = (Ethera.frame.height - position.height).toFloat()
+                if (position.y + dimension.height > Ethera.frame.height) {
+                    movement.vy = 0.0
+                    position.setLocation(
+                        Ethera.frame.height - dimension.height,
+                        position.x
+                    )
                 }
 
                 // right collision
-                if (position.x + position.width > Ethera.frame.width) {
-                    position.x = (Ethera.frame.width - position.width).toFloat()
+                if (position.x + dimension.width > Ethera.frame.width) {
+                    position.setLocation(
+                        position.y,
+                        Ethera.frame.width - dimension.width
+                    )
                 }
 
                 // left collision
                 if (position.x < 0) {
-                    position.x = 0f
+                    position.setLocation(
+                        position.y,
+                        0.0
+                    )
                 }
             }
     }

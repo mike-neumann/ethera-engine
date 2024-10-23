@@ -1,30 +1,55 @@
 package me.etheraengine.service
 
+import me.etheraengine.Ethera
 import me.etheraengine.logger
 import me.etheraengine.scene.Scene
 import org.springframework.stereotype.Service
 import java.awt.Graphics
 
 /**
- * Service to manage the currently active scene, and switch between different scenes
+ * Service to manage the currently active scene, and switch between different ones
  */
 @Service
 class SceneService {
     private val log = logger<SceneService>()
+    var lastScene: Scene? = null
+        private set
     var currentScene: Scene? = null
-        set(value) {
-            if (currentScene != null) {
-                log.info("Disabling scene {}", currentScene!!::class.java.simpleName)
-                currentScene!!.onDisable()
+        private set(value) {
+            if (value != field) {
+                lastScene = field
             }
 
             field = value
-
-            if (currentScene != null) {
-                log.info("Enabling scene {}", currentScene!!::class.java.simpleName)
-                currentScene!!.onEnable()
-            }
         }
+
+    @PublishedApi
+    internal fun switchScene(scene: Scene) {
+        currentScene?.let {
+            log.info("Disabling scene {}", it::class.java.simpleName)
+            it.onDisable()
+        }
+
+        currentScene = scene
+
+        currentScene?.let {
+            log.info("Enabling scene {}", it::class.java.simpleName)
+
+            if (!it.isInitialized) {
+                it.isInitialized = true
+            }
+
+            it.onEnable()
+        }
+    }
+
+    inline fun <reified T : Scene> switchScene() {
+        switchScene(Ethera.context.getBean(T::class.java))
+    }
+
+    fun switchToPreviousScene() {
+        lastScene?.let { switchScene(it) }
+    }
 
     fun update(deltaTime: Long) {
         currentScene?.update(deltaTime)

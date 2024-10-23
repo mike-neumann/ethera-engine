@@ -4,13 +4,16 @@ import me.etheraengine.example.entity.Player
 import me.etheraengine.example.entity.component.Attack
 import me.etheraengine.example.entity.component.Health
 import me.etheraengine.example.entity.component.PlayerMovement
+import me.etheraengine.example.scene.PauseScene
+import me.etheraengine.service.SceneService
 import org.springframework.stereotype.Component
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 
 @Component
-class PlayerKeyListener(
-    private val player: Player
+class ExampleSceneKeyListener(
+    private val player: Player,
+    private val sceneService: SceneService
 ) : KeyListener {
     override fun keyTyped(e: KeyEvent) {
 
@@ -21,6 +24,10 @@ class PlayerKeyListener(
         val playerMovement = player.getComponent<PlayerMovement>()!!
 
         when (e.keyCode) {
+            KeyEvent.VK_ESCAPE -> {
+                sceneService.switchScene<PauseScene>()
+            }
+
             KeyEvent.VK_Q -> {
                 val health = player.getComponent<Health>()!!
 

@@ -1,12 +1,13 @@
 package me.etheraengine.example.system
 
 import me.etheraengine.entity.Entity
-import me.etheraengine.g2d.util.CollisionUtils
+import me.etheraengine.example.world.Tile
+import me.etheraengine.g2d.util.CollisionUtils2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
-import me.etheraengine.example.entity.component.Position
-import me.etheraengine.example.world.Tile
 import org.springframework.stereotype.Component
+import java.awt.geom.Dimension2D
+import java.awt.geom.Point2D
 
 @Component
 class EntityWorldCollisionSystem : LogicSystem {
@@ -15,41 +16,53 @@ class EntityWorldCollisionSystem : LogicSystem {
 
         entities
             .filter { it !in tiles }
-            .filter { it.hasComponent<Position>() }
+            .filter { it.hasComponent<Point2D>() }
+            .filter { it.hasComponent<Dimension2D>() }
             .forEach {
-                val position = it.getComponent<Position>()!!
+                val position = it.getComponent<Point2D>()!!
+                val dimension = it.getComponent<Dimension2D>()!!
                 val nextCollidingTiles =
-                    getCollidingTiles(tiles, position.x, position.y, position.width, position.height)
+                    getCollidingTiles(
+                        tiles,
+                        position.x,
+                        position.y,
+                        dimension.width,
+                        dimension.height
+                    )
                 val nextNotPassableCollidingTiles = nextCollidingTiles.filter { !it.tileType.isPassable }
 
                 nextNotPassableCollidingTiles.forEach {
-                    val tilePositionComponent = it.getComponent<Position>()!!
-                    val mtv = CollisionUtils.getMiniumTranslationVector(
+                    val tilePosition = it.getComponent<Point2D>()!!
+                    val tileDimension = it.getComponent<Dimension2D>()!!
+                    val mtv = CollisionUtils2D.getMiniumTranslationVector(
                         position.x,
                         position.y,
-                        position.width,
-                        position.height,
-                        tilePositionComponent.x,
-                        tilePositionComponent.y,
-                        tilePositionComponent.width,
-                        tilePositionComponent.height
+                        dimension.width,
+                        dimension.height,
+                        tilePosition.x,
+                        tilePosition.y,
+                        tileDimension.width,
+                        tileDimension.height
                     )
 
-                    position.x += mtv.first
-                    position.y += mtv.second
+                    position.setLocation(
+                        position.x + mtv.first,
+                        position.y + mtv.second
+                    )
                 }
             }
     }
 
-    private fun getCollidingTiles(tiles: List<Tile>, x: Float, y: Float, width: Int, height: Int): List<Tile> {
+    private fun getCollidingTiles(tiles: List<Tile>, x: Double, y: Double, width: Double, height: Double): List<Tile> {
         return tiles.filter {
-            val positionComponent = it.getComponent<Position>()!!
+            val position = it.getComponent<Point2D>()!!
+            val dimension = it.getComponent<Dimension2D>()!!
 
-            CollisionUtils.checkCollision(
-                positionComponent.x,
-                positionComponent.y,
-                positionComponent.width,
-                positionComponent.height,
+            CollisionUtils2D.checkCollision(
+                position.x,
+                position.y,
+                dimension.width,
+                dimension.height,
                 x,
                 y,
                 width,

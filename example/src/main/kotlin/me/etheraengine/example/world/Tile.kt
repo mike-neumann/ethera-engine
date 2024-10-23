@@ -1,16 +1,20 @@
 package me.etheraengine.example.world
 
 import me.etheraengine.entity.Entity
-import me.etheraengine.g2d.entity.component.Animations2D
 import me.etheraengine.example.entity.component.Position
+import me.etheraengine.g2d.entity.component.Animations2D
+import java.awt.Dimension
 
 class Tile(
     val tileType: TileType,
-    x: Float,
-    y: Float,
+    x: Double,
+    y: Double
 ) : Entity() {
     init {
-        addComponents(Position(x, y, ExampleWorld.tileSize, ExampleWorld.tileSize))
+        addComponents(
+            Position(x, y),
+            Dimension(ExampleWorld.tileSize, ExampleWorld.tileSize),
+        )
 
         if (tileType.sprite != null) {
             addComponents(tileType.sprite)

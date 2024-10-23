@@ -31,7 +31,7 @@ class EntityStateSystem(
 
                 if (state.state == EntityState.DYING) {
                     state.state = EntityState.DEAD
-                    soundService.playSound("despawn.wav", false)
+                    soundService.playSound("despawn.wav")
                     state.lock(450)
 
                     return@forEach
@@ -55,7 +55,7 @@ class EntityStateSystem(
                     if (health.health < health.lastHealth && state.state != EntityState.DAMAGE) {
                         health.lastHealth = health.health
                         state.state = EntityState.DAMAGE
-                        soundService.playSound("damage.wav", false)
+                        soundService.playSound("damage.wav")
                         state.lock(600)
 
                         return@forEach
@@ -63,7 +63,7 @@ class EntityStateSystem(
 
                     if (health.health <= 0 && state.state != EntityState.DYING && state.state != EntityState.DEAD) {
                         state.state = EntityState.DYING
-                        soundService.playSound("death.wav", false)
+                        soundService.playSound("death.wav")
                         state.lock(4_000)
 
                         return@forEach
@@ -76,7 +76,7 @@ class EntityStateSystem(
                     if (attack.isAttacking && state.state != EntityState.ATTACK) {
                         attack.lastAttackTime = System.currentTimeMillis()
                         state.state = EntityState.ATTACK
-                        soundService.playSound("attack.wav", false)
+                        soundService.playSound("attack.wav")
                         state.lock(750)
 
                         return@forEach

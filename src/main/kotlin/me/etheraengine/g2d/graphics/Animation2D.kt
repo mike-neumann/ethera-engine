@@ -1,5 +1,8 @@
 package me.etheraengine.g2d.graphics
 
+/**
+ * Class to load a 2D animation via the provided spritesheet instance, containing meta information for animation rendering
+ */
 open class Animation2D(
     val spritesheet: Spritesheet2D,
     var frameDuration: Int,

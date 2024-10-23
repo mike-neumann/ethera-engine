@@ -1,11 +1,11 @@
 package me.etheraengine.example.system
 
 import me.etheraengine.entity.Entity
+import me.etheraengine.example.entity.Player
+import me.etheraengine.example.entity.component.PlayerMovement
 import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
-import me.etheraengine.example.entity.Player
-import me.etheraengine.example.entity.component.PlayerMovement
 import org.springframework.stereotype.Component
 import kotlin.math.sqrt
 
@@ -19,19 +19,19 @@ class PlayerMovementSystem : LogicSystem {
                 val movement = it.getComponent<Movement2D>()!!
 
                 if (playerMovement.isMovingUp) {
-                    movement.vy = -1f
+                    movement.vy = -1.0
                 } else if (playerMovement.isMovingDown) {
-                    movement.vy = 1f
+                    movement.vy = 1.0
                 } else {
-                    movement.vy = 0f
+                    movement.vy = 0.0
                 }
 
                 if (playerMovement.isMovingLeft) {
-                    movement.vx = -1f
+                    movement.vx = -1.0
                 } else if (playerMovement.isMovingRight) {
-                    movement.vx = 1f
+                    movement.vx = 1.0
                 } else {
-                    movement.vx = 0f
+                    movement.vx = 0.0
                 }
 
                 // normalize diagonal movement

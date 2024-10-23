@@ -1,7 +1,7 @@
 package me.etheraengine.example.entity.component
 
 data class Health(
-    var maxHealth: Float,
+    var maxHealth: Double,
     val cooldown: Long
 ) {
     var lastHealth = maxHealth
