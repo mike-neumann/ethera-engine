@@ -3,7 +3,7 @@ package me.etheraengine.entity
 import me.etheraengine.entity.component.Value
 import java.awt.Color
 
-open class UIInputElement<T>(
+open class UIInputElement<T : Number>(
     x: Double,
     y: Double,
     width: Int,

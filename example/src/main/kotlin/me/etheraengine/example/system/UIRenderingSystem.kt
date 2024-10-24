@@ -97,7 +97,7 @@ class UIRenderingSystem : RenderingSystem {
                 }
 
                 g.fillRect(
-                    it.getPinXPositionForCurrentValue().toInt(),
+                    it.getPinXPositionForCurrentValue(10.0).toInt(),
                     position.y.toInt(),
                     10,
                     dimension.height.toInt()

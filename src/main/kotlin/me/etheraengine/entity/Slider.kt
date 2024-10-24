@@ -28,11 +28,19 @@ open class Slider(
     value,
     maxValue
 ) {
-    fun getPinXPositionForCurrentValue(): Double {
+    /**
+     * Gets the sliders draggable pin x position by the current value its holding
+     */
+    fun getPinXPositionForCurrentValue(pinWidth: Double): Double {
         val point = getComponent<Point2D>()!!
         val dimension = getComponent<Dimension2D>()!!
         val value = getComponent<Value<Double>>()!!
+        val valueX = point.x + value.value / 100 * value.maxValue / 100 * dimension.width
 
-        return point.x + value.value / 100 * value.maxValue / 100 * dimension.width
+        return if (valueX + pinWidth > point.x + dimension.width) {
+            (point.x + dimension.width) - pinWidth
+        } else {
+            valueX
+        }
     }
 }
