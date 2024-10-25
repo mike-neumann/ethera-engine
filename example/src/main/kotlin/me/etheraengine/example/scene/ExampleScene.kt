@@ -11,7 +11,6 @@ import me.etheraengine.example.listener.ExampleSceneKeyListener
 import me.etheraengine.example.system.*
 import me.etheraengine.example.world.ExampleWorld
 import me.etheraengine.example.world.Tile
-import me.etheraengine.g2d.system.Bounds2DRenderingSystem
 import me.etheraengine.scene.Scene
 import me.etheraengine.service.SoundService
 import org.springframework.stereotype.Component
@@ -36,7 +35,6 @@ class ExampleScene(
     private val enemyAIMovementSystem: EnemyAIMovementSystem,
     private val entityCollisionSystem: EntityCollisionSystem,
 
-    private val bounds2DRenderingSystem: Bounds2DRenderingSystem,
     private val entityHealthHudRenderingSystem: EntityHealthHudRenderingSystem,
     private val uiRenderingSystem: UIRenderingSystem,
     private val soundService: SoundService
@@ -44,7 +42,7 @@ class ExampleScene(
     override fun onInitialize() {
         addKeyListeners(exampleSceneKeyListener)
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
-        addRenderingSystems(bounds2DRenderingSystem, entityHealthHudRenderingSystem, uiRenderingSystem)
+        addRenderingSystems(entityHealthHudRenderingSystem, uiRenderingSystem)
         addLogicSystems(
             playerAttackSystem,
             entityPositionMovementSystem,

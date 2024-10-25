@@ -1,7 +1,7 @@
 package me.etheraengine.example
 
 import me.etheraengine.Ethera
-import me.etheraengine.example.scene.PauseScene
+import me.etheraengine.example.scene.ExampleScene
 import me.etheraengine.service.SceneService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
@@ -16,9 +16,5 @@ fun main() {
 
     // After running Ethera, all classes annotated as a Component (See Spring docs) will be initialized
     // During initialization we set the active scene
-    // TODO: uncomment this
-    // exampleGame.sceneService.switchScene<ExampleScene>()
-
-    // TODO: remove this
-    exampleGame.sceneService.switchScene<PauseScene>()
+    exampleGame.sceneService.switchScene<ExampleScene>()
 }
