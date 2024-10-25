@@ -1,11 +1,10 @@
 package me.etheraengine.example.scene
 
-import me.etheraengine.Ethera
-import me.etheraengine.entity.Button
 import me.etheraengine.entity.Entity
-import me.etheraengine.entity.Label
-import me.etheraengine.entity.component.Clickable
-import me.etheraengine.entity.component.Hoverable
+import me.etheraengine.entity.UIButton
+import me.etheraengine.entity.UILabel
+import me.etheraengine.entity.component.UIClickable
+import me.etheraengine.entity.component.UIHoverable
 import me.etheraengine.example.listener.PauseSceneKeyListener
 import me.etheraengine.example.system.UIRenderingSystem
 import me.etheraengine.scene.Scene
@@ -31,7 +30,7 @@ class PauseScene(
         addRenderingSystems(uiRenderingSystem)
 
         val xRenderOffset = 100.0
-        val pauseLabel = Label(
+        val pauseLabel = UILabel(
             xRenderOffset,
             100.0,
             "PAUSE",
@@ -39,7 +38,7 @@ class PauseScene(
             Color.BLACK,
             Font.BOLD
         )
-        val resumeButton = Button(
+        val resumeButton = UIButton(
             xRenderOffset,
             400.0,
             150,
@@ -50,15 +49,15 @@ class PauseScene(
             Font.PLAIN
         ).apply {
             addComponents(
-                Hoverable(),
-                Clickable(
+                UIHoverable(),
+                UIClickable(
                     offClick = {
                         sceneService.switchScene<ExampleScene>()
                     }
                 )
             )
         }
-        val settingsButton = Button(
+        val settingsButton = UIButton(
             xRenderOffset,
             460.0,
             150,
@@ -69,8 +68,8 @@ class PauseScene(
             Font.PLAIN
         ).apply {
             addComponents(
-                Hoverable(),
-                Clickable(
+                UIHoverable(),
+                UIClickable(
                     offClick = {
                         soundService.playSound("select.wav")
                         sceneService.switchScene<SettingsScene>()
@@ -78,7 +77,7 @@ class PauseScene(
                 )
             )
         }
-        val quitButton = Button(
+        val quitButton = UIButton(
             xRenderOffset,
             520.0,
             150,
@@ -89,8 +88,8 @@ class PauseScene(
             Font.PLAIN
         ).apply {
             addComponents(
-                Hoverable(),
-                Clickable(
+                UIHoverable(),
+                UIClickable(
                     offClick = {
                         soundService.stopSound("main_loop.wav")
                         soundService.playSound("shutdown.wav", isBlocking = true)

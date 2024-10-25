@@ -1,6 +1,6 @@
 package me.etheraengine.entity
 
-import me.etheraengine.entity.component.Value
+import me.etheraengine.entity.component.UIValue
 import java.awt.Color
 
 open class UIInputElement<T : Number>(
@@ -13,20 +13,13 @@ open class UIInputElement<T : Number>(
     textColor: Color,
     textStyle: Int,
     value: T,
-    maxValue: T = value
-) : UIElement(
-    x,
-    y,
-    width,
-    height,
-    text,
-    textSize,
-    textColor,
-    textStyle
-) {
+    maxValue: T = value,
+    onFocus: (it: Entity) -> Unit = {},
+    offFocus: (it: Entity) -> Unit = {}
+) : UIElement(x, y, width, height, text, textSize, textColor, textStyle, onFocus, offFocus) {
     init {
         addComponents(
-            Value(value, maxValue)
+            UIValue(value, maxValue)
         )
     }
 }

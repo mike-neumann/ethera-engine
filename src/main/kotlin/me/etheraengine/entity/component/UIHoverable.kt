@@ -3,9 +3,9 @@ package me.etheraengine.entity.component
 import me.etheraengine.entity.Entity
 
 /**
- * UI component, speciifes that the attached entitiy is hoverable
+ * UI component, specifies that the attached entity is hoverable
  */
-open class Hoverable(
+open class UIHoverable(
     val onHover: (it: Entity) -> Unit = {},
     val offHover: (it: Entity) -> Unit = {}
 ) {

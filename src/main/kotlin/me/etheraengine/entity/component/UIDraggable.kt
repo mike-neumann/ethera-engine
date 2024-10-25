@@ -5,7 +5,7 @@ import me.etheraengine.entity.Entity
 /**
  * UI component, specifies that the attached entity is draggable from position A to B
  */
-open class Draggable(
+open class UIDraggable(
     val onDrag: (it: Entity, fromX: Double, fromY: Double, toX: Double, toY: Double) -> Unit = { _, _, _, _, _ -> },
     val offDrag: (it: Entity, fromX: Double, fromY: Double, toX: Double, toY: Double) -> Unit = { _, _, _, _, _ -> }
 ) {

@@ -1,7 +1,7 @@
 package me.etheraengine.example.scene
 
 import me.etheraengine.entity.Entity
-import me.etheraengine.entity.Label
+import me.etheraengine.entity.UILabel
 import me.etheraengine.entity.component.State
 import me.etheraengine.example.entity.Enemy
 import me.etheraengine.example.entity.EntityState
@@ -72,7 +72,7 @@ class ExampleScene(
             enemy
         }.toTypedArray()
         val labels = listOf(
-            Label(
+            UILabel(
                 0.0,
                 40.0,
                 "WASD or Arrow keys to move",
@@ -80,7 +80,7 @@ class ExampleScene(
                 Color.WHITE,
                 Font.PLAIN
             ),
-            Label(
+            UILabel(
                 0.0,
                 85.0,
                 "Space to attack",
@@ -88,7 +88,7 @@ class ExampleScene(
                 Color.WHITE,
                 Font.PLAIN
             ),
-            Label(
+            UILabel(
                 0.0,
                 135.0,
                 "Q to take damage",
@@ -96,7 +96,7 @@ class ExampleScene(
                 Color.WHITE,
                 Font.PLAIN
             ),
-            Label(
+            UILabel(
                 0.0,
                 185.0,
                 "ESC to pause",

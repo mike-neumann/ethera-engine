@@ -62,6 +62,8 @@ open class Ethera(
         frame.addMouseMotionListener(screen)
         frame.addMouseListener(screen)
         frame.addMouseWheelListener(screen)
+        // we want to manually handle ui, so we have to disable focus traversal
+        frame.focusTraversalKeysEnabled = false
     }
 }
 

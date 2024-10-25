@@ -5,7 +5,7 @@ import java.awt.Color
 /**
  * UI entity used for when catching user click input
  */
-open class Button(
+open class UIButton(
     x: Double,
     y: Double,
     width: Int,
@@ -14,13 +14,6 @@ open class Button(
     textSize: Float,
     textColor: Color,
     textStyle: Int,
-) : UIElement(
-    x,
-    y,
-    width,
-    height,
-    text,
-    textSize,
-    textColor,
-    textStyle
-)
+    onFocus: (it: Entity) -> Unit = {},
+    offFocus: (it: Entity) -> Unit = {}
+) : UIElement(x, y, width, height, text, textSize, textColor, textStyle, onFocus, offFocus)

@@ -5,12 +5,8 @@ import me.etheraengine.entity.Cursor
 import me.etheraengine.entity.Entity
 import me.etheraengine.g2d.system.Animation2DRenderingSystem
 import me.etheraengine.g2d.system.Sprite2DRenderingSystem
-import me.etheraengine.listener.CursorListener
 import me.etheraengine.logger
-import me.etheraengine.system.LogicSystem
-import me.etheraengine.system.RenderingSystem
-import me.etheraengine.system.UIEventSystem
-import me.etheraengine.system.UISliderValueSystem
+import me.etheraengine.system.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.awt.Graphics
@@ -35,22 +31,22 @@ abstract class Scene {
         }
 
     @Autowired
-    private lateinit var cursorListener: CursorListener
-
-    @Autowired
-    private lateinit var sprite2DRenderingSystem: Sprite2DRenderingSystem
-
-    @Autowired
-    private lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
-
-    @Autowired
     private lateinit var cursor: Cursor
+
+    @Autowired
+    private lateinit var uiFocusSystem: UIFocusSystem
 
     @Autowired
     private lateinit var uiEventSystem: UIEventSystem
 
     @Autowired
     private lateinit var uiSliderValueSystem: UISliderValueSystem
+
+    @Autowired
+    private lateinit var sprite2DRenderingSystem: Sprite2DRenderingSystem
+
+    @Autowired
+    private lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
 
     private val renderingSystems = mutableListOf<RenderingSystem>()
     private val logicSystems = mutableListOf<LogicSystem>()
@@ -65,16 +61,21 @@ abstract class Scene {
 
     @PostConstruct
     fun init() {
-        addMouseMotionListeners(cursorListener)
-        addMouseListeners(cursorListener)
+        addKeyListeners(uiFocusSystem, uiEventSystem)
+        addMouseMotionListeners(uiEventSystem)
+        addMouseListeners(uiEventSystem)
+
+        addLogicSystems(
+            uiFocusSystem,
+            uiEventSystem,
+            uiSliderValueSystem
+        )
 
         // register default rendering systems (developers can later remove them if necessary)
         addRenderingSystems(
             sprite2DRenderingSystem,
             animation2DRenderingSystem
         )
-
-        addLogicSystems(uiEventSystem, uiSliderValueSystem)
 
         addEntities(cursor)
     }

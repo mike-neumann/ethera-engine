@@ -5,7 +5,7 @@ import me.etheraengine.entity.Entity
 /**
  * UI component, specifies that the attached entity is clickable
  */
-open class Clickable(
+open class UIClickable(
     /**
      * Disclaimer: onClick triggers right after the user clicks on the entity,
      * this can cause some problems when switching scenes, as users may click new scene buttons before the scene is rendered.

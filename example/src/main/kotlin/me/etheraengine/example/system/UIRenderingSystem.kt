@@ -1,13 +1,10 @@
 package me.etheraengine.example.system
 
-import me.etheraengine.entity.Button
 import me.etheraengine.entity.Entity
-import me.etheraengine.entity.Label
-import me.etheraengine.entity.Slider
-import me.etheraengine.entity.component.Clickable
-import me.etheraengine.entity.component.Hoverable
-import me.etheraengine.entity.component.Text
-import me.etheraengine.entity.component.Value
+import me.etheraengine.entity.UIButton
+import me.etheraengine.entity.UILabel
+import me.etheraengine.entity.UISlider
+import me.etheraengine.entity.component.*
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.RenderingSystem
 import org.springframework.stereotype.Component
@@ -21,48 +18,47 @@ import kotlin.math.roundToInt
 class UIRenderingSystem : RenderingSystem {
     override fun render(scene: Scene, entities: List<Entity>, g: Graphics, now: Long, deltaTime: Long) {
         entities
-            .filterIsInstance<Button>()
+            .filterIsInstance<UIButton>()
             .forEach {
                 val position = it.getComponent<Point2D>()!!
                 val dimension = it.getComponent<Dimension2D>()!!
-                val text = it.getComponent<Text>()!!
+                val text = it.getComponent<UIText>()!!
 
-                g.font = g.font.deriveFont(text.size)
-                g.color = Color.GRAY
-
-                if (it.hasComponent<Clickable>()) {
-                    val clickable = it.getComponent<Clickable>()!!
-
-                    if (clickable.isClicked) {
-                        g.color = Color.DARK_GRAY
-                    }
-                }
-
-                g.fillRect(position.x.toInt(), position.y.toInt(), dimension.width.toInt(), dimension.height.toInt())
                 g.color = text.color
+                g.font = g.font.deriveFont(text.size)
+                g.font = g.font.deriveFont(text.style)
 
-                if (it.hasComponent<Hoverable>()) {
-                    val hoverable = it.getComponent<Hoverable>()!!
+                if (it.hasComponent<UIHoverable>()) {
+                    val hoverable = it.getComponent<UIHoverable>()!!
 
                     if (hoverable.isHovered) {
-                        g.color = Color.WHITE
+                        g.font = g.font.deriveFont(text.size + 5)
                     }
                 }
 
+                if (it.hasComponent<UIClickable>()) {
+                    val clickable = it.getComponent<UIClickable>()!!
+
+                    if (clickable.isClicked) {
+                        g.font = g.font.deriveFont(text.size)
+                    }
+                }
+
+                // can be used to center text on the rendered UIButton (x-axis)
                 val xOffset = (dimension.width / 2) - (g.fontMetrics.stringWidth(text.text) / 2)
 
                 g.drawString(
                     text.text,
-                    (position.x + xOffset).toInt(),
+                    (position.x).toInt(),
                     (position.y + (dimension.height / 2) + (g.fontMetrics.height / 3)).toInt()
                 )
             }
 
         entities
-            .filterIsInstance<Label>()
+            .filterIsInstance<UILabel>()
             .forEach {
                 val position = it.getComponent<Point2D>()!!
-                val text = it.getComponent<Text>()!!
+                val text = it.getComponent<UIText>()!!
 
                 g.color = text.color
                 g.font = g.font.deriveFont(text.size)
@@ -76,20 +72,30 @@ class UIRenderingSystem : RenderingSystem {
             }
 
         entities
-            .filterIsInstance<Slider>()
+            .filterIsInstance<UISlider>()
             .forEach {
                 val position = it.getComponent<Point2D>()!!
                 val dimension = it.getComponent<Dimension2D>()!!
-                val text = it.getComponent<Text>()!!
-                val value = it.getComponent<Value<Double>>()!!
+                val text = it.getComponent<UIText>()!!
+                val value = it.getComponent<UIValue<Double>>()!!
+
+                g.font = g.font.deriveFont(text.size)
+                g.font = g.font.deriveFont(text.style)
+                g.color = Color.LIGHT_GRAY
+
+                val pinHeight = dimension.height / 8
+
+                g.fillRect(
+                    position.x.toInt(),
+                    position.y.toInt() + ((dimension.height.toInt() / 2) - pinHeight.toInt() / 2),
+                    dimension.width.toInt(),
+                    pinHeight.toInt()
+                )
 
                 g.color = Color.GRAY
 
-                g.fillRect(position.x.toInt(), position.y.toInt(), dimension.width.toInt(), dimension.height.toInt())
-                g.color = Color.DARK_GRAY
-
-                if (it.hasComponent<Hoverable>()) {
-                    val hoverable = it.getComponent<Hoverable>()!!
+                if (it.hasComponent<UIHoverable>()) {
+                    val hoverable = it.getComponent<UIHoverable>()!!
 
                     if (hoverable.isHovered) {
                         g.color = Color.WHITE
@@ -104,8 +110,6 @@ class UIRenderingSystem : RenderingSystem {
                 )
 
                 g.color = text.color
-                g.font = g.font.deriveFont(text.size)
-                g.font = g.font.deriveFont(text.style)
 
                 g.drawString(text.text, position.x.toInt(), position.y.toInt() + g.fontMetrics.height)
                 g.drawString(
@@ -113,6 +117,26 @@ class UIRenderingSystem : RenderingSystem {
                     position.x.toInt(),
                     position.y.toInt() + dimension.height.toInt()
                 )
+            }
+
+        entities
+            .filter { it.hasComponent<Point2D>() }
+            .filter { it.hasComponent<Dimension2D>() }
+            .filter { it.hasComponent<UIFocusable>() }
+            .forEach {
+                val position = it.getComponent<Point2D>()!!
+                val dimension = it.getComponent<Dimension2D>()!!
+                val focusable = it.getComponent<UIFocusable>()!!
+
+                if (focusable.isFocused) {
+                    g.color = Color.WHITE
+                    g.drawRect(
+                        position.x.toInt(),
+                        position.y.toInt(),
+                        dimension.width.toInt(),
+                        dimension.height.toInt()
+                    )
+                }
             }
     }
 }

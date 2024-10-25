@@ -1,12 +1,12 @@
 package me.etheraengine.example.scene
 
-import me.etheraengine.entity.Button
 import me.etheraengine.entity.Entity
-import me.etheraengine.entity.Label
-import me.etheraengine.entity.Slider
-import me.etheraengine.entity.component.Clickable
-import me.etheraengine.entity.component.Draggable
-import me.etheraengine.entity.component.Hoverable
+import me.etheraengine.entity.UIButton
+import me.etheraengine.entity.UILabel
+import me.etheraengine.entity.UISlider
+import me.etheraengine.entity.component.UIClickable
+import me.etheraengine.entity.component.UIDraggable
+import me.etheraengine.entity.component.UIHoverable
 import me.etheraengine.example.system.UIRenderingSystem
 import me.etheraengine.scene.Scene
 import me.etheraengine.service.SceneService
@@ -31,7 +31,7 @@ class SettingsScene(
         addRenderingSystems(uiRenderingSystem)
 
         val xRenderOffset = 100.0
-        val settingsLabel = Label(
+        val settingsLabel = UILabel(
             xRenderOffset,
             100.0,
             "SETTINGS",
@@ -39,7 +39,7 @@ class SettingsScene(
             Color.BLACK,
             Font.BOLD
         )
-        val soundSlider = Slider(
+        val soundSlider = UISlider(
             xRenderOffset,
             400.0,
             150,
@@ -51,8 +51,8 @@ class SettingsScene(
             100.0
         ).apply {
             addComponents(
-                Hoverable(),
-                Draggable(
+                UIHoverable(),
+                UIDraggable(
                     offDrag = { _, _, _, _, _ ->
                         soundService.playSound("select.wav")
                     }
@@ -60,7 +60,7 @@ class SettingsScene(
             )
         }
 
-        val applyButton = Button(
+        val applyButton = UIButton(
             xRenderOffset,
             460.0,
             150,
@@ -71,8 +71,8 @@ class SettingsScene(
             Font.PLAIN
         ).apply {
             addComponents(
-                Hoverable(),
-                Clickable(
+                UIHoverable(),
+                UIClickable(
                     offClick = {
                         apply()
                         soundService.playSound("select.wav")
@@ -81,7 +81,7 @@ class SettingsScene(
             )
         }
 
-        val backButton = Button(
+        val backButton = UIButton(
             xRenderOffset,
             520.0,
             150,
@@ -92,8 +92,8 @@ class SettingsScene(
             Font.PLAIN
         ).apply {
             addComponents(
-                Hoverable(),
-                Clickable(
+                UIHoverable(),
+                UIClickable(
                     offClick = {
                         soundService.playSound("select.wav")
                         sceneService.switchToPreviousScene()

@@ -5,7 +5,7 @@ import java.awt.Color
 /**
  * UI component, specifies that the attached entity displays text
  */
-open class Text(
+open class UIText(
     val text: String,
     val size: Float,
     val color: Color,

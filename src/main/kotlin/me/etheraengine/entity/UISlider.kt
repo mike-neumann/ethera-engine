@@ -1,11 +1,11 @@
 package me.etheraengine.entity
 
-import me.etheraengine.entity.component.Value
+import me.etheraengine.entity.component.UIValue
 import java.awt.Color
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
 
-open class Slider(
+open class UISlider(
     x: Double,
     y: Double,
     width: Int,
@@ -16,6 +16,8 @@ open class Slider(
     textStyle: Int,
     value: Double,
     maxValue: Double = value,
+    onFocus: (it: Entity) -> Unit = {},
+    offFocus: (it: Entity) -> Unit = {}
 ) : UIInputElement<Double>(
     x,
     y,
@@ -26,7 +28,9 @@ open class Slider(
     textColor,
     textStyle,
     value,
-    maxValue
+    maxValue,
+    onFocus,
+    offFocus
 ) {
     /**
      * Gets the sliders draggable pin x position by the current value its holding
@@ -34,7 +38,7 @@ open class Slider(
     fun getPinXPositionForCurrentValue(pinWidth: Double): Double {
         val point = getComponent<Point2D>()!!
         val dimension = getComponent<Dimension2D>()!!
-        val value = getComponent<Value<Double>>()!!
+        val value = getComponent<UIValue<Double>>()!!
         val valueX = point.x + value.value / 100 * value.maxValue / 100 * dimension.width
 
         return if (valueX + pinWidth > point.x + dimension.width) {
