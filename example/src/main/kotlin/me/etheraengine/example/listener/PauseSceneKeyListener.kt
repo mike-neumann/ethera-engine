@@ -10,10 +10,6 @@ import java.awt.event.KeyListener
 class PauseSceneKeyListener(
     private val sceneService: SceneService
 ) : KeyListener {
-    override fun keyTyped(e: KeyEvent?) {
-
-    }
-
     override fun keyPressed(e: KeyEvent) {
         when (e.keyCode) {
             KeyEvent.VK_ESCAPE -> {
@@ -22,7 +18,6 @@ class PauseSceneKeyListener(
         }
     }
 
-    override fun keyReleased(e: KeyEvent?) {
-
-    }
+    override fun keyReleased(e: KeyEvent?) {}
+    override fun keyTyped(e: KeyEvent?) {}
 }

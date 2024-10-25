@@ -16,7 +16,7 @@ class EntityCollisionSystem : LogicSystem {
         entities
             .filter { it.hasComponent<Point2D>() }
             .filter { it.hasComponent<Dimension2D>() }
-            .filter { it.hasComponent<Collideable>() }
+            .filter { it.getComponent<Collideable>()?.isCollideable == true }
             .forEach {
                 val position = it.getComponent<Point2D>()!!
                 val dimension = it.getComponent<Dimension2D>()!!

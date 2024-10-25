@@ -28,18 +28,16 @@ class UIRenderingSystem : RenderingSystem {
                 g.font = g.font.deriveFont(text.size)
                 g.font = g.font.deriveFont(text.style)
 
-                if (it.hasComponent<UIHoverable>()) {
-                    val hoverable = it.getComponent<UIHoverable>()!!
-
-                    if (hoverable.isHovered) {
+                // if the entity hovered, scale up the font size a bit
+                it.getComponent<UIHoverable>()?.let {
+                    if (it.isHovered) {
                         g.font = g.font.deriveFont(text.size + 5)
                     }
                 }
 
-                if (it.hasComponent<UIClickable>()) {
-                    val clickable = it.getComponent<UIClickable>()!!
-
-                    if (clickable.isClicked) {
+                // if the entity is clicked, reset the font size
+                it.getComponent<UIClickable>()?.let {
+                    if (it.isClicked) {
                         g.font = g.font.deriveFont(text.size)
                     }
                 }
@@ -94,10 +92,9 @@ class UIRenderingSystem : RenderingSystem {
 
                 g.color = Color.GRAY
 
-                if (it.hasComponent<UIHoverable>()) {
-                    val hoverable = it.getComponent<UIHoverable>()!!
-
-                    if (hoverable.isHovered) {
+                // if the entity is hoverable, paint it white
+                it.getComponent<UIHoverable>()?.let {
+                    if (it.isHovered) {
                         g.color = Color.WHITE
                     }
                 }

@@ -16,6 +16,10 @@ data class Health(
 
                 lastHealth = field
                 field = value
+
+                if (field < 0) {
+                    field = 0.0
+                }
             }
         }
 }

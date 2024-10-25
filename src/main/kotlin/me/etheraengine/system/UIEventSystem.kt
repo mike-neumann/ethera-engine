@@ -31,59 +31,56 @@ class UIEventSystem(
 
         entities
             .filterIsInstance<UIElement>()
-            .forEach {
-                val focusable = it.getComponent<UIFocusable>()!!
-                val isMouseHovered = CollisionUtils2D.checkCollision(it, cursor)
+            .forEach { element ->
+                val focusable = element.getComponent<UIFocusable>()!!
+                val isMouseHovered = CollisionUtils2D.checkCollision(element, cursor)
                 val isMouseInteracted = isMouseHovered && isLeftMouse
                 val isKeyboardHovered = focusable.isFocused
                 val isKeyboardInteracted = isKeyboardHovered && (isSpace || isEnter)
 
-                if (it.hasComponent<UIHoverable>()) {
-                    val hoverable = it.getComponent<UIHoverable>()!!
-
-                    if ((isMouseHovered || isKeyboardHovered) && !hoverable.isHovered) {
-                        hoverable.isHovered = true
-                        hoverable.onHover(it)
-                    } else if ((!isMouseHovered && !isKeyboardHovered) && hoverable.isHovered) {
-                        hoverable.isHovered = false
-                        hoverable.offHover(it)
+                // handle hover event is element is hoverable
+                element.getComponent<UIHoverable>()?.let {
+                    if ((isMouseHovered || isKeyboardHovered) && !it.isHovered) {
+                        it.isHovered = true
+                        it.onHover(element)
+                    } else if ((!isMouseHovered && !isKeyboardHovered) && it.isHovered) {
+                        it.isHovered = false
+                        it.offHover(element)
                     }
                 }
 
-                if (it.hasComponent<UIClickable>()) {
-                    val clickable = it.getComponent<UIClickable>()!!
-
-                    if ((isMouseInteracted || isKeyboardInteracted) && !clickable.isClicked) {
-                        clickable.isClicked = true
-                        clickable.onClick(it)
-                    } else if ((!isMouseInteracted && !isKeyboardInteracted) && clickable.isClicked) {
-                        clickable.isClicked = false
-                        clickable.offClick(it)
+                // handle click event if element is clickable
+                element.getComponent<UIClickable>()?.let {
+                    if ((isMouseInteracted || isKeyboardInteracted) && !it.isClicked) {
+                        it.isClicked = true
+                        it.onClick(element)
+                    } else if ((!isMouseInteracted && !isKeyboardInteracted) && it.isClicked) {
+                        it.isClicked = false
+                        it.offClick(element)
                     }
                 }
 
-                if (it.hasComponent<UIDraggable>()) {
-                    val draggable = it.getComponent<UIDraggable>()!!
-
-                    if (isMouseInteracted && !draggable.isDragging) {
-                        draggable.fromX = cursorPosition.x
-                        draggable.fromY = cursorPosition.y
-                        draggable.toX = cursorPosition.x
-                        draggable.toY = cursorPosition.y
-                        draggable.isDragging = true
-                        draggable.onDrag(it, draggable.fromX, draggable.fromY, draggable.toX, draggable.toY)
+                // handle drag event if element is draggable
+                element.getComponent<UIDraggable>()?.let {
+                    if (isMouseInteracted && !it.isDragging) {
+                        it.fromX = cursorPosition.x
+                        it.fromY = cursorPosition.y
+                        it.toX = cursorPosition.x
+                        it.toY = cursorPosition.y
+                        it.isDragging = true
+                        it.onDrag(element, it.fromX, it.fromY, it.toX, it.toY)
                     }
 
-                    if (isMouseInteracted && draggable.isDragging) {
-                        draggable.toX = cursorPosition.x
-                        draggable.toY = cursorPosition.y
-                        draggable.isDragging = true
-                        draggable.onDrag(it, draggable.fromX, draggable.fromY, draggable.toX, draggable.toY)
+                    if (isMouseInteracted && it.isDragging) {
+                        it.toX = cursorPosition.x
+                        it.toY = cursorPosition.y
+                        it.isDragging = true
+                        it.onDrag(element, it.fromX, it.fromY, it.toX, it.toY)
                     }
 
-                    if (!isMouseInteracted && draggable.isDragging) {
-                        draggable.isDragging = false
-                        draggable.offDrag(it, draggable.fromX, draggable.fromY, draggable.toX, draggable.toY)
+                    if (!isMouseInteracted && it.isDragging) {
+                        it.isDragging = false
+                        it.offDrag(element, it.fromX, it.fromY, it.toX, it.toY)
                     }
                 }
             }

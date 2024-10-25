@@ -73,7 +73,7 @@ class ExampleScene(
         }.toTypedArray()
         val labels = listOf(
             UILabel(
-                0.0,
+                100.0,
                 40.0,
                 "WASD or Arrow keys to move",
                 40f,
@@ -81,7 +81,7 @@ class ExampleScene(
                 Font.PLAIN
             ),
             UILabel(
-                0.0,
+                100.0,
                 85.0,
                 "Space to attack",
                 40f,
@@ -89,7 +89,7 @@ class ExampleScene(
                 Font.PLAIN
             ),
             UILabel(
-                0.0,
+                100.0,
                 135.0,
                 "Q to take damage",
                 40f,
@@ -97,7 +97,7 @@ class ExampleScene(
                 Font.PLAIN
             ),
             UILabel(
-                0.0,
+                100.0,
                 185.0,
                 "ESC to pause",
                 40f,
@@ -110,10 +110,6 @@ class ExampleScene(
         addEntities(*tiles, *enemies, player, *labels)
 
         soundService.playSound("main_loop.wav", loop = true)
-    }
-
-    override fun onRender(entities: List<Entity>, g: Graphics) {
-
     }
 
     override fun onEnable() {
@@ -141,4 +137,6 @@ class ExampleScene(
             }
         }
     }
+
+    override fun onRender(entities: List<Entity>, g: Graphics) {}
 }

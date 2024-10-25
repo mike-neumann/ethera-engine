@@ -15,10 +15,6 @@ class ExampleSceneKeyListener(
     private val player: Player,
     private val sceneService: SceneService
 ) : KeyListener {
-    override fun keyTyped(e: KeyEvent) {
-
-    }
-
     override fun keyPressed(e: KeyEvent) {
         val attack = player.getComponent<Attack>()!!
         val playerMovement = player.getComponent<PlayerMovement>()!!
@@ -82,4 +78,6 @@ class ExampleSceneKeyListener(
             }
         }
     }
+
+    override fun keyTyped(e: KeyEvent) {}
 }

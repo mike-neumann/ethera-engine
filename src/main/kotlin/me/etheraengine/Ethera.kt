@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import java.awt.Dimension
+import java.awt.Font
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 
@@ -64,6 +65,11 @@ open class Ethera(
         frame.addMouseWheelListener(screen)
         // we want to manually handle ui, so we have to disable focus traversal
         frame.focusTraversalKeysEnabled = false
+
+        // set default font specified in config
+        etheraConfig.fontUrl?.let {
+            screen.font = Font.createFont(Font.TRUETYPE_FONT, it.openStream())
+        }
     }
 }
 

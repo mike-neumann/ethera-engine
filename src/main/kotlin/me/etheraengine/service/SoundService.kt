@@ -30,7 +30,7 @@ class SoundService(
 
     @PostConstruct
     fun init() {
-        val soundsFile = File(etheraConfig.soundUrl.toURI())
+        val soundsFile = File(etheraConfig.soundsUrl.toURI())
         val soundFiles = soundsFile.listFiles(FileFilter {
             !it.isDirectory && it.extension == "wav"
         })
@@ -46,7 +46,7 @@ class SoundService(
         sounds.computeIfAbsent(key) {
             log.info("Loading sound {}", key)
 
-            val file = ResourceUtils.getFile("${etheraConfig.soundUrl}/$key")
+            val file = ResourceUtils.getFile("${etheraConfig.soundsUrl}/$key")
 
             // First call to cache the next calls
             AudioSystem.getAudioInputStream(file)

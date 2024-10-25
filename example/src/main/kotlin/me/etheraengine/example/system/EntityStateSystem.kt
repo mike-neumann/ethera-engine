@@ -20,8 +20,8 @@ class EntityStateSystem(
     override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<State>() }
-            .forEach {
-                val state = it.getComponent<State>()!!
+            .forEach { entity ->
+                val state = entity.getComponent<State>()!!
 
                 if (System.currentTimeMillis() - state.lockTime < state.lockedTime) {
                     return@forEach
@@ -44,16 +44,14 @@ class EntityStateSystem(
                 }
 
                 if (state.state == EntityState.DESPAWN) {
-                    scene.removeEntities(it)
+                    scene.removeEntities(entity)
 
                     return@forEach
                 }
 
-                if (it.hasComponent<Health>()) {
-                    val health = it.getComponent<Health>()!!
-
-                    if (health.health < health.lastHealth && state.state != EntityState.DAMAGE) {
-                        health.lastHealth = health.health
+                entity.getComponent<Health>()?.let {
+                    if (it.health < it.lastHealth && state.state != EntityState.DAMAGE) {
+                        it.lastHealth = it.health
                         state.state = EntityState.DAMAGE
                         soundService.playSound("damage.wav")
                         state.lock(600)
@@ -61,7 +59,7 @@ class EntityStateSystem(
                         return@forEach
                     }
 
-                    if (health.health <= 0 && state.state != EntityState.DYING && state.state != EntityState.DEAD) {
+                    if (it.health <= 0 && state.state != EntityState.DYING && state.state != EntityState.DEAD) {
                         state.state = EntityState.DYING
                         soundService.playSound("death.wav")
                         state.lock(4_000)
@@ -70,11 +68,9 @@ class EntityStateSystem(
                     }
                 }
 
-                if (it.hasComponent<Attack>()) {
-                    val attack = it.getComponent<Attack>()!!
-
-                    if (attack.isAttacking && state.state != EntityState.ATTACK) {
-                        attack.lastAttackTime = System.currentTimeMillis()
+                entity.getComponent<Attack>()?.let {
+                    if (it.isAttacking && state.state != EntityState.ATTACK) {
+                        it.lastAttackTime = System.currentTimeMillis()
                         state.state = EntityState.ATTACK
                         soundService.playSound("attack.wav")
                         state.lock(750)
@@ -83,17 +79,15 @@ class EntityStateSystem(
                     }
                 }
 
-                if (it.hasComponent<Movement2D>()) {
-                    val movement = it.getComponent<Movement2D>()!!
-
-                    if (movement.isMoving()) {
+                entity.getComponent<Movement2D>()?.let {
+                    if (it.isMoving()) {
                         state.state = EntityState.WALK
 
-                        val position = it.getComponent<Position>()!!
+                        val position = entity.getComponent<Position>()!!
 
-                        if (movement.vx > 0f) {
+                        if (it.vx > 0f) {
                             position.direction = Direction.RIGHT
-                        } else if (movement.vx < 0f) {
+                        } else if (it.vx < 0f) {
                             position.direction = Direction.LEFT
                         }
                     } else {

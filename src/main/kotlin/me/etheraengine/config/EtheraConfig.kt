@@ -3,6 +3,7 @@ package me.etheraengine.config
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.util.ResourceUtils
+import java.net.URL
 
 /**
  * Defines internal and external configurations for Ethera
@@ -55,5 +56,11 @@ open class EtheraConfig {
     var soundVolume = 1f
 
     @Value("\${settings.sounds-url}")
-    var soundUrl = ResourceUtils.getURL("classpath:")
+    var soundsUrl: URL = ResourceUtils.getURL("classpath:")
+
+    /**
+     * Defines the font url that is used by default
+     */
+    @Value("\${settings.font-url}")
+    var fontUrl: URL? = null
 }

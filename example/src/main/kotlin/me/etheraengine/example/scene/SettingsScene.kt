@@ -45,7 +45,7 @@ class SettingsScene(
             150,
             50,
             "SOUND",
-            20f,
+            30f,
             Color.BLACK,
             Font.PLAIN,
             100.0
@@ -66,7 +66,7 @@ class SettingsScene(
             150,
             50,
             "APPLY",
-            20f,
+            30f,
             Color.BLACK,
             Font.PLAIN
         ).apply {
@@ -87,7 +87,7 @@ class SettingsScene(
             150,
             50,
             "BACK",
-            20f,
+            30f,
             Color.BLACK,
             Font.PLAIN
         ).apply {
@@ -110,19 +110,8 @@ class SettingsScene(
         )
     }
 
-    override fun onEnable() {
-    }
-
-    override fun onDisable() {
-
-    }
-
-
-    override fun onRender(entities: List<Entity>, g: Graphics) {
-
-    }
-
-    override fun onUpdate(entities: List<Entity>, deltaTime: Long) {
-
-    }
+    override fun onEnable() {}
+    override fun onDisable() {}
+    override fun onRender(entities: List<Entity>, g: Graphics) {}
+    override fun onUpdate(entities: List<Entity>, deltaTime: Long) {}
 }

@@ -20,7 +20,7 @@ class Enemy(
             Attack(1.0, 40.0, 400, 10, 40.0),
             Health(5.0, 100),
             EnemyAI(null),
-            Collideable(),
+            Collideable(true),
             Animations2D(
                 EntityAnimation.IDLE_LEFT,
                 mapOf(

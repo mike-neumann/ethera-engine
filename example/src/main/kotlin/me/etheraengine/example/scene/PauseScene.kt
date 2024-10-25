@@ -44,7 +44,7 @@ class PauseScene(
             150,
             50,
             "RESUME",
-            20f,
+            30f,
             Color.BLACK,
             Font.PLAIN
         ).apply {
@@ -63,7 +63,7 @@ class PauseScene(
             150,
             50,
             "SETTINGS",
-            20f,
+            30f,
             Color.BLACK,
             Font.PLAIN
         ).apply {
@@ -83,7 +83,7 @@ class PauseScene(
             150,
             50,
             "QUIT",
-            20f,
+            30f,
             Color.BLACK,
             Font.PLAIN
         ).apply {
@@ -107,19 +107,8 @@ class PauseScene(
         )
     }
 
-    override fun onEnable() {
-
-    }
-
-    override fun onDisable() {
-
-    }
-
-    override fun onRender(entities: List<Entity>, g: Graphics) {
-
-    }
-
-    override fun onUpdate(entities: List<Entity>, deltaTime: Long) {
-
-    }
+    override fun onEnable() {}
+    override fun onDisable() {}
+    override fun onRender(entities: List<Entity>, g: Graphics) {}
+    override fun onUpdate(entities: List<Entity>, deltaTime: Long) {}
 }
