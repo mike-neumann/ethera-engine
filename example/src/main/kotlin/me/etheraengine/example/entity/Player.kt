@@ -150,7 +150,7 @@ class Player : Entity() {
     init {
         addComponents(
             State(EntityState.IDLE),
-            Movement2D(300.0),
+            Movement2D(250.0),
             PlayerMovement(),
             Position(400.0, 400.0),
             Dimension(50, 35),

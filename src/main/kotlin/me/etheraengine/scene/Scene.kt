@@ -182,94 +182,109 @@ abstract class Scene {
     }
 
     fun render(g: Graphics, deltaTime: Long) {
-        renderingSystems.forEach {
-            it.render(this, entities, g, System.currentTimeMillis(), deltaTime)
-        }
+        renderingSystems.toSet()
+            .forEach {
+                it.render(this, entities, g, System.currentTimeMillis(), deltaTime)
+            }
         onRender(entities, g)
     }
 
     fun update(deltaTime: Long) {
-        logicSystems.forEach {
-            it.update(this, entities, System.currentTimeMillis(), deltaTime)
-        }
+        logicSystems.toSet()
+            .forEach {
+                it.update(this, entities, System.currentTimeMillis(), deltaTime)
+            }
         onUpdate(entities, deltaTime)
     }
 
     fun keyTyped(e: KeyEvent) {
-        keyListeners.forEach {
-            it.keyTyped(e)
-        }
+        keyListeners.toSet()
+            .forEach {
+                it.keyTyped(e)
+            }
     }
 
     fun keyPressed(e: KeyEvent) {
-        keyListeners.forEach {
-            it.keyPressed(e)
-        }
+        keyListeners.toSet()
+            .forEach {
+                it.keyPressed(e)
+            }
     }
 
     fun keyReleased(e: KeyEvent) {
-        keyListeners.forEach {
-            it.keyReleased(e)
-        }
+        keyListeners.toSet()
+            .forEach {
+                it.keyReleased(e)
+            }
     }
 
     fun mouseClicked(e: MouseEvent) {
-        mouseListeners.forEach {
-            it.mouseClicked(e)
-        }
+        mouseListeners.toSet()
+            .forEach {
+                it.mouseClicked(e)
+            }
     }
 
     fun mousePressed(e: MouseEvent) {
-        mouseListeners.forEach {
-            it.mousePressed(e)
-        }
+        mouseListeners.toSet()
+            .forEach {
+                it.mousePressed(e)
+            }
     }
 
     fun mouseReleased(e: MouseEvent) {
-        mouseListeners.forEach {
-            it.mouseReleased(e)
-        }
+        mouseListeners.toSet()
+            .forEach {
+                it.mouseReleased(e)
+            }
     }
 
     fun mouseEntered(e: MouseEvent) {
-        mouseListeners.forEach {
-            it.mouseEntered(e)
-        }
+        mouseListeners.toSet()
+            .forEach {
+                it.mouseEntered(e)
+            }
     }
 
     fun mouseExited(e: MouseEvent) {
-        mouseListeners.forEach {
-            it.mouseExited(e)
-        }
+        mouseListeners.toSet()
+            .forEach {
+                it.mouseExited(e)
+            }
     }
 
     fun mouseWheelMoved(e: MouseWheelEvent) {
-        mouseWheelListeners.forEach {
-            it.mouseWheelMoved(e)
-        }
+        mouseWheelListeners.toSet()
+            .forEach {
+                it.mouseWheelMoved(e)
+            }
     }
 
     fun mouseDragged(e: MouseEvent) {
-        mouseMotionListeners.forEach {
-            it.mouseDragged(e)
-        }
+        mouseMotionListeners.toSet()
+            .forEach {
+                it.mouseDragged(e)
+            }
     }
 
     fun mouseMoved(e: MouseEvent) {
-        mouseMotionListeners.forEach {
-            it.mouseMoved(e)
-        }
+        mouseMotionListeners.toSet()
+            .forEach {
+                it.mouseMoved(e)
+            }
     }
 
     fun focusGained(e: FocusEvent) {
-        focusListeners.forEach {
-            it.focusGained(e)
-        }
+        focusListeners.toSet()
+            .forEach {
+                it.focusGained(e)
+            }
     }
 
     fun focusLost(e: FocusEvent) {
-        focusListeners.forEach {
-            it.focusLost(e)
-        }
+        focusListeners.toSet()
+            .forEach {
+                it.focusLost(e)
+            }
     }
 }
