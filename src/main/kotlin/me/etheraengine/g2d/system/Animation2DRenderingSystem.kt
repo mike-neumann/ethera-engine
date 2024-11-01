@@ -7,13 +7,20 @@ import me.etheraengine.system.RenderingSystem
 import org.springframework.stereotype.Component
 import java.awt.Graphics
 import java.awt.geom.Point2D
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * prebuilt system to handle 2D animation graphics
  */
 @Component
 class Animation2DRenderingSystem : RenderingSystem {
-    override fun render(scene: Scene, entities: List<Entity>, g: Graphics, now: Long, deltaTime: Long) {
+    override fun render(
+        scene: Scene,
+        entities: ConcurrentLinkedQueue<Entity>,
+        g: Graphics,
+        now: Long,
+        deltaTime: Long
+    ) {
         entities
             .filter { it.hasComponent<Animations2D>() }
             .filter { it.hasComponent<Point2D>() }

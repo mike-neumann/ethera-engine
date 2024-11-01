@@ -8,10 +8,11 @@ import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class EntityWorldCollisionSystem : LogicSystem {
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         val tiles = entities.filterIsInstance<Tile>()
 
         entities
@@ -53,21 +54,28 @@ class EntityWorldCollisionSystem : LogicSystem {
             }
     }
 
-    private fun getCollidingTiles(tiles: List<Tile>, x: Double, y: Double, width: Double, height: Double): List<Tile> {
-        return tiles.filter {
-            val position = it.getComponent<Point2D>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+    private fun getCollidingTiles(
+        tiles: List<Tile>,
+        x: Double,
+        y: Double,
+        width: Double,
+        height: Double
+    ): List<Tile> {
+        return tiles
+            .filter {
+                val position = it.getComponent<Point2D>()!!
+                val dimension = it.getComponent<Dimension2D>()!!
 
-            CollisionUtils2D.checkCollision(
-                position.x,
-                position.y,
-                dimension.width,
-                dimension.height,
-                x,
-                y,
-                width,
-                height
-            )
-        }
+                CollisionUtils2D.checkCollision(
+                    position.x,
+                    position.y,
+                    dimension.width,
+                    dimension.height,
+                    x,
+                    y,
+                    width,
+                    height
+                )
+            }
     }
 }

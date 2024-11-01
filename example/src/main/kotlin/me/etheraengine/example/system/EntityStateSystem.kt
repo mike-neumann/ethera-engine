@@ -12,12 +12,13 @@ import me.etheraengine.scene.Scene
 import me.etheraengine.service.SoundService
 import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class EntityStateSystem(
     private val soundService: SoundService
 ) : LogicSystem {
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<State>() }
             .forEach { entity ->

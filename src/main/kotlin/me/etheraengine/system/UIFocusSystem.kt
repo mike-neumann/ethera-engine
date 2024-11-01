@@ -6,6 +6,7 @@ import me.etheraengine.scene.Scene
 import org.springframework.stereotype.Component
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * System responsible for managing the focused state of ui entities
@@ -17,7 +18,7 @@ class UIFocusSystem : LogicSystem, KeyListener {
     private var isUp = false
     private var isDown = false
 
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         // handle focus switch
         entities
             .filter { it.hasComponent<UIFocusable>() }
@@ -33,6 +34,7 @@ class UIFocusSystem : LogicSystem, KeyListener {
                 if (isUp || (isTab && isShift)) {
                     // search for previous focusable element
                     val previous = entities
+                        .toList()
                         .reversed()
                         .firstOrNull { previous -> entities.indexOf(previous) < index && previous.hasComponent<UIFocusable>() }
                         ?: return@forEach
@@ -66,7 +68,7 @@ class UIFocusSystem : LogicSystem, KeyListener {
             .filter { it.hasComponent<UIFocusable>() }
             .filter { it.getComponent<UIFocusable>()!!.isFocused }
 
-        if (focusedEntities.isEmpty()) {
+        if (focusedEntities.toList().isEmpty()) {
             // activate first non focused element
             val first = entities
                 .firstOrNull { it.hasComponent<UIFocusable>() }

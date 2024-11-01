@@ -3,8 +3,6 @@ package me.etheraengine.example.scene
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.UIButton
 import me.etheraengine.entity.UILabel
-import me.etheraengine.entity.component.UIClickable
-import me.etheraengine.entity.component.UIHoverable
 import me.etheraengine.example.listener.PauseSceneKeyListener
 import me.etheraengine.example.system.UIRenderingSystem
 import me.etheraengine.scene.Scene
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.system.exitProcess
 
 @Component
@@ -46,17 +45,11 @@ class PauseScene(
             "RESUME",
             30f,
             Color.BLACK,
-            Font.PLAIN
-        ).apply {
-            addComponents(
-                UIHoverable(),
-                UIClickable(
-                    offClick = {
-                        sceneService.switchScene<ExampleScene>()
-                    }
-                )
-            )
-        }
+            Font.PLAIN,
+            offClick = {
+                sceneService.switchScene<ExampleScene>()
+            }
+        )
         val settingsButton = UIButton(
             xRenderOffset,
             460.0,
@@ -65,18 +58,12 @@ class PauseScene(
             "SETTINGS",
             30f,
             Color.BLACK,
-            Font.PLAIN
-        ).apply {
-            addComponents(
-                UIHoverable(),
-                UIClickable(
-                    offClick = {
-                        soundService.playSound("select.wav")
-                        sceneService.switchScene<SettingsScene>()
-                    }
-                )
-            )
-        }
+            Font.PLAIN,
+            offClick = {
+                soundService.playSound("select.wav")
+                sceneService.switchScene<SettingsScene>()
+            }
+        )
         val quitButton = UIButton(
             xRenderOffset,
             520.0,
@@ -85,19 +72,13 @@ class PauseScene(
             "QUIT",
             30f,
             Color.BLACK,
-            Font.PLAIN
-        ).apply {
-            addComponents(
-                UIHoverable(),
-                UIClickable(
-                    offClick = {
-                        soundService.stopSound("main_loop.wav")
-                        soundService.playSound("shutdown.wav", isBlocking = true)
-                        exitProcess(0)
-                    }
-                )
-            )
-        }
+            Font.PLAIN,
+            offClick = {
+                soundService.stopSound("main_loop.wav")
+                soundService.playSound("shutdown.wav", isBlocking = true)
+                exitProcess(0)
+            }
+        )
 
         addEntities(
             pauseLabel,
@@ -109,6 +90,6 @@ class PauseScene(
 
     override fun onEnable() {}
     override fun onDisable() {}
-    override fun onRender(entities: List<Entity>, g: Graphics) {}
-    override fun onUpdate(entities: List<Entity>, deltaTime: Long) {}
+    override fun onRender(entities: ConcurrentLinkedQueue<Entity>, g: Graphics) {}
+    override fun onUpdate(entities: ConcurrentLinkedQueue<Entity>, deltaTime: Long) {}
 }

@@ -84,7 +84,8 @@ If your looking for an example project, you can take a look into the `example` m
 working example on how you might implement Ethera!
 
 Before you start, make sure your environment is set to support JDK 21, and build one time using gradle!  
-If startup fails, and you are using IDEA, you can also manually start the game by clicking the play button in the example game class `ExampleGame`  
+If startup fails, and you are using IDEA, you can also manually start the game by clicking the play button in the
+example game class `ExampleGame`
 
 If you're using IDEA you can simply use the provided run configuration `run example` to run the test game and see for
 yourself.

@@ -4,9 +4,6 @@ import me.etheraengine.entity.Entity
 import me.etheraengine.entity.UIButton
 import me.etheraengine.entity.UILabel
 import me.etheraengine.entity.UISlider
-import me.etheraengine.entity.component.UIClickable
-import me.etheraengine.entity.component.UIDraggable
-import me.etheraengine.entity.component.UIHoverable
 import me.etheraengine.example.system.UIRenderingSystem
 import me.etheraengine.scene.Scene
 import me.etheraengine.service.SceneService
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class SettingsScene(
@@ -48,17 +46,11 @@ class SettingsScene(
             30f,
             Color.BLACK,
             Font.PLAIN,
-            100.0
-        ).apply {
-            addComponents(
-                UIHoverable(),
-                UIDraggable(
-                    offDrag = { _, _, _, _, _ ->
-                        soundService.playSound("select.wav")
-                    }
-                )
-            )
-        }
+            100.0,
+            offDrag = { _, _, _, _, _ ->
+                soundService.playSound("select.wav")
+            }
+        )
 
         val applyButton = UIButton(
             xRenderOffset,
@@ -68,18 +60,12 @@ class SettingsScene(
             "APPLY",
             30f,
             Color.BLACK,
-            Font.PLAIN
-        ).apply {
-            addComponents(
-                UIHoverable(),
-                UIClickable(
-                    offClick = {
-                        apply()
-                        soundService.playSound("select.wav")
-                    }
-                )
-            )
-        }
+            Font.PLAIN,
+            offClick = {
+                apply()
+                soundService.playSound("select.wav")
+            }
+        )
 
         val backButton = UIButton(
             xRenderOffset,
@@ -89,18 +75,12 @@ class SettingsScene(
             "BACK",
             30f,
             Color.BLACK,
-            Font.PLAIN
-        ).apply {
-            addComponents(
-                UIHoverable(),
-                UIClickable(
-                    offClick = {
-                        soundService.playSound("select.wav")
-                        sceneService.switchToPreviousScene()
-                    }
-                )
-            )
-        }
+            Font.PLAIN,
+            offClick = {
+                soundService.playSound("select.wav")
+                sceneService.switchToPreviousScene()
+            }
+        )
 
         addEntities(
             settingsLabel,
@@ -112,6 +92,6 @@ class SettingsScene(
 
     override fun onEnable() {}
     override fun onDisable() {}
-    override fun onRender(entities: List<Entity>, g: Graphics) {}
-    override fun onUpdate(entities: List<Entity>, deltaTime: Long) {}
+    override fun onRender(entities: ConcurrentLinkedQueue<Entity>, g: Graphics) {}
+    override fun onUpdate(entities: ConcurrentLinkedQueue<Entity>, deltaTime: Long) {}
 }

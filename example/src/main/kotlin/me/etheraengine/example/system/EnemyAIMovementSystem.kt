@@ -7,10 +7,11 @@ import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class EnemyAIMovementSystem : LogicSystem {
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<EnemyAI>() }
             .filter { it.hasComponent<Position>() }

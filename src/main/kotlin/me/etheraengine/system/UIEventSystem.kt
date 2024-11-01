@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component
 import java.awt.event.*
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * System handling ui entity element logic like: hover and click events
@@ -26,11 +27,12 @@ class UIEventSystem(
     private var isSpace = false
     private var isEnter = false
 
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         val cursorPosition = cursor.getComponent<Point2D>()!!
 
         entities
             .filterIsInstance<UIElement>()
+            .filter { it.hasComponent<UIFocusable>() }
             .forEach { element ->
                 val focusable = element.getComponent<UIFocusable>()!!
                 val isMouseHovered = CollisionUtils2D.checkCollision(element, cursor)

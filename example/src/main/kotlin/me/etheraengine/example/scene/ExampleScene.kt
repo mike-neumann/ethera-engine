@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.system.exitProcess
 
 @Component
@@ -118,7 +119,7 @@ class ExampleScene(
         soundService.playSound("pause.wav")
     }
 
-    override fun onUpdate(entities: List<Entity>, deltaTime: Long) {
+    override fun onUpdate(entities: ConcurrentLinkedQueue<Entity>, deltaTime: Long) {
         val state = player.getComponent<State>()!!
 
         when (state.state) {
@@ -136,5 +137,5 @@ class ExampleScene(
         }
     }
 
-    override fun onRender(entities: List<Entity>, g: Graphics) {}
+    override fun onRender(entities: ConcurrentLinkedQueue<Entity>, g: Graphics) {}
 }

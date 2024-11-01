@@ -1,5 +1,8 @@
 package me.etheraengine.entity
 
+import me.etheraengine.entity.component.UIClickable
+import me.etheraengine.entity.component.UIDraggable
+import me.etheraengine.entity.component.UIHoverable
 import me.etheraengine.entity.component.UIValue
 import java.awt.Color
 import java.awt.geom.Dimension2D
@@ -16,8 +19,14 @@ open class UISlider(
     textStyle: Int,
     value: Double,
     maxValue: Double = value,
+    onHover: (it: Entity) -> Unit = {},
+    offHover: (it: Entity) -> Unit = {},
     onFocus: (it: Entity) -> Unit = {},
-    offFocus: (it: Entity) -> Unit = {}
+    offFocus: (it: Entity) -> Unit = {},
+    onClick: (it: Entity) -> Unit = {},
+    offClick: (it: Entity) -> Unit = {},
+    onDrag: (it: Entity, fromX: Double, fromY: Double, toX: Double, toY: Double) -> Unit = { _, _, _, _, _ -> },
+    offDrag: (it: Entity, fromX: Double, fromY: Double, toX: Double, toY: Double) -> Unit = { _, _, _, _, _ -> }
 ) : UIInputElement<Double>(
     x,
     y,
@@ -32,6 +41,15 @@ open class UISlider(
     onFocus,
     offFocus
 ) {
+    init {
+        // add components needed for all sliders
+        addComponents(
+            UIHoverable(onHover, offHover),
+            UIClickable(onClick, offClick),
+            UIDraggable(onDrag, offDrag)
+        )
+    }
+
     /**
      * Gets the sliders draggable pin x position by the current value its holding
      */

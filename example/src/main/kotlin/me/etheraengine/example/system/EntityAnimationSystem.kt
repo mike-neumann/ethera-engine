@@ -10,10 +10,11 @@ import me.etheraengine.g2d.entity.component.Animations2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class EntityAnimationSystem : LogicSystem {
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<State>() }
             .filter { it.hasComponent<Position>() }

@@ -1,5 +1,7 @@
 package me.etheraengine.entity
 
+import me.etheraengine.entity.component.UIClickable
+import me.etheraengine.entity.component.UIHoverable
 import java.awt.Color
 
 /**
@@ -14,6 +16,17 @@ open class UIButton(
     textSize: Float,
     textColor: Color,
     textStyle: Int,
+    onHover: (it: Entity) -> Unit = {},
+    offHover: (it: Entity) -> Unit = {},
     onFocus: (it: Entity) -> Unit = {},
-    offFocus: (it: Entity) -> Unit = {}
-) : UIElement(x, y, width, height, text, textSize, textColor, textStyle, onFocus, offFocus)
+    offFocus: (it: Entity) -> Unit = {},
+    onClick: (it: Entity) -> Unit = {},
+    offClick: (it: Entity) -> Unit = {},
+) : UIElement(x, y, width, height, text, textSize, textColor, textStyle, onFocus, offFocus) {
+    init {
+        addComponents(
+            UIHoverable(onHover, offHover),
+            UIClickable(onClick, offClick)
+        )
+    }
+}

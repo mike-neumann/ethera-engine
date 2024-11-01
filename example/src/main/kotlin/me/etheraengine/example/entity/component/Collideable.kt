@@ -1,5 +1,5 @@
 package me.etheraengine.example.entity.component
 
-class Collideable (
+class Collideable(
     var isCollideable: Boolean = false
 )

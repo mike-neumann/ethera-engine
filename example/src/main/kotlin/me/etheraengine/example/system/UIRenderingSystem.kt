@@ -12,11 +12,18 @@ import java.awt.Color
 import java.awt.Graphics
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.math.roundToInt
 
 @Component
 class UIRenderingSystem : RenderingSystem {
-    override fun render(scene: Scene, entities: List<Entity>, g: Graphics, now: Long, deltaTime: Long) {
+    override fun render(
+        scene: Scene,
+        entities: ConcurrentLinkedQueue<Entity>,
+        g: Graphics,
+        now: Long,
+        deltaTime: Long
+    ) {
         entities
             .filterIsInstance<UIButton>()
             .forEach {

@@ -8,13 +8,20 @@ import org.springframework.stereotype.Component
 import java.awt.Graphics
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Prebuilt system to render 2D sprite graphics
  */
 @Component
 class Sprite2DRenderingSystem : RenderingSystem {
-    override fun render(scene: Scene, entities: List<Entity>, g: Graphics, now: Long, deltaTime: Long) {
+    override fun render(
+        scene: Scene,
+        entities: ConcurrentLinkedQueue<Entity>,
+        g: Graphics,
+        now: Long,
+        deltaTime: Long
+    ) {
         entities
             .filter { it.hasComponent<Sprite2D>() }
             .filter { it.hasComponent<Point2D>() }

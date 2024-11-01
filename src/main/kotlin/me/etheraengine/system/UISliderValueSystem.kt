@@ -8,15 +8,21 @@ import me.etheraengine.scene.Scene
 import org.springframework.stereotype.Component
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Logic system handling ui slider value control
  */
 @Component
 class UISliderValueSystem : LogicSystem {
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filterIsInstance<UISlider>()
+            .filter { it.hasComponent<Point2D>() }
+            .filter { it.hasComponent<Dimension2D>() }
+            .filter { it.hasComponent<UIDraggable>() }
+            .filter { it.hasComponent<UIValue<Double>>() }
+            .toList()
             .forEach {
                 val position = it.getComponent<Point2D>()!!
                 val dimension = it.getComponent<Dimension2D>()!!

@@ -16,10 +16,11 @@ import org.springframework.stereotype.Component
 import java.awt.Dimension
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class PlayerAttackSystem : LogicSystem {
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filterIsInstance<Player>()
             .forEach { player ->
@@ -47,6 +48,7 @@ class PlayerAttackSystem : LogicSystem {
                 val damageDimension = Dimension(attack.range.toInt(), attack.range.toInt())
 
                 entities
+                    .asSequence()
                     .filter { it != player }
                     .filter { it.hasComponent<Point2D>() }
                     .filter { it.hasComponent<Dimension2D>() }
@@ -57,6 +59,7 @@ class PlayerAttackSystem : LogicSystem {
 
                         CollisionUtils2D.checkCollision(position, dimension, damagePosition, damageDimension)
                     }
+                    .toList()
                     .forEach {
                         val health = it.getComponent<Health>()!!
 

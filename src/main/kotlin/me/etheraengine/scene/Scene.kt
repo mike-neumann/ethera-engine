@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.awt.Graphics
 import java.awt.event.*
+import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Basic scene, used to register entities which are handled by registered systems in the ECS pattern
@@ -48,16 +49,16 @@ abstract class Scene {
     @Autowired
     private lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
 
-    private val renderingSystems = mutableListOf<RenderingSystem>()
-    private val logicSystems = mutableListOf<LogicSystem>()
+    private val renderingSystems = ConcurrentLinkedQueue<RenderingSystem>()
+    private val logicSystems = ConcurrentLinkedQueue<LogicSystem>()
 
-    private val entities = mutableListOf<Entity>()
+    private val entities = ConcurrentLinkedQueue<Entity>()
 
-    private val keyListeners = mutableListOf<KeyListener>()
-    private val mouseListeners = mutableListOf<MouseListener>()
-    private val mouseWheelListeners = mutableListOf<MouseWheelListener>()
-    private val mouseMotionListeners = mutableListOf<MouseMotionListener>()
-    private val focusListeners = mutableListOf<FocusListener>()
+    private val keyListeners = ConcurrentLinkedQueue<KeyListener>()
+    private val mouseListeners = ConcurrentLinkedQueue<MouseListener>()
+    private val mouseWheelListeners = ConcurrentLinkedQueue<MouseWheelListener>()
+    private val mouseMotionListeners = ConcurrentLinkedQueue<MouseMotionListener>()
+    private val focusListeners = ConcurrentLinkedQueue<FocusListener>()
 
     @PostConstruct
     fun init() {
@@ -86,8 +87,8 @@ abstract class Scene {
     abstract fun onInitialize()
     abstract fun onEnable()
     abstract fun onDisable()
-    abstract fun onRender(entities: List<Entity>, g: Graphics)
-    abstract fun onUpdate(entities: List<Entity>, deltaTime: Long)
+    abstract fun onRender(entities: ConcurrentLinkedQueue<Entity>, g: Graphics)
+    abstract fun onUpdate(entities: ConcurrentLinkedQueue<Entity>, deltaTime: Long)
 
     /**
      * Unregisters all known systems and reinitializes them

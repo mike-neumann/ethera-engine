@@ -8,10 +8,11 @@ import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class EntityPositionMovementSystem : LogicSystem {
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         val deltaSeconds = deltaTime / 1_000f
 
         entities

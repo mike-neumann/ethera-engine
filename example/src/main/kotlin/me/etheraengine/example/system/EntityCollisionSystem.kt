@@ -9,10 +9,11 @@ import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
+import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class EntityCollisionSystem : LogicSystem {
-    override fun update(scene: Scene, entities: List<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<Point2D>() }
             .filter { it.hasComponent<Dimension2D>() }
@@ -54,7 +55,7 @@ class EntityCollisionSystem : LogicSystem {
     }
 
     private fun getCollidingEntities(
-        entities: List<Entity>,
+        entities: ConcurrentLinkedQueue<Entity>,
         x: Double,
         y: Double,
         width: Double,
