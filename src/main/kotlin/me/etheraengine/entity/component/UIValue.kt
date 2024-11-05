@@ -1,6 +1,9 @@
 package me.etheraengine.entity.component
 
-open class UIValue<T : Number>(
+import me.etheraengine.entity.Entity
+
+open class UIValue<T>(
     var value: T,
-    val maxValue: T = value
+    val maxValue: T = value,
+    val onChange: (it: Entity, oldValue: T, newValue: T) -> Unit = { _, _, _ -> }
 )

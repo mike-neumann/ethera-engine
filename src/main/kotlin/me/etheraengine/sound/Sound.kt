@@ -1,4 +1,4 @@
-package me.etheraengine.sound.Sound
+package me.etheraengine.sound
 
 import javax.sound.sampled.Clip
 

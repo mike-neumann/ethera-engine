@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class UISliderValueSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
+            .asSequence()
             .filterIsInstance<UISlider>()
             .filter { it.hasComponent<Point2D>() }
             .filter { it.hasComponent<Dimension2D>() }
@@ -32,12 +33,15 @@ class UISliderValueSystem : LogicSystem {
                 if (draggable.isDragging) {
                     val draggedDistance = draggable.toX - position.x
                     val newValue = (draggedDistance / dimension.width * 100) / 100 * value.maxValue
+                    val oldValue = value.value
 
                     if (newValue < 0) {
                         value.value = 0.0
                     } else {
                         value.value = newValue
                     }
+
+                    value.onChange(it, oldValue, newValue)
                 }
             }
     }

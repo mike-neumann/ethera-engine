@@ -29,63 +29,60 @@ class PauseScene(
         addRenderingSystems(uiRenderingSystem)
 
         val xRenderOffset = 100.0
-        val pauseLabel = UILabel(
-            xRenderOffset,
-            100.0,
-            "PAUSE",
-            100f,
-            Color.BLACK,
-            Font.BOLD
-        )
-        val resumeButton = UIButton(
-            xRenderOffset,
-            400.0,
-            150,
-            50,
-            "RESUME",
-            30f,
-            Color.BLACK,
-            Font.PLAIN,
-            offClick = {
-                sceneService.switchScene<ExampleScene>()
-            }
-        )
-        val settingsButton = UIButton(
-            xRenderOffset,
-            460.0,
-            150,
-            50,
-            "SETTINGS",
-            30f,
-            Color.BLACK,
-            Font.PLAIN,
-            offClick = {
-                soundService.playSound("select.wav")
-                sceneService.switchScene<SettingsScene>()
-            }
-        )
-        val quitButton = UIButton(
-            xRenderOffset,
-            520.0,
-            150,
-            50,
-            "QUIT",
-            30f,
-            Color.BLACK,
-            Font.PLAIN,
-            offClick = {
-                soundService.stopSound("main_loop.wav")
-                soundService.playSound("shutdown.wav", isBlocking = true)
-                exitProcess(0)
-            }
+        val elements = arrayOf(
+            UILabel(
+                xRenderOffset,
+                100.0,
+                "PAUSE",
+                100f,
+                Color.BLACK,
+                Font.BOLD
+            ),
+            UIButton(
+                xRenderOffset,
+                400.0,
+                150,
+                50,
+                "RESUME",
+                30f,
+                Color.BLACK,
+                Font.PLAIN,
+                offClick = {
+                    sceneService.switchScene<ExampleScene>()
+                }
+            ),
+            UIButton(
+                xRenderOffset,
+                460.0,
+                150,
+                50,
+                "SETTINGS",
+                30f,
+                Color.BLACK,
+                Font.PLAIN,
+                offClick = {
+                    soundService.playSound("select.wav")
+                    sceneService.switchScene<SettingsScene>()
+                }
+            ),
+            UIButton(
+                xRenderOffset,
+                520.0,
+                150,
+                50,
+                "QUIT",
+                30f,
+                Color.BLACK,
+                Font.PLAIN,
+                offClick = {
+                    soundService.stopSound("main_loop.wav")
+                    soundService.playSound("shutdown.wav", isBlocking = true)
+                    exitProcess(0)
+                }
+            )
         )
 
-        addEntities(
-            pauseLabel,
-            resumeButton,
-            settingsButton,
-            quitButton
-        )
+        addEntities(*elements)
     }
 
     override fun onEnable() {}

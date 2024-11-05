@@ -1,5 +1,6 @@
 package me.etheraengine.config
 
+import me.etheraengine.sound.SoundHandler
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.util.ResourceUtils
@@ -9,7 +10,9 @@ import java.net.URL
  * Defines internal and external configurations for Ethera
  */
 @Configuration
-open class EtheraConfig {
+open class EtheraConfig(
+    val soundHandlers: List<SoundHandler>
+) {
     /**
      * Defines the width of the rendered screen.
      * Default: 1920

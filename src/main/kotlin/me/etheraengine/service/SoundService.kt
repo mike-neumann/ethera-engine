@@ -3,11 +3,12 @@ package me.etheraengine.service
 import jakarta.annotation.PostConstruct
 import me.etheraengine.config.EtheraConfig
 import me.etheraengine.logger
-import me.etheraengine.sound.Sound.Sound
+import me.etheraengine.sound.Sound
 import org.springframework.stereotype.Service
 import org.springframework.util.ResourceUtils
 import java.io.File
 import java.io.FileFilter
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.AudioSystem
 
@@ -18,9 +19,10 @@ import javax.sound.sampled.AudioSystem
 class SoundService(
     private val etheraConfig: EtheraConfig
 ) {
+    var volume = 1f
+    val activeSounds = ConcurrentLinkedQueue<Sound>()
     private val log = logger<SoundService>()
     private val sounds = mutableMapOf<String, File>()
-    private val activeSounds = mutableListOf<Sound>()
     private val taskQueue = LinkedBlockingQueue<() -> Unit>()
     private val workerThread = Thread {
         while (true) {
@@ -62,6 +64,7 @@ class SoundService(
     fun playSound(key: String, loop: Boolean = false, isBlocking: Boolean = false) {
         val offer = {
             val clip = AudioSystem.getClip()
+            val sound = Sound(key, clip)
 
             clip.open(AudioSystem.getAudioInputStream(getSound(key)))
             clip.addLineListener {
@@ -74,8 +77,12 @@ class SoundService(
                     clip.framePosition = 0
                     clip.start()
                 }
+
+                if (clip.framePosition == clip.frameLength && !loop) {
+                    activeSounds.remove(sound)
+                }
             }
-            activeSounds.add(Sound(key, clip))
+            activeSounds.add(sound)
             clip.start()
         }
 
@@ -94,6 +101,6 @@ class SoundService(
             it.clip.stop()
             it.clip.close()
         }
-        activeSounds.removeAll(sounds)
+        activeSounds.removeAll(sounds.toSet())
     }
 }

@@ -11,6 +11,7 @@ import me.etheraengine.example.listener.ExampleSceneKeyListener
 import me.etheraengine.example.system.*
 import me.etheraengine.example.world.ExampleWorld
 import me.etheraengine.example.world.Tile
+import me.etheraengine.g2d.system.Bounds2DRenderingSystem
 import me.etheraengine.scene.Scene
 import me.etheraengine.service.SoundService
 import org.springframework.stereotype.Component
@@ -38,12 +39,13 @@ class ExampleScene(
 
     private val entityHealthHudRenderingSystem: EntityHealthHudRenderingSystem,
     private val uiRenderingSystem: UIRenderingSystem,
-    private val soundService: SoundService
+    private val soundService: SoundService,
+    private val bounds2DRenderingSystem: Bounds2DRenderingSystem
 ) : Scene() {
     override fun onInitialize() {
         addKeyListeners(exampleSceneKeyListener)
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
-        addRenderingSystems(entityHealthHudRenderingSystem, uiRenderingSystem)
+        addRenderingSystems(/*bounds2DRenderingSystem,*/ entityHealthHudRenderingSystem, uiRenderingSystem)
         addLogicSystems(
             playerAttackSystem,
             entityPositionMovementSystem,
@@ -70,7 +72,7 @@ class ExampleScene(
             enemyAi.target = player
             enemy
         }.toTypedArray()
-        val labels = listOf(
+        val hud = arrayOf(
             UILabel(
                 100.0,
                 40.0,
@@ -103,10 +105,10 @@ class ExampleScene(
                 Color.WHITE,
                 Font.PLAIN
             )
-        ).toTypedArray()
+        )
 
         // player needs to be added last (render layer principal)
-        addEntities(*tiles, *enemies, player, *labels)
+        addEntities(*tiles, *enemies, player, *hud)
 
         soundService.playSound("main_loop.wav", loop = true)
     }

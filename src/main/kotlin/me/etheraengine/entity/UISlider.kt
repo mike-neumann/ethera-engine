@@ -26,7 +26,8 @@ open class UISlider(
     onClick: (it: Entity) -> Unit = {},
     offClick: (it: Entity) -> Unit = {},
     onDrag: (it: Entity, fromX: Double, fromY: Double, toX: Double, toY: Double) -> Unit = { _, _, _, _, _ -> },
-    offDrag: (it: Entity, fromX: Double, fromY: Double, toX: Double, toY: Double) -> Unit = { _, _, _, _, _ -> }
+    offDrag: (it: Entity, fromX: Double, fromY: Double, toX: Double, toY: Double) -> Unit = { _, _, _, _, _ -> },
+    onChange: (it: Entity, oldValue: Double, newValue: Double) -> Unit = { _, _, _ -> },
 ) : UIInputElement<Double>(
     x,
     y,
@@ -39,7 +40,8 @@ open class UISlider(
     value,
     maxValue,
     onFocus,
-    offFocus
+    offFocus,
+    onChange
 ) {
     init {
         // add components needed for all sliders

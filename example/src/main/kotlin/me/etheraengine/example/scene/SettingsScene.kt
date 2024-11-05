@@ -47,8 +47,11 @@ class SettingsScene(
             Color.BLACK,
             Font.PLAIN,
             100.0,
-            offDrag = { _, _, _, _, _ ->
+            offClick = {
                 soundService.playSound("select.wav")
+            },
+            onChange = { _, _, newValue ->
+                soundService.volume = newValue.toFloat() / 100.0f
             }
         )
 
