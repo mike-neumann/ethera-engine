@@ -19,7 +19,7 @@ import java.awt.geom.Point2D
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
-class PlayerAttackSystem : LogicSystem {
+class PlayerAttackLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filterIsInstance<Player>()

@@ -27,15 +27,15 @@ class ExampleScene(
 
     private val exampleSceneKeyListener: ExampleSceneKeyListener,
 
-    private val entityStateSystem: EntityStateSystem,
-    private val entityAnimationSystem: EntityAnimationSystem,
-    private val playerAttackSystem: PlayerAttackSystem,
+    private val entityStateLogicSystem: EntityStateLogicSystem,
+    private val entityAnimationLogicSystem: EntityAnimationLogicSystem,
+    private val playerAttackLogicSystem: PlayerAttackLogicSystem,
 
-    private val entityPositionMovementSystem: EntityPositionMovementSystem,
-    private val playerMovementSystem: PlayerMovementSystem,
-    private val entityWorldCollisionSystem: EntityWorldCollisionSystem,
-    private val enemyAIMovementSystem: EnemyAIMovementSystem,
-    private val entityCollisionSystem: EntityCollisionSystem,
+    private val entityPositionMovementLogicSystem: EntityPositionMovementLogicSystem,
+    private val playerMovementLogicSystem: PlayerMovementLogicSystem,
+    private val entityWorldCollisionLogicSystem: EntityWorldCollisionLogicSystem,
+    private val enemyAIMovementLogicSystem: EnemyAIMovementLogicSystem,
+    private val entityCollisionLogicSystem: EntityCollisionLogicSystem,
 
     private val entityHealthHudRenderingSystem: EntityHealthHudRenderingSystem,
     private val uiRenderingSystem: UIRenderingSystem,
@@ -47,14 +47,14 @@ class ExampleScene(
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
         addRenderingSystems(/*bounds2DRenderingSystem,*/ entityHealthHudRenderingSystem, uiRenderingSystem)
         addLogicSystems(
-            playerAttackSystem,
-            entityPositionMovementSystem,
-            playerMovementSystem,
-            entityStateSystem,
-            entityWorldCollisionSystem,
-            enemyAIMovementSystem,
-            entityCollisionSystem,
-            entityAnimationSystem
+            playerAttackLogicSystem,
+            entityPositionMovementLogicSystem,
+            playerMovementLogicSystem,
+            entityStateLogicSystem,
+            entityWorldCollisionLogicSystem,
+            enemyAIMovementLogicSystem,
+            entityCollisionLogicSystem,
+            entityAnimationLogicSystem
         )
 
         val tiles = ExampleWorld.tileTypeMask.mapIndexed { yIndex, tileTypes ->
@@ -66,7 +66,7 @@ class ExampleScene(
             }
         }.flatten().toTypedArray()
         val enemies = (1..1).map {
-            val enemy = Enemy(1700.0, 400.0)
+            val enemy = Enemy(1600.0, 400.0)
             val enemyAi = enemy.getComponent<EnemyAI>()!!
 
             enemyAi.target = player

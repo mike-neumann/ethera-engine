@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * Also responsible for updating the users cursor position via ECS pattern
  */
 @Component
-class UIEventSystem(
+class UIEventLogicSystem(
     private val cursor: Cursor
 ) : LogicSystem, MouseListener, MouseMotionListener, KeyListener {
     private var isLeftMouse = false

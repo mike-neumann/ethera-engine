@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
-class EntityAnimationSystem : LogicSystem {
+class EntityAnimationLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<State>() }

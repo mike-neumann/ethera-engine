@@ -86,10 +86,9 @@ class SoundService(
             clip.start()
         }
 
-        if (isBlocking) {
-            offer()
-        } else {
-            taskQueue.offer(offer)
+        when (isBlocking) {
+            true -> offer()
+            false -> taskQueue.offer(offer)
         }
     }
 

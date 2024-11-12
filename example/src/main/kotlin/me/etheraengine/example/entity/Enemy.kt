@@ -14,10 +14,10 @@ class Enemy(
     init {
         addComponents(
             State(EntityState.IDLE),
-            Movement2D(300.0),
+            Movement2D(300.0, 20.0, 20.0),
             Position(x, y),
             Dimension(50, 35),
-            Attack(1.0, 40.0, 400, 10, 40.0),
+            Attack(1.0, 40.0, 400, 10, 20.0),
             Health(5.0, 100),
             EnemyAI(null),
             Collideable(true),

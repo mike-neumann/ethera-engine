@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
-class EntityStateSystem(
+class EntityStateLogicSystem(
     private val soundService: SoundService
 ) : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {

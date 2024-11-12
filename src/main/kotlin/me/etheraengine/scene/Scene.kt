@@ -24,10 +24,9 @@ abstract class Scene {
         set(value) {
             field = value
 
-            if (field) {
-                onInitialize()
-            } else {
-                cleanup()
+            when (field) {
+                true -> onInitialize()
+                false -> cleanup()
             }
         }
 
@@ -35,13 +34,13 @@ abstract class Scene {
     private lateinit var cursor: Cursor
 
     @Autowired
-    private lateinit var uiFocusSystem: UIFocusSystem
+    private lateinit var uiFocusLogicSystem: UIFocusLogicSystem
 
     @Autowired
-    private lateinit var uiEventSystem: UIEventSystem
+    private lateinit var uiEventLogicSystem: UIEventLogicSystem
 
     @Autowired
-    private lateinit var uiSliderValueSystem: UISliderValueSystem
+    private lateinit var uiSliderValueLogicSystem: UISliderValueLogicSystem
 
     @Autowired
     private lateinit var sprite2DRenderingSystem: Sprite2DRenderingSystem
@@ -62,14 +61,14 @@ abstract class Scene {
 
     @PostConstruct
     fun init() {
-        addKeyListeners(uiFocusSystem, uiEventSystem)
-        addMouseMotionListeners(uiEventSystem)
-        addMouseListeners(uiEventSystem)
+        addKeyListeners(uiFocusLogicSystem, uiEventLogicSystem)
+        addMouseMotionListeners(uiEventLogicSystem)
+        addMouseListeners(uiEventLogicSystem)
 
         addLogicSystems(
-            uiFocusSystem,
-            uiEventSystem,
-            uiSliderValueSystem
+            uiFocusLogicSystem,
+            uiEventLogicSystem,
+            uiSliderValueLogicSystem
         )
 
         // register default rendering systems (developers can later remove them if necessary)

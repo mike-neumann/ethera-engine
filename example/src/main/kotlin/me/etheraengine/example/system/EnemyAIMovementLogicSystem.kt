@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
-class EnemyAIMovementSystem : LogicSystem {
+class EnemyAIMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<EnemyAI>() }
@@ -31,8 +31,8 @@ class EnemyAIMovementSystem : LogicSystem {
                 val xMovement = distanceX / enemyMovement.speed
                 val yMovement = distanceY / enemyMovement.speed
 
-                enemyMovement.vx = xMovement
-                enemyMovement.vy = yMovement
+                enemyMovement.vx = Math.clamp(xMovement, -1.0, 1.0)
+                enemyMovement.vy = Math.clamp(yMovement, -1.0, 1.0)
             }
     }
 }

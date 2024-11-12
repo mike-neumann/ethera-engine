@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * Logic system handling ui slider value control
  */
 @Component
-class UISliderValueSystem : LogicSystem {
+class UISliderValueLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .asSequence()
@@ -35,12 +35,7 @@ class UISliderValueSystem : LogicSystem {
                     val newValue = (draggedDistance / dimension.width * 100) / 100 * value.maxValue
                     val oldValue = value.value
 
-                    if (newValue < 0) {
-                        value.value = 0.0
-                    } else {
-                        value.value = newValue
-                    }
-
+                    value.value = Math.clamp(newValue, 0.0, newValue)
                     value.onChange(it, oldValue, newValue)
                 }
             }

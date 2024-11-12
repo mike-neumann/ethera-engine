@@ -44,10 +44,9 @@ object CollisionUtils2D {
                 bottomTranslation
             ).minBy { abs(it) }
 
-            return if (abs(mtv.first) < abs(mtv.second)) {
-                mtv.first to 0.0
-            } else {
-                0.0 to mtv.second
+            return when (abs(mtv.first) < abs(mtv.second)) {
+                true -> mtv.first to 0.0
+                false -> 0.0 to mtv.second
             }
         }
     }

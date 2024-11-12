@@ -61,10 +61,9 @@ open class UISlider(
         val value = getComponent<UIValue<Double>>()!!
         val valueX = point.x + value.value / 100 * value.maxValue / 100 * dimension.width
 
-        return if (valueX + pinWidth > point.x + dimension.width) {
-            (point.x + dimension.width) - pinWidth
-        } else {
-            valueX
+        return when (valueX + pinWidth > point.x + dimension.width) {
+            true -> (point.x + dimension.width) - pinWidth
+            false -> valueX
         }
     }
 }

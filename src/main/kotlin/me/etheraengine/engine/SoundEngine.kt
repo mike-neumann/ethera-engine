@@ -31,7 +31,7 @@ class SoundEngine(
         }
     }
 
-    override fun run(vararg args: String?) {
+    override fun run(vararg args: String) {
         start()
     }
 }

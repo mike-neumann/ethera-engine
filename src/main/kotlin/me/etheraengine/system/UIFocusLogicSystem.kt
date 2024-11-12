@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * System responsible for managing the focused state of ui entities
  */
 @Component
-class UIFocusSystem : LogicSystem, KeyListener {
+class UIFocusLogicSystem : LogicSystem, KeyListener {
     private var isTab = false
     private var isShift = false
     private var isUp = false

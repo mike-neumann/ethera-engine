@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.math.sqrt
 
 @Component
-class PlayerMovementSystem : LogicSystem {
+class PlayerMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filterIsInstance<Player>()

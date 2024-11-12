@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
-class EntityPositionMovementSystem : LogicSystem {
+class EntityPositionMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         val deltaSeconds = deltaTime / 1_000f
 
@@ -28,6 +28,10 @@ class EntityPositionMovementSystem : LogicSystem {
 
                 val position = it.getComponent<Position>()!!
                 val movement = it.getComponent<Movement2D>()!!
+
+                // limit velocities to their respective terminal velocities by default
+                movement.vx = Math.clamp(movement.vx, -movement.tvx, movement.tvx)
+                movement.vy = Math.clamp(movement.vy, -movement.tvy, movement.tvy)
 
                 position.y += movement.vy * movement.speed * deltaSeconds
                 position.x += movement.vx * movement.speed * deltaSeconds

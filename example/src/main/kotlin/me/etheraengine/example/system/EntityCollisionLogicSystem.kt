@@ -12,7 +12,7 @@ import java.awt.geom.Point2D
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
-class EntityCollisionSystem : LogicSystem {
+class EntityCollisionLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
             .filter { it.hasComponent<Point2D>() }

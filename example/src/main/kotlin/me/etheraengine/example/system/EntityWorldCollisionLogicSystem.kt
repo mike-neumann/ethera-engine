@@ -11,7 +11,7 @@ import java.awt.geom.Point2D
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
-class EntityWorldCollisionSystem : LogicSystem {
+class EntityWorldCollisionLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         val tiles = entities.filterIsInstance<Tile>()
 

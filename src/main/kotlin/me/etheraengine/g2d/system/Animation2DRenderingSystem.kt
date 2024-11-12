@@ -37,10 +37,9 @@ class Animation2DRenderingSystem : RenderingSystem {
                 }
 
                 if (currentAnimation.currentSpriteIndex == currentAnimation.spritesheet.sprites.size) {
-                    if (currentAnimation.shouldLoop) {
-                        currentAnimation.currentSpriteIndex = 0
-                    } else {
-                        currentAnimation.currentSpriteIndex -= 1
+                    when (currentAnimation.shouldLoop) {
+                        true -> currentAnimation.currentSpriteIndex = 0
+                        false -> currentAnimation.currentSpriteIndex -= 1
                     }
                 }
 

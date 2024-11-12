@@ -66,7 +66,7 @@ open class Ethera(
         // we want to manually handle ui, so we have to disable focus traversal
         frame.focusTraversalKeysEnabled = false
 
-        // set default font specified in config
+        // set default font if specified in config
         etheraConfig.fontUrl?.let {
             screen.font = Font.createFont(Font.TRUETYPE_FONT, it.openStream())
         }
