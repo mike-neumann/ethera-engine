@@ -35,7 +35,7 @@ class UISliderValueLogicSystem : LogicSystem {
                     val newValue = (draggedDistance / dimension.width * 100) / 100 * value.maxValue
                     val oldValue = value.value
 
-                    value.value = Math.clamp(newValue, 0.0, newValue)
+                    value.value = Math.clamp(newValue, 0.0, 0.0.coerceAtLeast(newValue))
                     value.onChange(it, oldValue, newValue)
                 }
             }

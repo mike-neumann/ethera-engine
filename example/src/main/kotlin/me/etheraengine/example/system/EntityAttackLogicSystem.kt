@@ -3,7 +3,6 @@ package me.etheraengine.example.system
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
 import me.etheraengine.example.entity.EntityState
-import me.etheraengine.example.entity.Player
 import me.etheraengine.example.entity.component.Attack
 import me.etheraengine.example.entity.component.Direction
 import me.etheraengine.example.entity.component.Health
@@ -19,37 +18,41 @@ import java.awt.geom.Point2D
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
-class PlayerAttackLogicSystem : LogicSystem {
+class EntityAttackLogicSystem : LogicSystem {
     override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
         entities
-            .filterIsInstance<Player>()
-            .forEach { player ->
-                val state = player.getComponent<State>()!!
-                val playerPosition = player.getComponent<Position>()!!
-                val playerDimension = player.getComponent<Dimension2D>()!!
-                val attack = player.getComponent<Attack>()!!
+            .asSequence()
+            .filter { it.hasComponent<State>() }
+            .filter { it.hasComponent<Position>() }
+            .filter { it.hasComponent<Dimension2D>() }
+            .filter { it.hasComponent<Attack>() }
+            .forEach { entity ->
+                val state = entity.getComponent<State>()!!
+                val entityPosition = entity.getComponent<Position>()!!
+                val entityDimension = entity.getComponent<Dimension2D>()!!
+                val attack = entity.getComponent<Attack>()!!
 
                 if (state.state != EntityState.ATTACK || now - attack.lastAttackTime < attack.damageDelay || now - attack.lastAttackTime - attack.damageDelay > attack.damageTimeRange) {
                     return@forEach
                 }
 
                 val damagePosition =
-                    when (playerPosition.direction) {
+                    when (entityPosition.direction) {
                         Direction.LEFT -> Position(
-                            playerPosition.x - attack.range,
-                            playerPosition.y
+                            entityPosition.x - attack.range,
+                            entityPosition.y
                         )
 
                         Direction.RIGHT -> Position(
-                            playerPosition.x + playerDimension.width,
-                            playerPosition.y
+                            entityPosition.x + entityDimension.width,
+                            entityPosition.y
                         )
                     }
                 val damageDimension = Dimension(attack.range.toInt(), attack.range.toInt())
 
                 entities
                     .asSequence()
-                    .filter { it != player }
+                    .filter { it != entity }
                     .filter { it.hasComponent<Point2D>() }
                     .filter { it.hasComponent<Dimension2D>() }
                     .filter { it.hasComponent<Health>() }
@@ -74,7 +77,7 @@ class PlayerAttackLogicSystem : LogicSystem {
                         if (movement != null) {
                             // apply some knockback
                             movement.vx =
-                                when (playerPosition.direction) {
+                                when (entityPosition.direction) {
                                     Direction.LEFT -> -attack.knockback
                                     Direction.RIGHT -> attack.knockback
                                 }

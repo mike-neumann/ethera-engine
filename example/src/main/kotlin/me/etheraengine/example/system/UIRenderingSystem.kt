@@ -1,9 +1,6 @@
 package me.etheraengine.example.system
 
-import me.etheraengine.entity.Entity
-import me.etheraengine.entity.UIButton
-import me.etheraengine.entity.UILabel
-import me.etheraengine.entity.UISlider
+import me.etheraengine.entity.*
 import me.etheraengine.entity.component.*
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.RenderingSystem
@@ -121,6 +118,45 @@ class UIRenderingSystem : RenderingSystem {
                     position.x.toInt(),
                     position.y.toInt() + dimension.height.toInt()
                 )
+            }
+
+        entities
+            .filterIsInstance<UICheckbox>()
+            .forEach {
+                val position = it.getComponent<Point2D>()!!
+                val dimension = it.getComponent<Dimension2D>()!!
+                val text = it.getComponent<UIText>()!!
+
+                g.color = text.color
+                g.font = g.font.deriveFont(text.size)
+                g.font = g.font.deriveFont(text.style)
+
+                // can be used to center text on the rendered UIButton (x-axis)
+                val xOffset = (dimension.width / 2) - (g.fontMetrics.stringWidth(text.text) / 2)
+
+                g.drawRect(
+                    position.x.toInt(),
+                    position.y.toInt(),
+                    dimension.width.toInt(),
+                    dimension.height.toInt()
+                )
+                g.drawString(
+                    text.text,
+                    (position.x + dimension.width + (dimension.width / 4)).toInt(),
+                    (position.y + (dimension.height / 2) + (g.fontMetrics.height / 3)).toInt()
+                )
+
+                val value = it.getComponent<UIValue<Boolean>>()!!
+
+                if (!value.value) {
+                    g.fillRect(
+                        (position.x + (dimension.width / 4)).toInt(),
+                        (position.y + (dimension.height / 4)).toInt(),
+                        // TODO: uneven
+                        (dimension.width / 2).toInt(),
+                        (dimension.height / 2).toInt()
+                    )
+                }
             }
 
         entities

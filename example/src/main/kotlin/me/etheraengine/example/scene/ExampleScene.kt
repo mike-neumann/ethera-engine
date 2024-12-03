@@ -29,12 +29,13 @@ class ExampleScene(
 
     private val entityStateLogicSystem: EntityStateLogicSystem,
     private val entityAnimationLogicSystem: EntityAnimationLogicSystem,
-    private val playerAttackLogicSystem: PlayerAttackLogicSystem,
+    private val entityAttackLogicSystem: EntityAttackLogicSystem,
 
     private val entityPositionMovementLogicSystem: EntityPositionMovementLogicSystem,
     private val playerMovementLogicSystem: PlayerMovementLogicSystem,
     private val entityWorldCollisionLogicSystem: EntityWorldCollisionLogicSystem,
     private val enemyAIMovementLogicSystem: EnemyAIMovementLogicSystem,
+    private val enemyAIAttackLogicSystem: EnemyAIAttackLogicSystem,
     private val entityCollisionLogicSystem: EntityCollisionLogicSystem,
 
     private val entityHealthHudRenderingSystem: EntityHealthHudRenderingSystem,
@@ -45,14 +46,15 @@ class ExampleScene(
     override fun onInitialize() {
         addKeyListeners(exampleSceneKeyListener)
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
-        addRenderingSystems(/*bounds2DRenderingSystem,*/ entityHealthHudRenderingSystem, uiRenderingSystem)
+        addRenderingSystems(bounds2DRenderingSystem, entityHealthHudRenderingSystem, uiRenderingSystem)
         addLogicSystems(
-            playerAttackLogicSystem,
+            entityAttackLogicSystem,
             entityPositionMovementLogicSystem,
             playerMovementLogicSystem,
             entityStateLogicSystem,
             entityWorldCollisionLogicSystem,
             enemyAIMovementLogicSystem,
+            enemyAIAttackLogicSystem,
             entityCollisionLogicSystem,
             entityAnimationLogicSystem
         )
@@ -110,7 +112,8 @@ class ExampleScene(
         // player needs to be added last (render layer principal)
         addEntities(*tiles, *enemies, player, *hud)
 
-        soundService.playSound("main_loop.wav", loop = true)
+        // TODO: comment back in
+        //soundService.playSound("main_loop.wav", loop = true)
     }
 
     override fun onEnable() {

@@ -71,6 +71,7 @@ class EntityStateLogicSystem(
 
                 entity.getComponent<Attack>()?.let {
                     if (it.isAttacking && state.state != EntityState.ATTACK) {
+                        it.isAttacking = false
                         it.lastAttackTime = System.currentTimeMillis()
                         state.state = EntityState.ATTACK
                         soundService.playSound("attack.wav")

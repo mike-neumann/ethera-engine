@@ -4,10 +4,7 @@ import me.etheraengine.entity.component.UIClickable
 import me.etheraengine.entity.component.UIHoverable
 import java.awt.Color
 
-/**
- * UI entity used for when catching user click input
- */
-open class UIButton(
+class UITextbox(
     x: Double,
     y: Double,
     width: Int,
@@ -16,11 +13,22 @@ open class UIButton(
     textSize: Float,
     textColor: Color,
     textStyle: Int,
+    value: String,
     onHover: (it: Entity) -> Unit = {},
     offHover: (it: Entity) -> Unit = {},
     onClick: (it: Entity) -> Unit = {},
     offClick: (it: Entity) -> Unit = {},
-) : UIElement(x, y, width, height, text, textSize, textColor, textStyle) {
+) : UIInputElement<String>(
+    x,
+    y,
+    width,
+    height,
+    text,
+    textSize,
+    textColor,
+    textStyle,
+    value
+) {
     init {
         addComponents(
             UIHoverable(onHover, offHover),

@@ -3,10 +3,7 @@ package me.etheraengine.system
 import me.etheraengine.entity.Cursor
 import me.etheraengine.entity.Entity
 import me.etheraengine.entity.UIElement
-import me.etheraengine.entity.component.UIClickable
-import me.etheraengine.entity.component.UIDraggable
-import me.etheraengine.entity.component.UIFocusable
-import me.etheraengine.entity.component.UIHoverable
+import me.etheraengine.entity.component.*
 import me.etheraengine.g2d.util.CollisionUtils2D
 import me.etheraengine.scene.Scene
 import org.springframework.stereotype.Component
@@ -86,6 +83,18 @@ class UIEventLogicSystem(
                     }
                 }
             }
+
+        entities
+            .filterIsInstance<UIElement>()
+            .filter { it.hasComponent<UIValue<Any>>() }
+            .forEach {
+                val value = it.getComponent<UIValue<Any>>()!!
+
+                if (value.value != value.lastValue) {
+                    value.lastValue = value.value
+                    value.onChange(it, value.lastValue, value.value)
+                }
+            }
     }
 
     private fun updateCursorPosition(x: Double, y: Double) {
@@ -93,7 +102,7 @@ class UIEventLogicSystem(
         val dimension = cursor.getComponent<Dimension2D>()!!
 
         position.setLocation(
-            x - (dimension.width / 2),
+            x - 9,
             y - 30 - (dimension.height / 2)
         )
     }

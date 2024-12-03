@@ -155,7 +155,7 @@ class Player : Entity() {
             Position(400.0, 400.0),
             Dimension(50, 35),
             Attack(1.0, 40.0, 250, 100, 40.0),
-            Health(10.0, 1_000),
+            Health(10.0, 500),
             Collideable(true),
             Animations2D(
                 EntityAnimation.IDLE_LEFT,

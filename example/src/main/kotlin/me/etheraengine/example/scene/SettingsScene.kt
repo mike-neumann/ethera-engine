@@ -1,9 +1,6 @@
 package me.etheraengine.example.scene
 
-import me.etheraengine.entity.Entity
-import me.etheraengine.entity.UIButton
-import me.etheraengine.entity.UILabel
-import me.etheraengine.entity.UISlider
+import me.etheraengine.entity.*
 import me.etheraengine.example.system.UIRenderingSystem
 import me.etheraengine.scene.Scene
 import me.etheraengine.service.SceneService
@@ -54,10 +51,23 @@ class SettingsScene(
                 soundService.volume = newValue.toFloat() / 100.0f
             }
         )
-
-        val applyButton = UIButton(
+        val testCheckbox = UICheckbox(
             xRenderOffset,
             460.0,
+            25,
+            25,
+            "TEST",
+            30f,
+            Color.BLACK,
+            Font.PLAIN,
+            false,
+            onChange = { _, _, _ ->
+                soundService.playSound("select.wav")
+            }
+        )
+        val applyButton = UIButton(
+            xRenderOffset,
+            520.0,
             150,
             50,
             "APPLY",
@@ -69,10 +79,9 @@ class SettingsScene(
                 soundService.playSound("select.wav")
             }
         )
-
         val backButton = UIButton(
             xRenderOffset,
-            520.0,
+            580.0,
             150,
             50,
             "BACK",
@@ -88,6 +97,7 @@ class SettingsScene(
         addEntities(
             settingsLabel,
             soundSlider,
+            testCheckbox,
             applyButton,
             backButton
         )

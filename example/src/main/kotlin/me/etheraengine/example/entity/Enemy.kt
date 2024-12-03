@@ -17,7 +17,7 @@ class Enemy(
             Movement2D(300.0, 20.0, 20.0),
             Position(x, y),
             Dimension(50, 35),
-            Attack(1.0, 40.0, 400, 10, 20.0),
+            Attack(1.0, 60.0, 250, 100, 40.0),
             Health(5.0, 100),
             EnemyAI(null),
             Collideable(true),
