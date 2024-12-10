@@ -150,11 +150,11 @@ class UIRenderingSystem : RenderingSystem {
 
                 if (!value.value) {
                     g.fillRect(
-                        (position.x + (dimension.width / 4)).toInt(),
-                        (position.y + (dimension.height / 4)).toInt(),
+                        (position.x + 4).toInt(),
+                        (position.y + 4).toInt(),
                         // TODO: uneven
-                        (dimension.width / 2).toInt(),
-                        (dimension.height / 2).toInt()
+                        dimension.width.toInt() - 7,
+                        dimension.height.toInt() - 7
                     )
                 }
             }
