@@ -182,19 +182,19 @@ abstract class Scene {
     }
 
     fun render(g: Graphics, deltaTime: Long) {
+        onRender(entities, g)
         renderingSystems.toSet()
             .forEach {
                 it.render(this, entities, g, System.currentTimeMillis(), deltaTime)
             }
-        onRender(entities, g)
     }
 
     fun update(deltaTime: Long) {
+        onUpdate(entities, deltaTime)
         logicSystems.toSet()
             .forEach {
                 it.update(this, entities, System.currentTimeMillis(), deltaTime)
             }
-        onUpdate(entities, deltaTime)
     }
 
     fun keyTyped(e: KeyEvent) {
