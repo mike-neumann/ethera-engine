@@ -31,22 +31,22 @@ abstract class Scene {
         }
 
     @Autowired
-    private lateinit var cursor: Cursor
+    lateinit var cursor: Cursor
 
     @Autowired
-    private lateinit var uiFocusLogicSystem: UIFocusLogicSystem
+    lateinit var uiFocusLogicSystem: UIFocusLogicSystem
 
     @Autowired
-    private lateinit var uiEventLogicSystem: UIEventLogicSystem
+    lateinit var uiEventLogicSystem: UIEventLogicSystem
 
     @Autowired
-    private lateinit var uiSliderValueLogicSystem: UISliderValueLogicSystem
+    lateinit var uiSliderValueLogicSystem: UISliderValueLogicSystem
 
     @Autowired
-    private lateinit var sprite2DRenderingSystem: Sprite2DRenderingSystem
+    lateinit var sprite2DRenderingSystem: Sprite2DRenderingSystem
 
     @Autowired
-    private lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
+    lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
 
     private val renderingSystems = ConcurrentLinkedQueue<RenderingSystem>()
     private val logicSystems = ConcurrentLinkedQueue<LogicSystem>()

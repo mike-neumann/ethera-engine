@@ -18,8 +18,8 @@ import javax.swing.SwingUtilities
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @SpringBootApplication(scanBasePackages = ["me.etheraengine"])
 open class Ethera(
-    private val etheraConfig: EtheraConfig,
-    private val screen: Screen
+    val etheraConfig: EtheraConfig,
+    val screen: Screen
 ) : CommandLineRunner {
     companion object {
         lateinit var windowTitle: String

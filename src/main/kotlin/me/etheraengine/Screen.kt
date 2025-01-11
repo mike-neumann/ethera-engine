@@ -12,7 +12,7 @@ import javax.swing.JPanel
  */
 @Component
 class Screen(
-    private val sceneService: SceneService
+    val sceneService: SceneService
 ) : JPanel(), FocusListener, KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
     private var lastFrameTime = 0L
 

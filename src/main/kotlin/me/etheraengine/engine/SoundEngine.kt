@@ -12,8 +12,8 @@ import kotlin.math.log10
  */
 @Component
 class SoundEngine(
-    private val etheraConfig: EtheraConfig,
-    private val soundService: SoundService
+    val etheraConfig: EtheraConfig,
+    val soundService: SoundService
 ) : Thread("SoundEngine"), CommandLineRunner {
     override fun run() {
         while (true) {

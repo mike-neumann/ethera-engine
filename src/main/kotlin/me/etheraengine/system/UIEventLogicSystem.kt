@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
  */
 @Component
 class UIEventLogicSystem(
-    private val cursor: Cursor
+    val cursor: Cursor
 ) : LogicSystem, MouseListener, MouseMotionListener, KeyListener {
     private var isLeftMouse = false
     private var isSpace = false

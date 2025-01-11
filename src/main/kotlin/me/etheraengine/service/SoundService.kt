@@ -17,7 +17,7 @@ import javax.sound.sampled.AudioSystem
  */
 @Service
 class SoundService(
-    private val etheraConfig: EtheraConfig
+    val etheraConfig: EtheraConfig
 ) {
     var volume = 1f
     val activeSounds = ConcurrentLinkedQueue<Sound>()

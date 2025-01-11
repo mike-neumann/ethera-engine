@@ -13,7 +13,7 @@ import kotlin.system.measureTimeMillis
 @Component
 class RenderingEngine(
     etheraConfig: EtheraConfig,
-    private val screen: Screen
+    val screen: Screen
 ) : Thread("RenderingEngine"), CommandLineRunner {
     private val log = me.etheraengine.logger<RenderingSystem>()
     private val frameDuration = 1_000 / etheraConfig.maxFps

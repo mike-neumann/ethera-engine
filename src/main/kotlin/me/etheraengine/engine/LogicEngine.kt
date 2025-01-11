@@ -12,7 +12,7 @@ import kotlin.system.measureTimeMillis
 @Component
 open class LogicEngine(
     etheraConfig: EtheraConfig,
-    private val sceneService: SceneService
+    val sceneService: SceneService
 ) : Thread("LogicEngine"), CommandLineRunner {
     private val log = me.etheraengine.logger<LogicEngine>()
     private val tickDuration = 1_000 / etheraConfig.tps
