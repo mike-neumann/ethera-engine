@@ -3,15 +3,13 @@ package me.etheraengine.config
 import me.etheraengine.sound.SoundHandler
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
-import org.springframework.util.ResourceUtils
-import java.net.URL
 
 /**
  * Defines internal and external configurations for Ethera
  */
 @Configuration
 open class EtheraConfig(
-    val soundHandlers: List<SoundHandler>
+    val soundHandlers: List<SoundHandler>,
 ) {
     /**
      * Defines the width of the rendered screen.
@@ -63,12 +61,12 @@ open class EtheraConfig(
      * Default: classpath
      */
     @Value("\${settings.sounds-url}")
-    var soundsUrl: URL = ResourceUtils.getURL("classpath:")
+    var soundsUrl = ""
 
     /**
      * Defines the font url that is used by default.
      * Default: null
      */
     @Value("\${settings.font-url}")
-    var fontUrl: URL? = null
+    var fontUrl = ""
 }

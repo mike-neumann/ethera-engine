@@ -12,6 +12,7 @@ import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import java.awt.Dimension
 import java.awt.Font
+import java.io.File
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 
@@ -19,7 +20,7 @@ import javax.swing.SwingUtilities
 @SpringBootApplication(scanBasePackages = ["me.etheraengine"])
 open class Ethera(
     val etheraConfig: EtheraConfig,
-    val screen: Screen
+    val screen: Screen,
 ) : CommandLineRunner {
     companion object {
         lateinit var windowTitle: String
@@ -67,8 +68,8 @@ open class Ethera(
         frame.focusTraversalKeysEnabled = false
 
         // set default font if specified in config
-        etheraConfig.fontUrl?.let {
-            screen.font = Font.createFont(Font.TRUETYPE_FONT, it.openStream())
+        if (etheraConfig.fontUrl != "") {
+            screen.font = Font.createFont(Font.TRUETYPE_FONT, File(etheraConfig.fontUrl).toURI().toURL().openStream())
         }
     }
 }

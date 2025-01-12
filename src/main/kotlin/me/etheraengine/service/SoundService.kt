@@ -5,7 +5,6 @@ import me.etheraengine.config.EtheraConfig
 import me.etheraengine.logger
 import me.etheraengine.sound.Sound
 import org.springframework.stereotype.Service
-import org.springframework.util.ResourceUtils
 import java.io.File
 import java.io.FileFilter
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -17,7 +16,7 @@ import javax.sound.sampled.AudioSystem
  */
 @Service
 class SoundService(
-    val etheraConfig: EtheraConfig
+    val etheraConfig: EtheraConfig,
 ) {
     var volume = 1f
     val activeSounds = ConcurrentLinkedQueue<Sound>()
@@ -32,7 +31,7 @@ class SoundService(
 
     @PostConstruct
     fun init() {
-        val soundsFile = File(etheraConfig.soundsUrl.toURI())
+        val soundsFile = File(etheraConfig.soundsUrl)
         val soundFiles = soundsFile.listFiles(FileFilter {
             !it.isDirectory && it.extension == "wav"
         })
@@ -48,7 +47,7 @@ class SoundService(
         sounds.computeIfAbsent(key) {
             log.info("Loading sound {}", key)
 
-            val file = ResourceUtils.getFile("${etheraConfig.soundsUrl}/$key")
+            val file = File("${etheraConfig.soundsUrl}/$key")
 
             // First call to cache the next calls
             AudioSystem.getAudioInputStream(file)
