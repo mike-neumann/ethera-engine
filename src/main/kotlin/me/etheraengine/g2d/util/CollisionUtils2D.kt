@@ -12,7 +12,7 @@ object CollisionUtils2D {
     /**
      * Calculates the MTV (Minimum Translation Vector) for the given coordinates, representing the translation values needed to move one object out of the other as a Pair<X, Y>
      */
-    fun getMiniumTranslationVector(
+    fun getMinimumTranslationVector(
         ourX: Double,
         ourY: Double,
         ourWidth: Double,
@@ -20,7 +20,7 @@ object CollisionUtils2D {
         theirX: Double,
         theirY: Double,
         theirWidth: Double,
-        theirHeight: Double
+        theirHeight: Double,
     ): Pair<Double, Double> {
         if (!checkXCollision(ourX, ourWidth, theirX, theirWidth) && !checkYCollision(
                 ourY,
@@ -51,6 +51,27 @@ object CollisionUtils2D {
         }
     }
 
+    fun getMinimumTranslationVector(
+        our: Entity,
+        their: Entity,
+    ): Pair<Double, Double> {
+        val ourPosition = our.getComponent<Point2D>()!!
+        val ourDimensions = our.getComponent<Dimension2D>()!!
+        val theirPosition = their.getComponent<Point2D>()!!
+        val theirDimensions = their.getComponent<Dimension2D>()!!
+
+        return getMinimumTranslationVector(
+            ourPosition.x,
+            ourPosition.y,
+            ourDimensions.width,
+            ourDimensions.height,
+            theirPosition.x,
+            theirPosition.y,
+            theirDimensions.width,
+            theirDimensions.height
+        )
+    }
+
     fun checkXCollision(ourX: Double, ourWidth: Double, theirX: Double, theirWidth: Double) =
         (theirX <= ourX + ourWidth || theirX + theirWidth <= ourX + ourWidth) && (theirX >= ourX || theirX + theirWidth >= ourX)
 
@@ -61,7 +82,7 @@ object CollisionUtils2D {
         ourPosition: Point2D,
         ourDimension: Dimension2D,
         theirPosition: Point2D,
-        theirDimension2D: Dimension2D
+        theirDimension2D: Dimension2D,
     ) =
         checkXCollision(
             ourPosition.x,
@@ -74,7 +95,7 @@ object CollisionUtils2D {
         ourPosition: Point2D,
         ourDimension: Dimension2D,
         theirPosition: Point2D,
-        theirDimension: Dimension2D
+        theirDimension: Dimension2D,
     ) =
         checkYCollision(
             ourPosition.y,
@@ -91,14 +112,14 @@ object CollisionUtils2D {
         theirX: Double,
         theirY: Double,
         theirWidth: Double,
-        theirHeight: Double
+        theirHeight: Double,
     ) = checkXCollision(ourX, ourWidth, theirX, theirWidth) && checkYCollision(ourY, ourHeight, theirY, theirHeight)
 
     fun checkCollision(
         ourPosition: Point2D,
         ourDimension: Dimension2D,
         theirPosition: Point2D,
-        theirDimension: Dimension2D
+        theirDimension: Dimension2D,
     ) =
         checkCollision(
             ourPosition.x,

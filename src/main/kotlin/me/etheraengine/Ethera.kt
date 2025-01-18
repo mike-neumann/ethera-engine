@@ -1,7 +1,7 @@
 package me.etheraengine
 
 import me.etheraengine.banner.EtheraBanner
-import me.etheraengine.config.EtheraConfig
+import me.etheraengine.service.ConfigurationService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @SpringBootApplication(scanBasePackages = ["me.etheraengine"])
 open class Ethera(
-    val etheraConfig: EtheraConfig,
+    val configurationService: ConfigurationService,
     val screen: Screen,
 ) : CommandLineRunner {
     companion object {
@@ -56,7 +56,7 @@ open class Ethera(
     override fun run(vararg args: String) {
         frame = JFrame(windowTitle)
         frame.add(screen)
-        frame.size = Dimension(etheraConfig.width, etheraConfig.height)
+        frame.size = Dimension(configurationService.width, configurationService.height)
         frame.isVisible = true
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         frame.addFocusListener(screen)
@@ -68,8 +68,9 @@ open class Ethera(
         frame.focusTraversalKeysEnabled = false
 
         // set default font if specified in config
-        if (etheraConfig.fontUrl != "") {
-            screen.font = Font.createFont(Font.TRUETYPE_FONT, File(etheraConfig.fontUrl).toURI().toURL().openStream())
+        if (configurationService.fontUrl != "") {
+            screen.font =
+                Font.createFont(Font.TRUETYPE_FONT, File(configurationService.fontUrl).toURI().toURL().openStream())
         }
     }
 }

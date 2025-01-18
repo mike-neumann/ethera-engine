@@ -1,6 +1,9 @@
 package me.etheraengine.example.scene
 
-import me.etheraengine.entity.*
+import me.etheraengine.entity.UIButton
+import me.etheraengine.entity.UICheckbox
+import me.etheraengine.entity.UILabel
+import me.etheraengine.entity.UISlider
 import me.etheraengine.example.system.UIRenderingSystem
 import me.etheraengine.scene.Scene
 import me.etheraengine.service.SceneService
@@ -9,14 +12,13 @@ import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
-import java.util.concurrent.ConcurrentLinkedQueue
 
 @Component
 class SettingsScene(
     private val sceneService: SceneService,
 
     private val uiRenderingSystem: UIRenderingSystem,
-    private val soundService: SoundService
+    private val soundService: SoundService,
 ) : Scene() {
     private fun apply() {
         // TODO
@@ -105,6 +107,6 @@ class SettingsScene(
 
     override fun onEnable() {}
     override fun onDisable() {}
-    override fun onRender(entities: ConcurrentLinkedQueue<Entity>, g: Graphics) {}
-    override fun onUpdate(entities: ConcurrentLinkedQueue<Entity>, deltaTime: Long) {}
+    override fun onRender(g: Graphics) {}
+    override fun onUpdate(deltaTime: Long) {}
 }

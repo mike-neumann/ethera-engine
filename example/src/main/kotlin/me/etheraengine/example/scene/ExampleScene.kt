@@ -1,6 +1,5 @@
 package me.etheraengine.example.scene
 
-import me.etheraengine.entity.Entity
 import me.etheraengine.entity.UILabel
 import me.etheraengine.entity.component.State
 import me.etheraengine.example.entity.Enemy
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
-import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.system.exitProcess
 
 @Component
@@ -41,7 +39,7 @@ class ExampleScene(
     private val entityHealthHudRenderingSystem: EntityHealthHudRenderingSystem,
     private val uiRenderingSystem: UIRenderingSystem,
     private val soundService: SoundService,
-    private val bounds2DRenderingSystem: Bounds2DRenderingSystem
+    private val bounds2DRenderingSystem: Bounds2DRenderingSystem,
 ) : Scene() {
     override fun onInitialize() {
         addKeyListeners(exampleSceneKeyListener)
@@ -124,7 +122,7 @@ class ExampleScene(
         soundService.playSound("pause.wav")
     }
 
-    override fun onUpdate(entities: ConcurrentLinkedQueue<Entity>, deltaTime: Long) {
+    override fun onUpdate(deltaTime: Long) {
         val state = player.getComponent<State>()!!
 
         when (state.state) {
@@ -142,5 +140,5 @@ class ExampleScene(
         }
     }
 
-    override fun onRender(entities: ConcurrentLinkedQueue<Entity>, g: Graphics) {}
+    override fun onRender(g: Graphics) {}
 }

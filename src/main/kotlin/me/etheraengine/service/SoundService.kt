@@ -1,13 +1,11 @@
 package me.etheraengine.service
 
 import jakarta.annotation.PostConstruct
-import me.etheraengine.config.EtheraConfig
 import me.etheraengine.logger
 import me.etheraengine.sound.Sound
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileFilter
-import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.AudioSystem
 
@@ -16,10 +14,10 @@ import javax.sound.sampled.AudioSystem
  */
 @Service
 class SoundService(
-    val etheraConfig: EtheraConfig,
+    val configurationService: ConfigurationService,
 ) {
     var volume = 1f
-    val activeSounds = ConcurrentLinkedQueue<Sound>()
+    val activeSounds = mutableListOf<Sound>()
     private val log = logger<SoundService>()
     private val sounds = mutableMapOf<String, File>()
     private val taskQueue = LinkedBlockingQueue<() -> Unit>()
@@ -31,7 +29,7 @@ class SoundService(
 
     @PostConstruct
     fun init() {
-        val soundsFile = File(etheraConfig.soundsUrl)
+        val soundsFile = File(configurationService.soundsUrl)
         val soundFiles = soundsFile.listFiles(FileFilter {
             !it.isDirectory && it.extension == "wav"
         })
@@ -43,17 +41,18 @@ class SoundService(
         workerThread.start()
     }
 
-    fun getSound(key: String) =
-        sounds.computeIfAbsent(key) {
-            log.info("Loading sound {}", key)
+    @Synchronized
+    fun getSound(key: String) = sounds.computeIfAbsent(key) {
+        log.info("Loading sound {}", key)
 
-            val file = File("${etheraConfig.soundsUrl}/$key")
+        val file = File("${configurationService.soundsUrl}/$key")
 
-            // First call to cache the next calls
-            AudioSystem.getAudioInputStream(file)
-            file
-        }
+        // First call to cache the next calls
+        AudioSystem.getAudioInputStream(file)
+        file
+    }
 
+    @Synchronized
     fun isPlaying(key: String) = activeSounds.any { it.name == key }
 
     /**
@@ -91,6 +90,7 @@ class SoundService(
         }
     }
 
+    @Synchronized
     fun stopSound(key: String) {
         val sounds = activeSounds
             .filter { it.name == key }
@@ -99,6 +99,6 @@ class SoundService(
             it.clip.stop()
             it.clip.close()
         }
-        activeSounds.removeAll(sounds.toSet())
+        activeSounds.removeAll(sounds)
     }
 }

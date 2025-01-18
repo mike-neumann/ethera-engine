@@ -1,12 +1,10 @@
 package me.etheraengine.system
 
-import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.UIFocusable
 import me.etheraengine.scene.Scene
 import org.springframework.stereotype.Component
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
-import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * System responsible for managing the focused state of ui entities
@@ -18,61 +16,62 @@ class UIFocusLogicSystem : LogicSystem, KeyListener {
     private var isUp = false
     private var isDown = false
 
-    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, now: Long, deltaTime: Long) {
         // handle focus switch
-        entities
-            .filter { it.hasComponent<UIFocusable>() }
-            .forEach {
-                val focusable = it.getComponent<UIFocusable>()!!
+        scene.getEntities {
+            it.hasComponent<UIFocusable>()
+        }.forEach {
+            val focusable = it.getComponent<UIFocusable>()!!
 
-                if (!focusable.isFocused) {
-                    return@forEach
-                }
-
-                val index = entities.indexOf(it)
-
-                if (isUp || (isTab && isShift)) {
-                    // search for previous focusable element
-                    val previous = entities
-                        .toList()
-                        .reversed()
-                        .firstOrNull { previous -> entities.indexOf(previous) < index && previous.hasComponent<UIFocusable>() }
-                        ?: return@forEach
-                    val previousFocusable = previous.getComponent<UIFocusable>()!!
-
-                    focusable.offFocus(it)
-                    focusable.isFocused = false
-                    previousFocusable.isFocused = true
-                    previousFocusable.onFocus(previous)
-                    isUp = false
-                    isTab = false
-                    isShift = false
-                } else if (isTab || isDown) {
-                    // search for next focusable element
-                    val next = entities
-                        .filterIndexed { nextIndex, next -> nextIndex > index && next.hasComponent<UIFocusable>() }
-                        .firstOrNull()
-                        ?: return@forEach
-                    val nextFocusable = next.getComponent<UIFocusable>()!!
-
-                    focusable.offFocus(it)
-                    focusable.isFocused = false
-                    nextFocusable.isFocused = true
-                    nextFocusable.onFocus(next)
-                    isTab = false
-                    isDown = false
-                }
+            if (!focusable.isFocused) {
+                return@forEach
             }
 
-        val focusedEntities = entities
-            .filter { it.hasComponent<UIFocusable>() }
-            .filter { it.getComponent<UIFocusable>()!!.isFocused }
+            val index = scene.getEntities().indexOf(it)
 
-        if (focusedEntities.toList().isEmpty()) {
+            if (isUp || (isTab && isShift)) {
+                // search for previous focusable element
+                val previous = scene.getEntities()
+                    .reversed()
+                    .firstOrNull { previous ->
+                        scene.getEntities().indexOf(previous) < index && previous.hasComponent<UIFocusable>()
+                    }
+                    ?: return@forEach
+                val previousFocusable = previous.getComponent<UIFocusable>()!!
+
+                focusable.offFocus(it)
+                focusable.isFocused = false
+                previousFocusable.isFocused = true
+                previousFocusable.onFocus(previous)
+                isUp = false
+                isTab = false
+                isShift = false
+            } else if (isTab || isDown) {
+                // search for next focusable element
+                val next = scene.getEntities()
+                    .filterIndexed { nextIndex, next -> nextIndex > index && next.hasComponent<UIFocusable>() }
+                    .firstOrNull()
+                    ?: return@forEach
+                val nextFocusable = next.getComponent<UIFocusable>()!!
+
+                focusable.offFocus(it)
+                focusable.isFocused = false
+                nextFocusable.isFocused = true
+                nextFocusable.onFocus(next)
+                isTab = false
+                isDown = false
+            }
+        }
+
+        val focusedEntities = scene.getEntities {
+            it.hasComponent<UIFocusable>() && it.getComponent<UIFocusable>()!!.isFocused
+        }
+
+        if (focusedEntities.isEmpty()) {
             // activate first non focused element
-            val first = entities
-                .firstOrNull { it.hasComponent<UIFocusable>() }
-                ?: return
+            val first = scene.getEntities {
+                it.hasComponent<UIFocusable>()
+            }.firstOrNull() ?: return
             val focusable = first.getComponent<UIFocusable>()!!
 
             if (isUp || isTab || isDown) {

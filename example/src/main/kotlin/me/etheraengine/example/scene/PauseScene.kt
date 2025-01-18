@@ -1,6 +1,5 @@
 package me.etheraengine.example.scene
 
-import me.etheraengine.entity.Entity
 import me.etheraengine.entity.UIButton
 import me.etheraengine.entity.UILabel
 import me.etheraengine.example.listener.PauseSceneKeyListener
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics
-import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.system.exitProcess
 
 @Component
@@ -22,7 +20,7 @@ class PauseScene(
     private val pauseSceneKeyListener: PauseSceneKeyListener,
 
     private val uiRenderingSystem: UIRenderingSystem,
-    private val soundService: SoundService
+    private val soundService: SoundService,
 ) : Scene() {
     override fun onInitialize() {
         addKeyListeners(pauseSceneKeyListener)
@@ -87,6 +85,6 @@ class PauseScene(
 
     override fun onEnable() {}
     override fun onDisable() {}
-    override fun onRender(entities: ConcurrentLinkedQueue<Entity>, g: Graphics) {}
-    override fun onUpdate(entities: ConcurrentLinkedQueue<Entity>, deltaTime: Long) {}
+    override fun onRender(g: Graphics) {}
+    override fun onUpdate(deltaTime: Long) {}
 }

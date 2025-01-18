@@ -1,7 +1,6 @@
 package me.etheraengine.system
 
 import me.etheraengine.entity.Cursor
-import me.etheraengine.entity.Entity
 import me.etheraengine.entity.UIElement
 import me.etheraengine.entity.component.*
 import me.etheraengine.g2d.util.CollisionUtils2D
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component
 import java.awt.event.*
 import java.awt.geom.Dimension2D
 import java.awt.geom.Point2D
-import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * System handling ui entity element logic like: hover and click events
@@ -18,23 +16,22 @@ import java.util.concurrent.ConcurrentLinkedQueue
  */
 @Component
 class UIEventLogicSystem(
-    val cursor: Cursor
+    val cursor: Cursor,
 ) : LogicSystem, MouseListener, MouseMotionListener, KeyListener {
     private var isLeftMouse = false
     private var isSpace = false
     private var isEnter = false
 
-    override fun update(scene: Scene, entities: ConcurrentLinkedQueue<Entity>, now: Long, deltaTime: Long) {
+    override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val cursorPosition = cursor.getComponent<Point2D>()!!
 
-        entities
-            .filterIsInstance<UIElement>()
-            .filter { it.hasComponent<UIFocusable>() }
-            .forEach { element ->
-                val focusable = element.getComponent<UIFocusable>()!!
+        scene.getEntities {
+            it is UIElement
+        }.forEach { element ->
+            element.getComponent<UIFocusable>()?.let {
                 val isMouseHovered = CollisionUtils2D.checkCollision(element, cursor)
                 val isMouseInteracted = isMouseHovered && isLeftMouse
-                val isKeyboardHovered = focusable.isFocused
+                val isKeyboardHovered = it.isFocused
                 val isKeyboardInteracted = isKeyboardHovered && (isSpace || isEnter)
 
                 // handle hover event is element is hoverable
@@ -84,17 +81,13 @@ class UIEventLogicSystem(
                 }
             }
 
-        entities
-            .filterIsInstance<UIElement>()
-            .filter { it.hasComponent<UIValue<Any>>() }
-            .forEach {
-                val value = it.getComponent<UIValue<Any>>()!!
-
-                if (value.value != value.lastValue) {
-                    value.lastValue = value.value
-                    value.onChange(it, value.lastValue, value.value)
+            element.getComponent<UIValue<Any>>()?.let {
+                if (it.value != it.lastValue) {
+                    it.lastValue = it.value
+                    it.onChange(element, it.lastValue, it.value)
                 }
             }
+        }
     }
 
     private fun updateCursorPosition(x: Double, y: Double) {

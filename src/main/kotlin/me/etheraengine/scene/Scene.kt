@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.awt.Graphics
 import java.awt.event.*
-import java.util.concurrent.ConcurrentLinkedQueue
 
 /**
  * Basic scene, used to register entities which are handled by registered systems in the ECS pattern
@@ -48,16 +47,19 @@ abstract class Scene {
     @Autowired
     lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
 
-    private val renderingSystems = ConcurrentLinkedQueue<RenderingSystem>()
-    private val logicSystems = ConcurrentLinkedQueue<LogicSystem>()
+    private val renderingSystems = mutableListOf<RenderingSystem>()
+    private val logicSystems = mutableListOf<LogicSystem>()
 
-    private val entities = ConcurrentLinkedQueue<Entity>()
+    private val entities = mutableListOf<Entity>()
 
-    private val keyListeners = ConcurrentLinkedQueue<KeyListener>()
-    private val mouseListeners = ConcurrentLinkedQueue<MouseListener>()
-    private val mouseWheelListeners = ConcurrentLinkedQueue<MouseWheelListener>()
-    private val mouseMotionListeners = ConcurrentLinkedQueue<MouseMotionListener>()
-    private val focusListeners = ConcurrentLinkedQueue<FocusListener>()
+    private val keyListeners = mutableListOf<KeyListener>()
+    private val mouseListeners = mutableListOf<MouseListener>()
+    private val mouseWheelListeners = mutableListOf<MouseWheelListener>()
+    private val mouseMotionListeners = mutableListOf<MouseMotionListener>()
+    private val focusListeners = mutableListOf<FocusListener>()
+
+    var cachedEntities = 0
+    val cachedFilterResults = mutableMapOf<EntityFilter, List<Entity>>()
 
     @PostConstruct
     fun init() {
@@ -86,8 +88,8 @@ abstract class Scene {
     abstract fun onInitialize()
     abstract fun onEnable()
     abstract fun onDisable()
-    abstract fun onRender(entities: ConcurrentLinkedQueue<Entity>, g: Graphics)
-    abstract fun onUpdate(entities: ConcurrentLinkedQueue<Entity>, deltaTime: Long)
+    abstract fun onRender(g: Graphics)
+    abstract fun onUpdate(deltaTime: Long)
 
     /**
      * Unregisters all known systems and reinitializes them
@@ -109,182 +111,219 @@ abstract class Scene {
         focusListeners.clear()
     }
 
+    @Synchronized
     fun addRenderingSystems(vararg renderingSystems: RenderingSystem) {
         log.info("Registering {} rendering systems", renderingSystems.size)
         log.debug("{}", renderingSystems)
         this.renderingSystems.addAll(renderingSystems)
     }
 
+    @Synchronized
     fun removeRenderingSystems(vararg renderingSystems: RenderingSystem) {
         log.info("Unregistering {} rendering systems", renderingSystems.size)
         log.debug("{}", renderingSystems)
-        this.renderingSystems.removeAll(renderingSystems.toSet())
+        this.renderingSystems.removeAll(renderingSystems)
     }
 
+    @Synchronized
     fun addLogicSystems(vararg logicSystems: LogicSystem) {
         log.info("Registering {} logic systems", logicSystems.size)
         log.debug("{}", logicSystems)
         this.logicSystems.addAll(logicSystems)
     }
 
+    @Synchronized
     fun removeLogicSystems(vararg logicSystems: LogicSystem) {
         log.info("Unregistering {} logic systems", logicSystems.size)
         log.debug("{}", logicSystems)
-        this.logicSystems.removeAll(logicSystems.toSet())
+        this.logicSystems.removeAll(logicSystems)
     }
 
+    @Synchronized
     fun addEntities(vararg entities: Entity) {
         log.info("Registering {} entities", entities.size)
         log.debug("{}", entities)
         this.entities.addAll(entities)
     }
 
+    @Synchronized
     fun removeEntities(vararg entities: Entity) {
         log.info("Unregistering {} entities", entities.size)
         log.debug("{}", entities)
-        this.entities.removeAll(entities.toSet())
+        this.entities.removeAll(entities)
     }
 
+    @Synchronized
     fun addKeyListeners(vararg keyListeners: KeyListener) {
         log.info("Registering {} key listeners", keyListeners.size)
         log.debug("{}", keyListeners)
         this.keyListeners.addAll(keyListeners)
     }
 
+    @Synchronized
     fun removeKeyListeners(vararg keyListeners: KeyListener) {
         log.info("Unregistering {} key listeners", keyListeners.size)
         log.debug("{}", keyListeners)
-        this.keyListeners.removeAll(keyListeners.toSet())
+        this.keyListeners.removeAll(keyListeners)
     }
 
+    @Synchronized
     fun addMouseListeners(vararg mouseListeners: MouseListener) {
         log.info("Registering {} mouse listeners", mouseListeners.size)
         log.debug("{}", mouseListeners)
         this.mouseListeners.addAll(mouseListeners)
     }
 
+    @Synchronized
     fun removeMouseListeners(vararg mouseListeners: MouseListener) {
         log.info("Unregistering {} mouse listeners", mouseListeners.size)
         log.debug("{}", mouseListeners)
-        this.mouseListeners.removeAll(mouseListeners.toSet())
+        this.mouseListeners.removeAll(mouseListeners)
     }
 
+    @Synchronized
     fun addMouseMotionListeners(vararg mouseMotionListeners: MouseMotionListener) {
         log.info("Registering {} mouse motion listeners", mouseMotionListeners.size)
         log.debug("{}", mouseMotionListeners)
         this.mouseMotionListeners.addAll(mouseMotionListeners)
     }
 
+    @Synchronized
     fun removeMouseMotionListeners(vararg mouseMotionListeners: MouseMotionListener) {
         log.info("Unregistering {} mouse motion listeners", mouseMotionListeners.size)
         log.debug("{}", mouseMotionListeners)
-        this.mouseMotionListeners.removeAll(mouseMotionListeners.toSet())
+        this.mouseMotionListeners.removeAll(mouseMotionListeners)
     }
 
+    @Synchronized
     fun render(g: Graphics, deltaTime: Long) {
-        renderingSystems.toSet()
-            .forEach {
-                it.render(this, entities, g, System.currentTimeMillis(), deltaTime)
-            }
-        onRender(entities, g)
+        renderingSystems.forEach {
+            it.render(this, g, System.currentTimeMillis(), deltaTime)
+        }
+
+        onRender(g)
     }
 
+    @Synchronized
     fun update(deltaTime: Long) {
-        logicSystems.toSet()
-            .forEach {
-                it.update(this, entities, System.currentTimeMillis(), deltaTime)
-            }
-        onUpdate(entities, deltaTime)
+        logicSystems.forEach {
+            it.update(this, System.currentTimeMillis(), deltaTime)
+        }
+
+        onUpdate(deltaTime)
     }
 
+    @Synchronized
     fun keyTyped(e: KeyEvent) {
-        keyListeners.toSet()
-            .forEach {
-                it.keyTyped(e)
-            }
+        keyListeners.forEach {
+            it.keyTyped(e)
+        }
     }
 
+    @Synchronized
     fun keyPressed(e: KeyEvent) {
-        keyListeners.toSet()
-            .forEach {
-                it.keyPressed(e)
-            }
+        keyListeners.forEach {
+            it.keyPressed(e)
+        }
     }
 
+    @Synchronized
     fun keyReleased(e: KeyEvent) {
-        keyListeners.toSet()
-            .forEach {
-                it.keyReleased(e)
-            }
+        keyListeners.forEach {
+            it.keyReleased(e)
+        }
     }
 
+    @Synchronized
     fun mouseClicked(e: MouseEvent) {
-        mouseListeners.toSet()
-            .forEach {
-                it.mouseClicked(e)
-            }
+        mouseListeners.forEach {
+            it.mouseClicked(e)
+        }
     }
 
+    @Synchronized
     fun mousePressed(e: MouseEvent) {
-        mouseListeners.toSet()
-            .forEach {
-                it.mousePressed(e)
-            }
+        mouseListeners.forEach {
+            it.mousePressed(e)
+        }
     }
 
+    @Synchronized
     fun mouseReleased(e: MouseEvent) {
-        mouseListeners.toSet()
-            .forEach {
-                it.mouseReleased(e)
-            }
+        mouseListeners.forEach {
+            it.mouseReleased(e)
+        }
     }
 
+    @Synchronized
     fun mouseEntered(e: MouseEvent) {
-        mouseListeners.toSet()
-            .forEach {
-                it.mouseEntered(e)
-            }
+        mouseListeners.forEach {
+            it.mouseEntered(e)
+        }
     }
 
+    @Synchronized
     fun mouseExited(e: MouseEvent) {
-        mouseListeners.toSet()
-            .forEach {
-                it.mouseExited(e)
-            }
+        mouseListeners.forEach {
+            it.mouseExited(e)
+        }
     }
 
+    @Synchronized
     fun mouseWheelMoved(e: MouseWheelEvent) {
-        mouseWheelListeners.toSet()
-            .forEach {
-                it.mouseWheelMoved(e)
-            }
+        mouseWheelListeners.forEach {
+            it.mouseWheelMoved(e)
+        }
     }
 
+    @Synchronized
     fun mouseDragged(e: MouseEvent) {
-        mouseMotionListeners.toSet()
-            .forEach {
-                it.mouseDragged(e)
-            }
+        mouseMotionListeners.forEach {
+            it.mouseDragged(e)
+        }
     }
 
+    @Synchronized
     fun mouseMoved(e: MouseEvent) {
-        mouseMotionListeners.toSet()
-            .forEach {
-                it.mouseMoved(e)
-            }
+        mouseMotionListeners.forEach {
+            it.mouseMoved(e)
+        }
     }
 
+    @Synchronized
     fun focusGained(e: FocusEvent) {
-        focusListeners.toSet()
-            .forEach {
-                it.focusGained(e)
-            }
+        focusListeners.forEach {
+            it.focusGained(e)
+        }
     }
 
+    @Synchronized
     fun focusLost(e: FocusEvent) {
-        focusListeners.toSet()
-            .forEach {
-                it.focusLost(e)
-            }
+        focusListeners.forEach {
+            it.focusLost(e)
+        }
+    }
+
+    /**
+     * Grabs all entities that adhere to the specified filter.
+     * This method uses caching to reduce cpu load while fetching entities in running systems
+     */
+    @Synchronized
+    @JvmOverloads
+    fun getEntities(filter: EntityFilter = EntityFilter { true }): List<Entity> {
+        if (cachedEntities != entities.size) {
+            // entities have changed, clear cache
+            cachedFilterResults.clear()
+            cachedEntities = entities.size
+        }
+
+        // cache and return filter results
+        return cachedFilterResults.computeIfAbsent(filter) {
+            entities.filter(filter::filter)
+        }
+    }
+
+    fun interface EntityFilter {
+        fun filter(entity: Entity): Boolean
     }
 }
