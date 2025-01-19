@@ -5,6 +5,7 @@ import me.etheraengine.entity.Cursor
 import me.etheraengine.entity.Entity
 import me.etheraengine.g2d.system.Animation2DRenderingSystem
 import me.etheraengine.g2d.system.Sprite2DRenderingSystem
+import me.etheraengine.g2d.world.Camera2D
 import me.etheraengine.logger
 import me.etheraengine.system.*
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,6 +29,8 @@ open class Scene {
                 false -> cleanup()
             }
         }
+
+    var camera2D: Camera2D? = null
 
     @Autowired
     lateinit var cursor: Cursor

@@ -1,16 +1,20 @@
 package me.etheraengine.example.scene
 
+import me.etheraengine.Ethera
 import me.etheraengine.entity.UILabel
 import me.etheraengine.entity.component.State
 import me.etheraengine.example.entity.Enemy
 import me.etheraengine.example.entity.EntityState
 import me.etheraengine.example.entity.Player
 import me.etheraengine.example.entity.component.EnemyAI
+import me.etheraengine.example.entity.component.Position
 import me.etheraengine.example.listener.ExampleSceneKeyListener
 import me.etheraengine.example.system.*
 import me.etheraengine.example.world.ExampleWorld
 import me.etheraengine.example.world.Tile
+import me.etheraengine.g2d.entity.component.Dimensions2D
 import me.etheraengine.g2d.system.Bounds2DRenderingSystem
+import me.etheraengine.g2d.world.Camera2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.service.SoundService
 import org.springframework.stereotype.Component
@@ -42,6 +46,8 @@ class ExampleScene(
     private val bounds2DRenderingSystem: Bounds2DRenderingSystem,
 ) : Scene() {
     override fun onInitialize() {
+        camera2D = Camera2D(player.getComponent<Position>()!!)
+
         addKeyListeners(exampleSceneKeyListener)
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
         addRenderingSystems(bounds2DRenderingSystem, entityHealthHudRenderingSystem, uiRenderingSystem)
@@ -140,5 +146,11 @@ class ExampleScene(
         }
     }
 
-    override fun onRender(g: Graphics, now: Long, deltaTime: Long) {}
+    override fun onRender(g: Graphics, now: Long, deltaTime: Long) {
+        // set camera offset so that the player is always in the middle
+        val dimensions = player.getComponent<Dimensions2D>()!!
+
+        camera2D!!.offsetX = (Ethera.frame.width / 2.0) - dimensions.width / 2
+        camera2D!!.offsetY = (Ethera.frame.height / 2.0) - dimensions.height / 2
+    }
 }

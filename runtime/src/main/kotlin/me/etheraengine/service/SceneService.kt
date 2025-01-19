@@ -56,6 +56,10 @@ class SceneService {
     }
 
     fun render(g: Graphics, now: Long, deltaTime: Long) {
-        currentScene?.render(g, now, deltaTime)
+        currentScene?.let {
+            it.camera2D?.translate(g)
+            it.render(g, now, deltaTime)
+            it.camera2D?.closeTranslation(g)
+        }
     }
 }
