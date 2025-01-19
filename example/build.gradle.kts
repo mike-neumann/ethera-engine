@@ -1,8 +1,9 @@
 plugins {
-    kotlin("jvm")
+    kotlin("jvm") version "1.9.24"
+    kotlin("kapt") version "1.9.24"
 }
 
-group = "me.etheraengine"
+group = "me.etheraengine.example"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -12,7 +13,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("me.etheraengine:ethera:1.0-SNAPSHOT")
+    implementation("me.etheraengine:runtime:1.0-SNAPSHOT")
 }
 
 tasks.test {

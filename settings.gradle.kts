@@ -1,2 +1,4 @@
 rootProject.name = "ethera"
-include("example")
+
+include("gui")
+include("runtime")
