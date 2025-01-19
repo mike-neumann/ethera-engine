@@ -3,12 +3,12 @@ package me.etheraengine.system
 import me.etheraengine.entity.Cursor
 import me.etheraengine.entity.UIElement
 import me.etheraengine.entity.component.*
+import me.etheraengine.g2d.entity.component.Dimensions2D
+import me.etheraengine.g2d.entity.component.Position2D
 import me.etheraengine.g2d.util.CollisionUtils2D
 import me.etheraengine.scene.Scene
 import org.springframework.stereotype.Component
 import java.awt.event.*
-import java.awt.geom.Dimension2D
-import java.awt.geom.Point2D
 
 /**
  * System handling ui entity element logic like: hover and click events
@@ -23,7 +23,7 @@ class UIEventLogicSystem(
     private var isEnter = false
 
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val cursorPosition = cursor.getComponent<Point2D>()!!
+        val cursorPosition = cursor.getComponent<Position2D>()!!
 
         scene.getEntities {
             it is UIElement
@@ -91,12 +91,12 @@ class UIEventLogicSystem(
     }
 
     private fun updateCursorPosition(x: Double, y: Double) {
-        val position = cursor.getComponent<Point2D>()!!
-        val dimension = cursor.getComponent<Dimension2D>()!!
+        val position = cursor.getComponent<Position2D>()!!
+        val dimensions = cursor.getComponent<Dimensions2D>()!!
 
         position.setLocation(
             x - 9,
-            y - 30 - (dimension.height / 2)
+            y - 30 - (dimensions.height / 2)
         )
     }
 

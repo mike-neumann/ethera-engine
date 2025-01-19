@@ -10,7 +10,7 @@ import javax.imageio.ImageIO
 open class Sprite2D(
     val file: File,
     var renderOffsetX: Int = 0,
-    var renderOffsetY: Int = 0
+    var renderOffsetY: Int = 0,
 ) {
     val image: BufferedImage = ImageIO.read(file)
 }

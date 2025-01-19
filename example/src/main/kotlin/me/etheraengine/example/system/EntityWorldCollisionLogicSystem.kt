@@ -1,12 +1,12 @@
 package me.etheraengine.example.system
 
 import me.etheraengine.example.world.Tile
+import me.etheraengine.g2d.entity.component.Dimensions2D
+import me.etheraengine.g2d.entity.component.Position2D
 import me.etheraengine.g2d.util.CollisionUtils2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
-import java.awt.geom.Dimension2D
-import java.awt.geom.Point2D
 
 @Component
 class EntityWorldCollisionLogicSystem : LogicSystem {
@@ -16,32 +16,32 @@ class EntityWorldCollisionLogicSystem : LogicSystem {
         } as List<Tile>
 
         scene.getEntities {
-            it !in tiles && it.hasComponent<Point2D>() && it.hasComponent<Dimension2D>()
+            it !in tiles && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>()
         }.forEach {
-            val position = it.getComponent<Point2D>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+            val position = it.getComponent<Position2D>()!!
+            val dimensions = it.getComponent<Dimensions2D>()!!
             val nextCollidingTiles =
                 getCollidingTiles(
                     tiles,
                     position.x,
                     position.y,
-                    dimension.width,
-                    dimension.height
+                    dimensions.width,
+                    dimensions.height
                 )
             val nextNotPassableCollidingTiles = nextCollidingTiles.filter { !it.tileType.isPassable }
 
             nextNotPassableCollidingTiles.forEach {
-                val tilePosition = it.getComponent<Point2D>()!!
-                val tileDimension = it.getComponent<Dimension2D>()!!
+                val tilePosition = it.getComponent<Position2D>()!!
+                val tileDimensions = it.getComponent<Dimensions2D>()!!
                 val mtv = CollisionUtils2D.getMinimumTranslationVector(
                     position.x,
                     position.y,
-                    dimension.width,
-                    dimension.height,
+                    dimensions.width,
+                    dimensions.height,
                     tilePosition.x,
                     tilePosition.y,
-                    tileDimension.width,
-                    tileDimension.height
+                    tileDimensions.width,
+                    tileDimensions.height
                 )
 
                 position.setLocation(
@@ -56,19 +56,19 @@ class EntityWorldCollisionLogicSystem : LogicSystem {
         tiles: List<Tile>,
         x: Double,
         y: Double,
-        width: Double,
-        height: Double,
+        width: Int,
+        height: Int,
     ): List<Tile> {
         return tiles
             .filter {
-                val position = it.getComponent<Point2D>()!!
-                val dimension = it.getComponent<Dimension2D>()!!
+                val position = it.getComponent<Position2D>()!!
+                val dimensions = it.getComponent<Dimensions2D>()!!
 
                 CollisionUtils2D.checkCollision(
                     position.x,
                     position.y,
-                    dimension.width,
-                    dimension.height,
+                    dimensions.width,
+                    dimensions.height,
                     x,
                     y,
                     width,

@@ -85,6 +85,6 @@ class PauseScene(
 
     override fun onEnable() {}
     override fun onDisable() {}
-    override fun onRender(g: Graphics) {}
-    override fun onUpdate(deltaTime: Long) {}
+    override fun onRender(g: Graphics, now: Long, deltaTime: Long) {}
+    override fun onUpdate(now: Long, deltaTime: Long) {}
 }

@@ -2,12 +2,12 @@ package me.etheraengine.example.system
 
 import me.etheraengine.Ethera
 import me.etheraengine.example.entity.Player
+import me.etheraengine.g2d.entity.component.Dimensions2D
 import me.etheraengine.g2d.entity.component.Movement2D
+import me.etheraengine.g2d.entity.component.Position2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
-import java.awt.geom.Dimension2D
-import java.awt.geom.Point2D
 
 @Component
 class PlayerCollisionLogicSystem : LogicSystem {
@@ -16,8 +16,8 @@ class PlayerCollisionLogicSystem : LogicSystem {
             it is Player
         }.forEach {
             val movement = it.getComponent<Movement2D>()!!
-            val position = it.getComponent<Point2D>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+            val position = it.getComponent<Position2D>()!!
+            val dimensions = it.getComponent<Dimensions2D>()!!
 
             // top collision
             if (position.y < 0) {
@@ -28,19 +28,19 @@ class PlayerCollisionLogicSystem : LogicSystem {
             }
 
             // bottom collision
-            if (position.y + dimension.height > Ethera.frame.height) {
+            if (position.y + dimensions.height > Ethera.frame.height) {
                 movement.vy = 0.0
                 position.setLocation(
-                    Ethera.frame.height - dimension.height,
+                    Ethera.frame.height - dimensions.height.toDouble(),
                     position.x
                 )
             }
 
             // right collision
-            if (position.x + dimension.width > Ethera.frame.width) {
+            if (position.x + dimensions.width > Ethera.frame.width) {
                 position.setLocation(
                     position.y,
-                    Ethera.frame.width - dimension.width
+                    Ethera.frame.width - dimensions.width.toDouble()
                 )
             }
 

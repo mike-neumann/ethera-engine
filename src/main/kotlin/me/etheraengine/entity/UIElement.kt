@@ -2,9 +2,9 @@ package me.etheraengine.entity
 
 import me.etheraengine.entity.component.UIFocusable
 import me.etheraengine.entity.component.UIText
+import me.etheraengine.g2d.entity.component.Dimensions2D
+import me.etheraengine.g2d.entity.component.Position2D
 import java.awt.Color
-import java.awt.Dimension
-import java.awt.geom.Point2D
 
 open class UIElement(
     x: Double,
@@ -16,13 +16,13 @@ open class UIElement(
     textColor: Color,
     textStyle: Int,
     onFocus: (it: Entity) -> Unit = {},
-    offFocus: (it: Entity) -> Unit = {}
+    offFocus: (it: Entity) -> Unit = {},
 ) : Entity() {
     init {
         addComponents(
             UIFocusable(onFocus, offFocus),
-            Point2D.Double(x, y),
-            Dimension(width, height),
+            Position2D(x, y),
+            Dimensions2D(width, height),
             UIText(text, textSize, textColor, textStyle)
         )
     }

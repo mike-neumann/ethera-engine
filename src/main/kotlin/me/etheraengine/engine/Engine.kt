@@ -4,6 +4,9 @@ import me.etheraengine.logger
 import org.springframework.boot.CommandLineRunner
 import kotlin.system.measureTimeMillis
 
+/**
+ * An engine defines a continuous running task within the game engine's lifecycle.
+ */
 abstract class Engine(
     name: String,
     val tickDuration: Int,
@@ -17,7 +20,7 @@ abstract class Engine(
             val now = System.currentTimeMillis()
             val deltaTime = now - lastTickTime
             val elapsedTime = measureTimeMillis {
-                onTick(deltaTime)
+                onTick(now, deltaTime)
             }
 
             if (elapsedTime < tickDuration) {
@@ -29,7 +32,7 @@ abstract class Engine(
         }
     }
 
-    abstract fun onTick(deltaTime: Long)
+    abstract fun onTick(now: Long, deltaTime: Long)
 
     final override fun run(vararg args: String) {
         start()

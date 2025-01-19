@@ -51,11 +51,11 @@ class SceneService {
         lastScene?.let { switchScene(it) }
     }
 
-    fun update(deltaTime: Long) {
-        currentScene?.update(deltaTime)
+    fun update(now: Long, deltaTime: Long) {
+        currentScene?.update(now, deltaTime)
     }
 
-    fun render(g: Graphics, deltaTime: Long) {
-        currentScene?.render(g, deltaTime)
+    fun render(g: Graphics, now: Long, deltaTime: Long) {
+        currentScene?.render(g, now, deltaTime)
     }
 }

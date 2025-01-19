@@ -4,9 +4,9 @@ import me.etheraengine.entity.component.UIClickable
 import me.etheraengine.entity.component.UIDraggable
 import me.etheraengine.entity.component.UIHoverable
 import me.etheraengine.entity.component.UIValue
+import me.etheraengine.g2d.entity.component.Dimensions2D
+import me.etheraengine.g2d.entity.component.Position2D
 import java.awt.Color
-import java.awt.geom.Dimension2D
-import java.awt.geom.Point2D
 
 open class UISlider(
     x: Double,
@@ -56,13 +56,13 @@ open class UISlider(
      * Gets the sliders draggable pin x position by the current value its holding
      */
     fun getPinXPositionForCurrentValue(pinWidth: Double): Double {
-        val point = getComponent<Point2D>()!!
-        val dimension = getComponent<Dimension2D>()!!
+        val position = getComponent<Position2D>()!!
+        val dimensions = getComponent<Dimensions2D>()!!
         val value = getComponent<UIValue<Double>>()!!
-        val valueX = point.x + value.value / 100 * value.maxValue / 100 * dimension.width
+        val valueX = position.x + value.value / 100 * value.maxValue / 100 * dimensions.width
 
-        return when (valueX + pinWidth > point.x + dimension.width) {
-            true -> (point.x + dimension.width) - pinWidth
+        return when (valueX + pinWidth > position.x + dimensions.width) {
+            true -> (position.x + dimensions.width) - pinWidth
             false -> valueX
         }
     }

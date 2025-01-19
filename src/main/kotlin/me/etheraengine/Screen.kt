@@ -12,7 +12,7 @@ import javax.swing.JPanel
  */
 @Component
 class Screen(
-    val sceneService: SceneService
+    val sceneService: SceneService,
 ) : JPanel(), FocusListener, KeyListener, MouseMotionListener, MouseListener, MouseWheelListener {
     private var lastFrameTime = 0L
 
@@ -23,7 +23,9 @@ class Screen(
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
-        sceneService.render(g, System.currentTimeMillis() - lastFrameTime)
+        val now = System.currentTimeMillis()
+
+        sceneService.render(g, now, now - lastFrameTime)
 
         Toolkit.getDefaultToolkit().sync()
         lastFrameTime = System.currentTimeMillis()

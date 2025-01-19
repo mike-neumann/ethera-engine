@@ -3,17 +3,17 @@ package me.etheraengine.example.world
 import me.etheraengine.entity.Entity
 import me.etheraengine.example.entity.component.Position
 import me.etheraengine.g2d.entity.component.Animations2D
-import java.awt.Dimension
+import me.etheraengine.g2d.entity.component.Dimensions2D
 
 class Tile(
     val tileType: TileType,
     x: Double,
-    y: Double
+    y: Double,
 ) : Entity() {
     init {
         addComponents(
             Position(x, y),
-            Dimension(ExampleWorld.tileSize, ExampleWorld.tileSize),
+            Dimensions2D(ExampleWorld.tileSize, ExampleWorld.tileSize),
         )
 
         if (tileType.sprite != null) {

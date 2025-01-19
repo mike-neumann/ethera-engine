@@ -1,14 +1,17 @@
 package me.etheraengine.example.system
 
-import me.etheraengine.entity.*
+import me.etheraengine.entity.UIButton
+import me.etheraengine.entity.UICheckbox
+import me.etheraengine.entity.UILabel
+import me.etheraengine.entity.UISlider
 import me.etheraengine.entity.component.*
+import me.etheraengine.g2d.entity.component.Dimensions2D
+import me.etheraengine.g2d.entity.component.Position2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.RenderingSystem
 import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Graphics
-import java.awt.geom.Dimension2D
-import java.awt.geom.Point2D
 import kotlin.math.roundToInt
 
 @Component
@@ -22,8 +25,8 @@ class UIRenderingSystem : RenderingSystem {
         scene.getEntities {
             it is UIButton
         }.forEach {
-            val position = it.getComponent<Point2D>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+            val position = it.getComponent<Position2D>()!!
+            val dimensions = it.getComponent<Dimensions2D>()!!
             val text = it.getComponent<UIText>()!!
 
             g.color = text.color
@@ -45,19 +48,19 @@ class UIRenderingSystem : RenderingSystem {
             }
 
             // can be used to center text on the rendered UIButton (x-axis)
-            val xOffset = (dimension.width / 2) - (g.fontMetrics.stringWidth(text.text) / 2)
+            val xOffset = (dimensions.width / 2) - (g.fontMetrics.stringWidth(text.text) / 2)
 
             g.drawString(
                 text.text,
                 (position.x).toInt(),
-                (position.y + (dimension.height / 2) + (g.fontMetrics.height / 3)).toInt()
+                (position.y + (dimensions.height / 2) + (g.fontMetrics.height / 3)).toInt()
             )
         }
 
         scene.getEntities {
             it is UILabel
         }.forEach {
-            val position = it.getComponent<Point2D>()!!
+            val position = it.getComponent<Position2D>()!!
             val text = it.getComponent<UIText>()!!
 
             g.color = text.color
@@ -74,8 +77,8 @@ class UIRenderingSystem : RenderingSystem {
         scene.getEntities {
             it is UISlider
         }.forEach {
-            val position = it.getComponent<Point2D>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+            val position = it.getComponent<Position2D>()!!
+            val dimensions = it.getComponent<Dimensions2D>()!!
             val text = it.getComponent<UIText>()!!
             val value = it.getComponent<UIValue<Double>>()!!
 
@@ -83,12 +86,12 @@ class UIRenderingSystem : RenderingSystem {
             g.font = g.font.deriveFont(text.style)
             g.color = Color.LIGHT_GRAY
 
-            val pinHeight = dimension.height / 8
+            val pinHeight = dimensions.height / 8
 
             g.fillRect(
                 position.x.toInt(),
-                position.y.toInt() + ((dimension.height.toInt() / 2) - pinHeight.toInt() / 2),
-                dimension.width.toInt(),
+                position.y.toInt() + ((dimensions.height.toInt() / 2) - pinHeight.toInt() / 2),
+                dimensions.width.toInt(),
                 pinHeight.toInt()
             )
 
@@ -105,7 +108,7 @@ class UIRenderingSystem : RenderingSystem {
                 (it as UISlider).getPinXPositionForCurrentValue(10.0).toInt(),
                 position.y.toInt(),
                 10,
-                dimension.height.toInt()
+                dimensions.height.toInt()
             )
 
             g.color = text.color
@@ -114,15 +117,15 @@ class UIRenderingSystem : RenderingSystem {
             g.drawString(
                 "${value.value.roundToInt()}%",
                 position.x.toInt(),
-                position.y.toInt() + dimension.height.toInt()
+                position.y.toInt() + dimensions.height.toInt()
             )
         }
 
         scene.getEntities {
             it is UICheckbox
         }.forEach {
-            val position = it.getComponent<Point2D>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+            val position = it.getComponent<Position2D>()!!
+            val dimensions = it.getComponent<Dimensions2D>()!!
             val text = it.getComponent<UIText>()!!
 
             g.color = text.color
@@ -130,18 +133,18 @@ class UIRenderingSystem : RenderingSystem {
             g.font = g.font.deriveFont(text.style)
 
             // can be used to center text on the rendered UIButton (x-axis)
-            val xOffset = (dimension.width / 2) - (g.fontMetrics.stringWidth(text.text) / 2)
+            val xOffset = (dimensions.width / 2) - (g.fontMetrics.stringWidth(text.text) / 2)
 
             g.drawRect(
                 position.x.toInt(),
                 position.y.toInt(),
-                dimension.width.toInt(),
-                dimension.height.toInt()
+                dimensions.width.toInt(),
+                dimensions.height.toInt()
             )
             g.drawString(
                 text.text,
-                (position.x + dimension.width + (dimension.width / 4)).toInt(),
-                (position.y + (dimension.height / 2) + (g.fontMetrics.height / 3)).toInt()
+                (position.x + dimensions.width + (dimensions.width / 4)).toInt(),
+                (position.y + (dimensions.height / 2) + (g.fontMetrics.height / 3)).toInt()
             )
 
             val value = it.getComponent<UIValue<Boolean>>()!!
@@ -151,17 +154,17 @@ class UIRenderingSystem : RenderingSystem {
                     (position.x + 4).toInt(),
                     (position.y + 4).toInt(),
                     // TODO: uneven
-                    dimension.width.toInt() - 7,
-                    dimension.height.toInt() - 7
+                    dimensions.width.toInt() - 7,
+                    dimensions.height.toInt() - 7
                 )
             }
         }
 
         scene.getEntities {
-            it.hasComponent<Point2D>() && it.hasComponent<Dimension2D>() && it.hasComponent<UIFocusable>()
+            it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.hasComponent<UIFocusable>()
         }.forEach {
-            val position = it.getComponent<Point2D>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+            val position = it.getComponent<Position2D>()!!
+            val dimensions = it.getComponent<Dimensions2D>()!!
             val focusable = it.getComponent<UIFocusable>()!!
 
             if (focusable.isFocused) {
@@ -169,8 +172,8 @@ class UIRenderingSystem : RenderingSystem {
                 g.drawRect(
                     position.x.toInt(),
                     position.y.toInt(),
-                    dimension.width.toInt(),
-                    dimension.height.toInt()
+                    dimensions.width.toInt(),
+                    dimensions.height.toInt()
                 )
             }
         }

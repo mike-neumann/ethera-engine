@@ -1,11 +1,11 @@
 package me.etheraengine.g2d.system
 
 import me.etheraengine.g2d.entity.component.Animations2D
+import me.etheraengine.g2d.entity.component.Position2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.RenderingSystem
 import org.springframework.stereotype.Component
 import java.awt.Graphics
-import java.awt.geom.Point2D
 
 /**
  * prebuilt system to handle 2D animation graphics
@@ -19,7 +19,7 @@ class Animation2DRenderingSystem : RenderingSystem {
         deltaTime: Long,
     ) {
         scene.getEntities {
-            it.hasComponent<Animations2D>() && it.hasComponent<Point2D>()
+            it.hasComponent<Animations2D>() && it.hasComponent<Position2D>()
         }.forEach {
             val animations = it.getComponent<Animations2D>()!!
             val currentAnimation = animations.animations[animations.currentAnimation]
@@ -39,7 +39,7 @@ class Animation2DRenderingSystem : RenderingSystem {
                 }
             }
 
-            val position = it.getComponent<Point2D>()!!
+            val position = it.getComponent<Position2D>()!!
 
             // render current frame now...
             val currentSprite = currentAnimation.spritesheet.sprites[currentAnimation.currentSpriteIndex]

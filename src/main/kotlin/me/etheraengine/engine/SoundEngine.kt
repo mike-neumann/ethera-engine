@@ -7,14 +7,14 @@ import javax.sound.sampled.FloatControl
 import kotlin.math.log10
 
 /**
- * Engine responsible for handling sound volume
+ * Engine responsible for handling sound related tasks
  */
 @Component
-class SoundEngine(
+open class SoundEngine(
     val etheraConfig: EtheraConfig,
     val soundService: SoundService,
 ) : Engine("SoundEngine", 0) {
-    override fun onTick(deltaTime: Long) {
+    override fun onTick(now: Long, deltaTime: Long) {
         soundService.activeSounds.forEach { sound ->
             val floatControl = sound.clip.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl
 

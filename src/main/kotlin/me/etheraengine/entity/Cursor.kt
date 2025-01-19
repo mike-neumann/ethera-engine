@@ -1,8 +1,8 @@
 package me.etheraengine.entity
 
+import me.etheraengine.g2d.entity.component.Dimensions2D
+import me.etheraengine.g2d.entity.component.Position2D
 import org.springframework.stereotype.Component
-import java.awt.Dimension
-import java.awt.geom.Point2D
 
 /**
  * Represents the users 2d screen cursor, acts as an entity which also has a bounding box
@@ -11,8 +11,8 @@ import java.awt.geom.Point2D
 open class Cursor : Entity() {
     init {
         addComponents(
-            Point2D.Double(0.0, 0.0),
-            Dimension(1, 1)
+            Position2D(0.0, 0.0),
+            Dimensions2D(1, 1)
         )
     }
 }

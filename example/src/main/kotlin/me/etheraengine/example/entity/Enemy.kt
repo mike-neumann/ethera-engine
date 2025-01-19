@@ -4,19 +4,19 @@ import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.g2d.entity.component.Animations2D
+import me.etheraengine.g2d.entity.component.Dimensions2D
 import me.etheraengine.g2d.entity.component.Movement2D
-import java.awt.Dimension
 
 class Enemy(
     x: Double,
-    y: Double
+    y: Double,
 ) : Entity() {
     init {
         addComponents(
             State(EntityState.IDLE),
             Movement2D(300.0, 20.0, 20.0),
             Position(x, y),
-            Dimension(50, 35),
+            Dimensions2D(50, 35),
             Attack(1.0, 60.0, 250, 100, 40.0),
             Health(5.0, 100),
             EnemyAI(null),

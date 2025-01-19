@@ -16,7 +16,7 @@ import java.awt.event.*
  * Basic scene, used to register entities which are handled by registered systems in the ECS pattern
  */
 @Component
-abstract class Scene {
+open class Scene {
     private val log = logger<Scene>()
 
     var isInitialized = false
@@ -83,13 +83,29 @@ abstract class Scene {
     }
 
     /**
-     * Called when this scene is registered as a bean on spring level
+     * Called once, when the scene is initialized, or multiple times when reInitialize() is used
      */
-    abstract fun onInitialize()
-    abstract fun onEnable()
-    abstract fun onDisable()
-    abstract fun onRender(g: Graphics)
-    abstract fun onUpdate(deltaTime: Long)
+    open fun onInitialize() {}
+
+    /**
+     * Called every time this scene is switched to
+     */
+    open fun onEnable() {}
+
+    /**
+     * Called every time this scene is switched from
+     */
+    open fun onDisable() {}
+
+    /**
+     * Called every frame that is requested by the rendering engine
+     */
+    open fun onRender(g: Graphics, now: Long, deltaTime: Long) {}
+
+    /**
+     * Called every logic tick that is requested by the logic engine
+     */
+    open fun onUpdate(now: Long, deltaTime: Long) {}
 
     /**
      * Unregisters all known systems and reinitializes them
@@ -196,21 +212,21 @@ abstract class Scene {
     }
 
     @Synchronized
-    fun render(g: Graphics, deltaTime: Long) {
+    fun render(g: Graphics, now: Long, deltaTime: Long) {
         renderingSystems.forEach {
-            it.render(this, g, System.currentTimeMillis(), deltaTime)
+            it.render(this, g, now, deltaTime)
         }
 
-        onRender(g)
+        onRender(g, now, deltaTime)
     }
 
     @Synchronized
-    fun update(deltaTime: Long) {
+    fun update(now: Long, deltaTime: Long) {
         logicSystems.forEach {
-            it.update(this, System.currentTimeMillis(), deltaTime)
+            it.update(this, now, deltaTime)
         }
 
-        onUpdate(deltaTime)
+        onUpdate(now, deltaTime)
     }
 
     @Synchronized

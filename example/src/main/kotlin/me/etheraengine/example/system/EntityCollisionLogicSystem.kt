@@ -3,43 +3,43 @@ package me.etheraengine.example.system
 import me.etheraengine.entity.Entity
 import me.etheraengine.example.entity.component.Collideable
 import me.etheraengine.example.entity.component.Position
+import me.etheraengine.g2d.entity.component.Dimensions2D
+import me.etheraengine.g2d.entity.component.Position2D
 import me.etheraengine.g2d.util.CollisionUtils2D
 import me.etheraengine.scene.Scene
 import me.etheraengine.system.LogicSystem
 import org.springframework.stereotype.Component
-import java.awt.geom.Dimension2D
-import java.awt.geom.Point2D
 
 @Component
 class EntityCollisionLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         scene.getEntities {
-            it.hasComponent<Point2D>() && it.hasComponent<Dimension2D>() && it.getComponent<Collideable>()?.isCollideable == true
+            it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.getComponent<Collideable>()?.isCollideable == true
         }.forEach {
-            val position = it.getComponent<Point2D>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+            val position = it.getComponent<Position2D>()!!
+            val dimensions = it.getComponent<Dimensions2D>()!!
             val collidingEntities =
                 getCollidingEntities(
                     scene,
                     position.x,
                     position.y,
-                    dimension.width,
-                    dimension.height
+                    dimensions.width,
+                    dimensions.height
                 )
                     .filter { e -> e != it }
 
             collidingEntities.forEach {
                 val entityPosition = it.getComponent<Position>()!!
-                val entityDimension = it.getComponent<Dimension2D>()!!
+                val entityDimensions = it.getComponent<Dimensions2D>()!!
                 val mtv = CollisionUtils2D.getMinimumTranslationVector(
                     position.x,
                     position.y,
-                    dimension.width,
-                    dimension.height,
+                    dimensions.width,
+                    dimensions.height,
                     entityPosition.x,
                     entityPosition.y,
-                    entityDimension.width,
-                    entityDimension.height
+                    entityDimensions.width,
+                    entityDimensions.height
                 )
 
                 // allow for floaty mtv correction (entities can walk slightly into other entities hitboxes)
@@ -55,20 +55,20 @@ class EntityCollisionLogicSystem : LogicSystem {
         scene: Scene,
         x: Double,
         y: Double,
-        width: Double,
-        height: Double,
+        width: Int,
+        height: Int,
     ): List<Entity> {
         return scene.getEntities {
-            it.hasComponent<Position>() && it.hasComponent<Dimension2D>() && it.hasComponent<Collideable>()
+            it.hasComponent<Position>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Collideable>()
         }.filter {
             val position = it.getComponent<Position>()!!
-            val dimension = it.getComponent<Dimension2D>()!!
+            val dimensions = it.getComponent<Dimensions2D>()!!
 
             CollisionUtils2D.checkCollision(
                 position.x,
                 position.y,
-                dimension.width,
-                dimension.height,
+                dimensions.width,
+                dimensions.height,
                 x,
                 y,
                 width,

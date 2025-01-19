@@ -4,12 +4,12 @@ import me.etheraengine.entity.Entity
 import me.etheraengine.entity.component.State
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.g2d.entity.component.Animations2D
+import me.etheraengine.g2d.entity.component.Dimensions2D
 import me.etheraengine.g2d.entity.component.Movement2D
 import me.etheraengine.g2d.graphics.Animation2D
 import me.etheraengine.g2d.graphics.Spritesheet2D
 import org.springframework.stereotype.Component
 import org.springframework.util.ResourceUtils
-import java.awt.Dimension
 
 @Component
 class Player : Entity() {
@@ -153,7 +153,7 @@ class Player : Entity() {
             Movement2D(250.0),
             PlayerMovement(),
             Position(400.0, 400.0),
-            Dimension(50, 35),
+            Dimensions2D(50, 35),
             Attack(1.0, 40.0, 250, 100, 40.0),
             Health(10.0, 500),
             Collideable(true),
