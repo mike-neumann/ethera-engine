@@ -1,7 +1,7 @@
 package me.etheraengine.example.system
 
-import me.etheraengine.runtime.Ethera
 import me.etheraengine.example.entity.Player
+import me.etheraengine.runtime.Ethera
 import me.etheraengine.runtime.g2d.entity.component.*
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.LogicSystem

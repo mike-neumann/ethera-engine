@@ -1,8 +1,8 @@
 package me.etheraengine.example.system
 
-import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.example.entity.component.Collideable
 import me.etheraengine.example.entity.component.Position
+import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
 import me.etheraengine.runtime.g2d.entity.component.Position2D
 import me.etheraengine.runtime.g2d.util.CollisionUtils2D

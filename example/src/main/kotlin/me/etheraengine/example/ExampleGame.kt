@@ -1,7 +1,7 @@
 package me.etheraengine.example
 
-import me.etheraengine.runtime.Ethera
 import me.etheraengine.example.scene.ExampleScene
+import me.etheraengine.runtime.Ethera
 import me.etheraengine.runtime.service.SceneService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 

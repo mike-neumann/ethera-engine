@@ -22,7 +22,6 @@ subprojects {
 
     dependencies {
         api("org.springframework.boot:spring-boot-starter:3.3.1")
-
 //        implementation("org.lwjgl:lwjgl:3.3.1")
 //        implementation("org.lwjgl:lwjgl-opengl:3.3.1")
 //        implementation("org.lwjgl:lwjgl-glfw:3.3.1")
@@ -45,7 +44,6 @@ subprojects {
 //        runtimeOnly("org.lwjgl:lwjgl:3.3.1:natives-macos-arm64")
 //        runtimeOnly("org.lwjgl:lwjgl-glfw:3.3.1:natives-macos-arm64")
 //        runtimeOnly("org.lwjgl:lwjgl-opengl:3.3.1:natives-macos-arm64")
-
         // Testing Dependencies
         testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.1")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit")

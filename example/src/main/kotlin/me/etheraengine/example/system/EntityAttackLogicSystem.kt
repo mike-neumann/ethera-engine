@@ -1,8 +1,8 @@
 package me.etheraengine.example.system
 
+import me.etheraengine.example.entity.EntityState
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.runtime.entity.component.State
-import me.etheraengine.example.entity.EntityState
 import me.etheraengine.runtime.g2d.entity.component.*
 import me.etheraengine.runtime.g2d.util.CollisionUtils2D
 import me.etheraengine.runtime.scene.Scene

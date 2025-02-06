@@ -3,9 +3,7 @@ package me.etheraengine.example.entity
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.entity.component.State
-import me.etheraengine.runtime.g2d.entity.component.Animations2D
-import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
-import me.etheraengine.runtime.g2d.entity.component.Movement2D
+import me.etheraengine.runtime.g2d.entity.component.*
 import me.etheraengine.runtime.g2d.graphics.Animation2D
 import me.etheraengine.runtime.g2d.graphics.Spritesheet2D
 import org.springframework.stereotype.Component

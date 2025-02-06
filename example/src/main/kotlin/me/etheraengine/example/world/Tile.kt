@@ -1,7 +1,7 @@
 package me.etheraengine.example.world
 
-import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.example.entity.component.Position
+import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.g2d.entity.component.Animations2D
 import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
 
