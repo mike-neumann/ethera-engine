@@ -5,7 +5,7 @@ import me.etheraengine.runtime.Ethera
 import me.etheraengine.runtime.service.SceneService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
-@SpringBootApplication(scanBasePackages = ["me.etheraengine", "me.etheraengine.runtime.example"])
+@SpringBootApplication(scanBasePackages = ["me.etheraengine"])
 open class ExampleGame(val sceneService: SceneService)
 
 fun main() {
