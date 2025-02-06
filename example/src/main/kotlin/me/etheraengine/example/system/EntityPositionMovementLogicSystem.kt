@@ -1,30 +1,28 @@
 package me.etheraengine.example.system
 
-import me.etheraengine.entity.component.State
+import me.etheraengine.runtime.entity.component.State
 import me.etheraengine.example.entity.EntityState
 import me.etheraengine.example.entity.component.Position
-import me.etheraengine.g2d.entity.component.Movement2D
-import me.etheraengine.scene.Scene
-import me.etheraengine.system.LogicSystem
+import me.etheraengine.runtime.g2d.entity.component.Movement2D
+import me.etheraengine.runtime.scene.Scene
+import me.etheraengine.runtime.system.LogicSystem
 import org.springframework.stereotype.Component
 
 @Component
 class EntityPositionMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val deltaSeconds = deltaTime / 1_000f
+        val entities =
+            scene.getEntities { it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Movement2D>() }
 
-        scene.getEntities {
-            it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Movement2D>()
-        }.forEach {
-            val state = it.getComponent<State>()!!
+        for (entity in entities) {
+            val state = entity.getComponent<State>()!!
 
             if (state.state == EntityState.DYING || state.state == EntityState.DESPAWN || state.state == EntityState.DEAD) {
-                return@forEach
+                continue
             }
-
-            val position = it.getComponent<Position>()!!
-            val movement = it.getComponent<Movement2D>()!!
-
+            val position = entity.getComponent<Position>()!!
+            val movement = entity.getComponent<Movement2D>()!!
             // limit velocities to their respective terminal velocities by default
             movement.vx = Math.clamp(movement.vx, -movement.tvx, movement.tvx)
             movement.vy = Math.clamp(movement.vy, -movement.tvy, movement.tvy)

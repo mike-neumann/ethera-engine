@@ -1,16 +1,11 @@
 package me.etheraengine.example.entity
 
-import me.etheraengine.entity.Entity
-import me.etheraengine.entity.component.State
 import me.etheraengine.example.entity.component.*
-import me.etheraengine.g2d.entity.component.Animations2D
-import me.etheraengine.g2d.entity.component.Dimensions2D
-import me.etheraengine.g2d.entity.component.Movement2D
+import me.etheraengine.runtime.entity.Entity
+import me.etheraengine.runtime.entity.component.State
+import me.etheraengine.runtime.g2d.entity.component.*
 
-class Enemy(
-    x: Double,
-    y: Double,
-) : Entity() {
+class Enemy(x: Double, y: Double) : Entity() {
     init {
         addComponents(
             State(EntityState.IDLE),

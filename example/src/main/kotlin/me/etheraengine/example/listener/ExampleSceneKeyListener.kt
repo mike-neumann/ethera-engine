@@ -1,20 +1,16 @@
 package me.etheraengine.example.listener
 
 import me.etheraengine.example.entity.Player
-import me.etheraengine.example.entity.component.Attack
-import me.etheraengine.example.entity.component.Health
-import me.etheraengine.example.entity.component.PlayerMovement
+import me.etheraengine.example.entity.component.*
 import me.etheraengine.example.scene.PauseScene
-import me.etheraengine.service.SceneService
+import me.etheraengine.runtime.service.SceneService
 import org.springframework.stereotype.Component
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 
 @Component
-class ExampleSceneKeyListener(
-    private val player: Player,
-    private val sceneService: SceneService
-) : KeyListener {
+class ExampleSceneKeyListener(private val player: Player, private val sceneService: SceneService) :
+    KeyListener {
     override fun keyPressed(e: KeyEvent) {
         val attack = player.getComponent<Attack>()!!
         val playerMovement = player.getComponent<PlayerMovement>()!!

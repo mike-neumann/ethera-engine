@@ -1,9 +1,6 @@
 package me.etheraengine.example.entity.component
 
-data class Health(
-    var maxHealth: Double,
-    val cooldown: Long
-) {
+data class Health(var maxHealth: Double, val cooldown: Long) {
     var lastHealth = maxHealth
     var lastDamageTime: Long = 0
         private set

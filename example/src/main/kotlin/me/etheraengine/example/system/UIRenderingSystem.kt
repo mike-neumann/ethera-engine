@@ -1,14 +1,11 @@
 package me.etheraengine.example.system
 
-import me.etheraengine.entity.UIButton
-import me.etheraengine.entity.UICheckbox
-import me.etheraengine.entity.UILabel
-import me.etheraengine.entity.UISlider
-import me.etheraengine.entity.component.*
-import me.etheraengine.g2d.entity.component.Dimensions2D
-import me.etheraengine.g2d.entity.component.Position2D
-import me.etheraengine.scene.Scene
-import me.etheraengine.system.RenderingSystem
+import me.etheraengine.runtime.entity.*
+import me.etheraengine.runtime.entity.component.*
+import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
+import me.etheraengine.runtime.g2d.entity.component.Position2D
+import me.etheraengine.runtime.scene.Scene
+import me.etheraengine.runtime.system.RenderingSystem
 import org.springframework.stereotype.Component
 import java.awt.Color
 import java.awt.Graphics
@@ -16,37 +13,29 @@ import kotlin.math.roundToInt
 
 @Component
 class UIRenderingSystem : RenderingSystem {
-    override fun render(
-        scene: Scene,
-        g: Graphics,
-        now: Long,
-        deltaTime: Long,
-    ) {
-        scene.getEntities {
-            it is UIButton
-        }.forEach {
-            val position = it.getComponent<Position2D>()!!
-            val dimensions = it.getComponent<Dimensions2D>()!!
-            val text = it.getComponent<UIText>()!!
+    override fun render(scene: Scene, g: Graphics, now: Long, deltaTime: Long) {
+        val buttons = scene.getEntities { it is UIButton }
+
+        for (button in buttons) {
+            val position = button.getComponent<Position2D>()!!
+            val dimensions = button.getComponent<Dimensions2D>()!!
+            val text = button.getComponent<UIText>()!!
 
             g.color = text.color
             g.font = g.font.deriveFont(text.size)
             g.font = g.font.deriveFont(text.style)
-
             // if the entity hovered, scale up the font size a bit
-            it.getComponent<UIHoverable>()?.let {
+            button.getComponent<UIHoverable>()?.let {
                 if (it.isHovered) {
                     g.font = g.font.deriveFont(text.size + 5)
                 }
             }
-
             // if the entity is clicked, reset the font size
-            it.getComponent<UIClickable>()?.let {
+            button.getComponent<UIClickable>()?.let {
                 if (it.isClicked) {
                     g.font = g.font.deriveFont(text.size)
                 }
             }
-
             // can be used to center text on the rendered UIButton (x-axis)
             val xOffset = (dimensions.width / 2) - (g.fontMetrics.stringWidth(text.text) / 2)
 
@@ -56,12 +45,11 @@ class UIRenderingSystem : RenderingSystem {
                 (position.y + (dimensions.height / 2) + (g.fontMetrics.height / 3)).toInt()
             )
         }
+        val labels = scene.getEntities { it is UILabel }
 
-        scene.getEntities {
-            it is UILabel
-        }.forEach {
-            val position = it.getComponent<Position2D>()!!
-            val text = it.getComponent<UIText>()!!
+        for (label in labels) {
+            val position = label.getComponent<Position2D>()!!
+            val text = label.getComponent<UIText>()!!
 
             g.color = text.color
             g.font = g.font.deriveFont(text.size)
@@ -73,42 +61,39 @@ class UIRenderingSystem : RenderingSystem {
                 position.y.toInt()
             )
         }
+        val sliders = scene.getEntities { it is UISlider }
 
-        scene.getEntities {
-            it is UISlider
-        }.forEach {
-            val position = it.getComponent<Position2D>()!!
-            val dimensions = it.getComponent<Dimensions2D>()!!
-            val text = it.getComponent<UIText>()!!
-            val value = it.getComponent<UIValue<Double>>()!!
+        for (slider in sliders) {
+            val position = slider.getComponent<Position2D>()!!
+            val dimensions = slider.getComponent<Dimensions2D>()!!
+            val text = slider.getComponent<UIText>()!!
+            val value = slider.getComponent<UIValue<Double>>()!!
 
             g.font = g.font.deriveFont(text.size)
             g.font = g.font.deriveFont(text.style)
             g.color = Color.LIGHT_GRAY
-
             val pinHeight = dimensions.height / 8
 
             g.fillRect(
                 position.x.toInt(),
-                position.y.toInt() + ((dimensions.height.toInt() / 2) - pinHeight.toInt() / 2),
-                dimensions.width.toInt(),
-                pinHeight.toInt()
+                position.y.toInt() + ((dimensions.height / 2) - pinHeight / 2),
+                dimensions.width,
+                pinHeight
             )
 
             g.color = Color.GRAY
-
             // if the entity is hoverable, paint it white
-            it.getComponent<UIHoverable>()?.let {
+            slider.getComponent<UIHoverable>()?.let {
                 if (it.isHovered) {
                     g.color = Color.WHITE
                 }
             }
 
             g.fillRect(
-                (it as UISlider).getPinXPositionForCurrentValue(10.0).toInt(),
+                (slider as UISlider).getPinXPositionForCurrentValue(10.0).toInt(),
                 position.y.toInt(),
                 10,
-                dimensions.height.toInt()
+                dimensions.height
             )
 
             g.color = text.color
@@ -117,45 +102,42 @@ class UIRenderingSystem : RenderingSystem {
             g.drawString(
                 "${value.value.roundToInt()}%",
                 position.x.toInt(),
-                position.y.toInt() + dimensions.height.toInt()
+                position.y.toInt() + dimensions.height
             )
         }
+        val checkboxes = scene.getEntities { it is UICheckbox }
 
-        scene.getEntities {
-            it is UICheckbox
-        }.forEach {
-            val position = it.getComponent<Position2D>()!!
-            val dimensions = it.getComponent<Dimensions2D>()!!
-            val text = it.getComponent<UIText>()!!
+        for (checkbox in checkboxes) {
+            val position = checkbox.getComponent<Position2D>()!!
+            val dimensions = checkbox.getComponent<Dimensions2D>()!!
+            val text = checkbox.getComponent<UIText>()!!
 
             g.color = text.color
             g.font = g.font.deriveFont(text.size)
             g.font = g.font.deriveFont(text.style)
-
             // can be used to center text on the rendered UIButton (x-axis)
             val xOffset = (dimensions.width / 2) - (g.fontMetrics.stringWidth(text.text) / 2)
 
             g.drawRect(
                 position.x.toInt(),
                 position.y.toInt(),
-                dimensions.width.toInt(),
-                dimensions.height.toInt()
+                dimensions.width,
+                dimensions.height
             )
             g.drawString(
                 text.text,
                 (position.x + dimensions.width + (dimensions.width / 4)).toInt(),
                 (position.y + (dimensions.height / 2) + (g.fontMetrics.height / 3)).toInt()
             )
-
-            val value = it.getComponent<UIValue<Boolean>>()!!
+            val value = checkbox.getComponent<UIValue<Boolean>>()!!
 
             if (!value.value) {
                 g.fillRect(
                     (position.x + 4).toInt(),
                     (position.y + 4).toInt(),
                     // TODO: uneven
-                    dimensions.width.toInt() - 7,
-                    dimensions.height.toInt() - 7
+                    dimensions.width - 7,
+                    dimensions.height - 7
                 )
             }
         }
@@ -172,8 +154,8 @@ class UIRenderingSystem : RenderingSystem {
                 g.drawRect(
                     position.x.toInt(),
                     position.y.toInt(),
-                    dimensions.width.toInt(),
-                    dimensions.height.toInt()
+                    dimensions.width,
+                    dimensions.height
                 )
             }
         }

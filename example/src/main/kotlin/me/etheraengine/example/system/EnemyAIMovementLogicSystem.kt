@@ -2,25 +2,25 @@ package me.etheraengine.example.system
 
 import me.etheraengine.example.entity.component.EnemyAI
 import me.etheraengine.example.entity.component.Position
-import me.etheraengine.g2d.entity.component.Movement2D
-import me.etheraengine.scene.Scene
-import me.etheraengine.system.LogicSystem
+import me.etheraengine.runtime.g2d.entity.component.Movement2D
+import me.etheraengine.runtime.scene.Scene
+import me.etheraengine.runtime.system.LogicSystem
 import org.springframework.stereotype.Component
 
 @Component
 class EnemyAIMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        scene.getEntities {
-            it.hasComponent<EnemyAI>() && it.hasComponent<Position>() && it.hasComponent<Movement2D>()
-        }.forEach {
-            val enemyAi = it.getComponent<EnemyAI>()!!
+        val enemies =
+            scene.getEntities { it.hasComponent<EnemyAI>() && it.hasComponent<Position>() && it.hasComponent<Movement2D>() }
+
+        for (enemy in enemies) {
+            val enemyAi = enemy.getComponent<EnemyAI>()!!
 
             if (enemyAi.target == null) {
-                return@forEach
+                continue
             }
-
-            val enemyPosition = it.getComponent<Position>()!!
-            val enemyMovement = it.getComponent<Movement2D>()!!
+            val enemyPosition = enemy.getComponent<Position>()!!
+            val enemyMovement = enemy.getComponent<Movement2D>()!!
             val targetPosition = enemyAi.getTargetPosition()
             val distanceX = targetPosition!!.x - enemyPosition.x
             val distanceY = targetPosition.y - enemyPosition.y

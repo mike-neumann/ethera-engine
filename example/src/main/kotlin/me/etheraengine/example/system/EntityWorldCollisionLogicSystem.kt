@@ -1,25 +1,23 @@
 package me.etheraengine.example.system
 
 import me.etheraengine.example.world.Tile
-import me.etheraengine.g2d.entity.component.Dimensions2D
-import me.etheraengine.g2d.entity.component.Position2D
-import me.etheraengine.g2d.util.CollisionUtils2D
-import me.etheraengine.scene.Scene
-import me.etheraengine.system.LogicSystem
+import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
+import me.etheraengine.runtime.g2d.entity.component.Position2D
+import me.etheraengine.runtime.g2d.util.CollisionUtils2D
+import me.etheraengine.runtime.scene.Scene
+import me.etheraengine.runtime.system.LogicSystem
 import org.springframework.stereotype.Component
 
 @Component
 class EntityWorldCollisionLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val tiles = scene.getEntities {
-            it is Tile
-        } as List<Tile>
+        val tiles = scene.getEntities { it is Tile } as List<Tile>
+        val entities =
+            scene.getEntities { it !in tiles && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() }
 
-        scene.getEntities {
-            it !in tiles && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>()
-        }.forEach {
-            val position = it.getComponent<Position2D>()!!
-            val dimensions = it.getComponent<Dimensions2D>()!!
+        for (entity in entities) {
+            val position = entity.getComponent<Position2D>()!!
+            val dimensions = entity.getComponent<Dimensions2D>()!!
             val nextCollidingTiles =
                 getCollidingTiles(
                     tiles,
@@ -30,9 +28,9 @@ class EntityWorldCollisionLogicSystem : LogicSystem {
                 )
             val nextNotPassableCollidingTiles = nextCollidingTiles.filter { !it.tileType.isPassable }
 
-            nextNotPassableCollidingTiles.forEach {
-                val tilePosition = it.getComponent<Position2D>()!!
-                val tileDimensions = it.getComponent<Dimensions2D>()!!
+            for (nextNotPassableCollidingTile in nextNotPassableCollidingTiles) {
+                val tilePosition = nextNotPassableCollidingTile.getComponent<Position2D>()!!
+                val tileDimensions = nextNotPassableCollidingTile.getComponent<Dimensions2D>()!!
                 val mtv = CollisionUtils2D.getMinimumTranslationVector(
                     position.x,
                     position.y,

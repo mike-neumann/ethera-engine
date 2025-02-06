@@ -1,45 +1,37 @@
 package me.etheraengine.example.scene
 
-import me.etheraengine.Ethera
-import me.etheraengine.entity.UILabel
-import me.etheraengine.entity.component.State
-import me.etheraengine.example.entity.Enemy
-import me.etheraengine.example.entity.EntityState
-import me.etheraengine.example.entity.Player
+import me.etheraengine.example.entity.*
 import me.etheraengine.example.entity.component.EnemyAI
 import me.etheraengine.example.entity.component.Position
 import me.etheraengine.example.listener.ExampleSceneKeyListener
 import me.etheraengine.example.system.*
 import me.etheraengine.example.world.ExampleWorld
 import me.etheraengine.example.world.Tile
-import me.etheraengine.g2d.entity.component.Dimensions2D
-import me.etheraengine.g2d.system.Bounds2DRenderingSystem
-import me.etheraengine.g2d.world.Camera2D
-import me.etheraengine.scene.Scene
-import me.etheraengine.service.SoundService
+import me.etheraengine.runtime.Ethera
+import me.etheraengine.runtime.entity.UILabel
+import me.etheraengine.runtime.entity.component.State
+import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
+import me.etheraengine.runtime.g2d.system.Bounds2DRenderingSystem
+import me.etheraengine.runtime.g2d.world.Camera2D
+import me.etheraengine.runtime.scene.Scene
+import me.etheraengine.runtime.service.SoundService
 import org.springframework.stereotype.Component
-import java.awt.Color
-import java.awt.Font
-import java.awt.Graphics
+import java.awt.*
 import kotlin.system.exitProcess
 
 @Component
 class ExampleScene(
     private val player: Player,
-
     private val exampleSceneKeyListener: ExampleSceneKeyListener,
-
     private val entityStateLogicSystem: EntityStateLogicSystem,
     private val entityAnimationLogicSystem: EntityAnimationLogicSystem,
     private val entityAttackLogicSystem: EntityAttackLogicSystem,
-
     private val entityPositionMovementLogicSystem: EntityPositionMovementLogicSystem,
     private val playerMovementLogicSystem: PlayerMovementLogicSystem,
     private val entityWorldCollisionLogicSystem: EntityWorldCollisionLogicSystem,
     private val enemyAIMovementLogicSystem: EnemyAIMovementLogicSystem,
     private val enemyAIAttackLogicSystem: EnemyAIAttackLogicSystem,
     private val entityCollisionLogicSystem: EntityCollisionLogicSystem,
-
     private val entityHealthHudRenderingSystem: EntityHealthHudRenderingSystem,
     private val uiRenderingSystem: UIRenderingSystem,
     private val soundService: SoundService,
@@ -62,7 +54,6 @@ class ExampleScene(
             entityCollisionLogicSystem,
             entityAnimationLogicSystem
         )
-
         val tiles = ExampleWorld.tileTypeMask.mapIndexed { yIndex, tileTypes ->
             tileTypes.mapIndexed { xIndex, tileType ->
                 val tileX = xIndex * ExampleWorld.tileSize
@@ -79,43 +70,13 @@ class ExampleScene(
             enemy
         }.toTypedArray()
         val hud = arrayOf(
-            UILabel(
-                100.0,
-                40.0,
-                "WASD or Arrow keys to move",
-                40f,
-                Color.WHITE,
-                Font.PLAIN
-            ),
-            UILabel(
-                100.0,
-                85.0,
-                "Space to attack",
-                40f,
-                Color.WHITE,
-                Font.PLAIN
-            ),
-            UILabel(
-                100.0,
-                135.0,
-                "Q to take damage",
-                40f,
-                Color.WHITE,
-                Font.PLAIN
-            ),
-            UILabel(
-                100.0,
-                185.0,
-                "ESC to pause",
-                40f,
-                Color.WHITE,
-                Font.PLAIN
-            )
+            UILabel(100.0, 40.0, "WASD or Arrow keys to move", 40f, Color.WHITE, Font.PLAIN),
+            UILabel(100.0, 85.0, "Space to attack", 40f, Color.WHITE, Font.PLAIN),
+            UILabel(100.0, 135.0, "Q to take damage", 40f, Color.WHITE, Font.PLAIN),
+            UILabel(100.0, 185.0, "ESC to pause", 40f, Color.WHITE, Font.PLAIN)
         )
-
         // player needs to be added last (render layer principal)
         addEntities(*tiles, *enemies, player, *hud)
-
         // TODO: comment back in
         //soundService.playSound("main_loop.wav", loop = true)
     }

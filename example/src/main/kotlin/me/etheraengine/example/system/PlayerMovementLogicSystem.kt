@@ -2,20 +2,20 @@ package me.etheraengine.example.system
 
 import me.etheraengine.example.entity.Player
 import me.etheraengine.example.entity.component.PlayerMovement
-import me.etheraengine.g2d.entity.component.Movement2D
-import me.etheraengine.scene.Scene
-import me.etheraengine.system.LogicSystem
+import me.etheraengine.runtime.g2d.entity.component.Movement2D
+import me.etheraengine.runtime.scene.Scene
+import me.etheraengine.runtime.system.LogicSystem
 import org.springframework.stereotype.Component
 import kotlin.math.sqrt
 
 @Component
 class PlayerMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        scene.getEntities {
-            it is Player
-        }.forEach {
-            val playerMovement = it.getComponent<PlayerMovement>()!!
-            val movement = it.getComponent<Movement2D>()!!
+        val players = scene.getEntities { it is Player }
+
+        for (player in players) {
+            val playerMovement = player.getComponent<PlayerMovement>()!!
+            val movement = player.getComponent<Movement2D>()!!
 
             if (playerMovement.isMovingUp) {
                 movement.vy = -1.0
@@ -32,7 +32,6 @@ class PlayerMovementLogicSystem : LogicSystem {
             } else {
                 movement.vx = 0.0
             }
-
             // normalize diagonal movement
             val magnitude =
                 sqrt(movement.vx * movement.vx + movement.vy * movement.vy)

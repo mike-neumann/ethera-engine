@@ -1,26 +1,18 @@
 package me.etheraengine.example.world
 
-import me.etheraengine.g2d.entity.component.Sprite2D
-import me.etheraengine.g2d.graphics.Animation2D
-import me.etheraengine.g2d.graphics.Spritesheet2D
+import me.etheraengine.runtime.g2d.entity.component.Sprite2D
+import me.etheraengine.runtime.g2d.graphics.Animation2D
+import me.etheraengine.runtime.g2d.graphics.Spritesheet2D
 import org.springframework.util.ResourceUtils
 
 enum class TileType(
     val mask: Char,
     val sprite: Sprite2D? = null,
     val animations: Map<String, Animation2D>? = null,
-    val isPassable: Boolean
+    val isPassable: Boolean,
 ) {
-    AIR(
-        ' ',
-        Sprite2D(ResourceUtils.getFile("classpath:assets/tiles/air.png")),
-        isPassable = true
-    ),
-    GRASS(
-        'G',
-        Sprite2D(ResourceUtils.getFile("classpath:assets/tiles/grass.png")),
-        isPassable = true
-    ),
+    AIR(' ', Sprite2D(ResourceUtils.getFile("classpath:assets/tiles/air.png")), isPassable = true),
+    GRASS('G', Sprite2D(ResourceUtils.getFile("classpath:assets/tiles/grass.png")), isPassable = true),
     WATER(
         'W',
         animations = mapOf(
@@ -30,9 +22,7 @@ enum class TileType(
                     100,
                     100,
                     1
-                ),
-                250,
-                true
+                ), 250, true
             )
         ),
         isPassable = false
