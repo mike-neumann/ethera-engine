@@ -16,14 +16,9 @@ abstract class Engine(name: String, val tickDuration: Int) : Thread(name), Comma
         while (true) {
             val now = System.currentTimeMillis()
             val deltaTime = now - lastTickTime
-            val elapsedTime = measureTimeMillis {
-                onTick(now, deltaTime)
-            }
-
-            if (elapsedTime < tickDuration) {
-                // TODO: marcel tips?
-                sleep(tickDuration - elapsedTime)
-            }
+            val elapsedTime = measureTimeMillis { onTick(now, deltaTime) }
+            // TODO: marcel tips?
+            if (elapsedTime < tickDuration) sleep(tickDuration - elapsedTime)
 
             lastTickTime = now
         }

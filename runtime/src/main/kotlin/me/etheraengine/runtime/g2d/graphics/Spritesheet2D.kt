@@ -23,12 +23,7 @@ open class Spritesheet2D(
         for (row in 0 until rows) {
             for (x in 0..image.width - gridWidth step gridWidth) {
                 subImages.add(
-                    image.getSubimage(
-                        x + offset,
-                        (gridHeight * row) + offset,
-                        gridWidth - (offset * 2),
-                        gridHeight - (offset * 2)
-                    )
+                    image.getSubimage(x + offset, (gridHeight * row) + offset, gridWidth - (offset * 2), gridHeight - (offset * 2))
                 )
             }
         }

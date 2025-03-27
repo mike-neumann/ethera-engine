@@ -34,10 +34,9 @@ open class Ethera(val configurationService: ConfigurationService, val screen: Sc
             }
 
             windowTitle = title
-            context =
-                SpringApplicationBuilder().sources(Ethera::class.java, type)
-                    .banner(EtheraBanner())
-                    .run()
+            context = SpringApplicationBuilder().sources(Ethera::class.java, type)
+                .banner(EtheraBanner())
+                .run()
             return context.getBean(type)
         }
 
@@ -62,11 +61,7 @@ open class Ethera(val configurationService: ConfigurationService, val screen: Sc
         frame.focusTraversalKeysEnabled = false
         // set default font if specified in config
         if (configurationService.fontUrl != "") {
-            screen.font =
-                Font.createFont(
-                    Font.TRUETYPE_FONT,
-                    File(configurationService.fontUrl).toURI().toURL().openStream()
-                )
+            screen.font = Font.createFont(Font.TRUETYPE_FONT, File(configurationService.fontUrl).toURI().toURL().openStream())
         }
     }
 }

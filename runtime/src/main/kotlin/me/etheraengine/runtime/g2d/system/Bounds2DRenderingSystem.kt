@@ -21,12 +21,7 @@ class Bounds2DRenderingSystem : RenderingSystem {
             val position = it.getComponent<Position2D>()!!
             val dimensions = it.getComponent<Dimensions2D>()!!
 
-            g.drawRect(
-                position.x.toInt(),
-                position.y.toInt(),
-                dimensions.width,
-                dimensions.height
-            )
+            g.drawRect(position.x.toInt(), position.y.toInt(), dimensions.width, dimensions.height)
         }
     }
 }

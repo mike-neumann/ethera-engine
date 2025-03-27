@@ -23,18 +23,14 @@ class UIFocusLogicSystem : LogicSystem, KeyListener {
         for (entity in entities) {
             val focusable = entity.getComponent<UIFocusable>()!!
 
-            if (!focusable.isFocused) {
-                continue
-            }
+            if (!focusable.isFocused) continue
             val index = scene.getEntities().indexOf(entity)
 
             if (isUp || (isTab && isShift)) {
                 // search for previous focusable element
                 val previous = scene.getEntities()
                     .reversed()
-                    .firstOrNull { previous ->
-                        scene.getEntities().indexOf(previous) < index && previous.hasComponent<UIFocusable>()
-                    }
+                    .firstOrNull { scene.getEntities().indexOf(it) < index && it.hasComponent<UIFocusable>() }
                     ?: continue
                 val previousFocusable = previous.getComponent<UIFocusable>()!!
 
@@ -61,16 +57,11 @@ class UIFocusLogicSystem : LogicSystem, KeyListener {
                 isDown = false
             }
         }
-        val focusedEntities = scene.getEntities {
-            it.hasComponent<UIFocusable>() && it.getComponent<UIFocusable>()!!.isFocused
-        }
+        val focusedEntities = scene.getEntities { it.hasComponent<UIFocusable>() && it.getComponent<UIFocusable>()!!.isFocused }
 
         if (focusedEntities.isEmpty()) {
             // activate first non focused element
-            val first = scene.getEntities {
-                it.hasComponent<UIFocusable>()
-            }.firstOrNull()
-                ?: return
+            val first = scene.getEntities { it.hasComponent<UIFocusable>() }.firstOrNull() ?: return
             val focusable = first.getComponent<UIFocusable>()!!
 
             if (isUp || isTab || isDown) {

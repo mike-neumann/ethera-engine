@@ -10,7 +10,5 @@ import org.springframework.stereotype.Component
 @Component
 open class LogicEngine(configurationService: ConfigurationService, val sceneService: SceneService) :
     Engine("LogicEngine", 1_000 / configurationService.tps) {
-    override fun onTick(now: Long, deltaTime: Long) {
-        sceneService.update(now, deltaTime)
-    }
+    override fun onTick(now: Long, deltaTime: Long): Unit = run { sceneService.update(now, deltaTime) }
 }

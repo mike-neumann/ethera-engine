@@ -42,11 +42,7 @@ open class UISlider(
 ) {
     init {
         // add components needed for all sliders
-        addComponents(
-            UIHoverable(onHover, offHover),
-            UIClickable(onClick, offClick),
-            UIDraggable(onDrag, offDrag)
-        )
+        addComponents(UIHoverable(onHover, offHover), UIClickable(onClick, offClick), UIDraggable(onDrag, offDrag))
     }
 
     /**

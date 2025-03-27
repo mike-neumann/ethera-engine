@@ -324,9 +324,7 @@ open class Scene {
             cachedEntities = entities.size
         }
         // cache and return filter results
-        return cachedFilterResults.computeIfAbsent(filter) {
-            entities.filter(filter::filter)
-        }
+        return cachedFilterResults.computeIfAbsent(filter) { entities.filter(filter::filter) }
     }
 
     fun interface EntityFilter {

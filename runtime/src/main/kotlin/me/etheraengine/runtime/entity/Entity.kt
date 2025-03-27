@@ -8,11 +8,9 @@ open class Entity {
     private var cachedComponents = 0
     private val cachedComponentFilterResults = mutableMapOf<Class<*>, Any>()
 
-    fun <T : Any> addComponents(vararg components: T) {
-        for (component in components) {
-            this.components[component::class.java] = component
-        }
-    }
+    fun <T : Any> addComponents(vararg components: T) = this.components.putAll(components.associateBy { it::class.java })
+    inline fun <reified T : Any> getComponent(): T? = getComponent(T::class.java)
+    inline fun <reified T : Any> hasComponent() = hasComponent(T::class.java)
 
     @PublishedApi
     @Suppress("UNCHECKED_CAST")
@@ -24,20 +22,13 @@ open class Entity {
         }
 
         if (!cachedComponentFilterResults.containsKey(type)) {
-            val component =
-                components.entries.find { type == it.key || type.isAssignableFrom(it.key) }?.value as? T
-                    ?: return null
-
+            val component = components.entries.find { type == it.key || type.isAssignableFrom(it.key) }?.value as? T ?: return null
             cachedComponentFilterResults[type] = component
         }
 
         return cachedComponentFilterResults[type] as T?
     }
 
-    inline fun <reified T : Any> getComponent(): T? = getComponent(T::class.java)
-
     @PublishedApi
     internal fun <T : Any> hasComponent(type: Class<T>) = getComponent(type) != null
-
-    inline fun <reified T : Any> hasComponent() = hasComponent(T::class.java)
 }

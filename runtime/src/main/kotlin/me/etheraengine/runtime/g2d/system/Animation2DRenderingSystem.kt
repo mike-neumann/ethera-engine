@@ -17,14 +17,11 @@ class Animation2DRenderingSystem : RenderingSystem {
 
         for (entity in entities) {
             val animations = entity.getComponent<Animations2D>()!!
-            val currentAnimation = animations.animations[animations.currentAnimation]
-                ?: continue
+            val currentAnimation = animations.animations[animations.currentAnimation] ?: continue
             // stop last animation
             animations.animations[animations.lastAnimation]?.isPlaying = false
 
-            if (!currentAnimation.isPlaying) {
-                currentAnimation.isPlaying = true
-            }
+            if (!currentAnimation.isPlaying) currentAnimation.isPlaying = true
 
             if (currentAnimation.currentSpriteIndex == currentAnimation.spritesheet.sprites.size) {
                 if (currentAnimation.shouldLoop) {
@@ -47,9 +44,7 @@ class Animation2DRenderingSystem : RenderingSystem {
             )
             val frameTime = System.currentTimeMillis() - currentAnimation.lastFrameTime
 
-            if (frameTime >= currentAnimation.frameDuration) {
-                currentAnimation.currentSpriteIndex++
-            }
+            if (frameTime >= currentAnimation.frameDuration) currentAnimation.currentSpriteIndex++
         }
     }
 }

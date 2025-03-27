@@ -22,14 +22,8 @@ object CollisionUtils2D {
         theirWidth: Int,
         theirHeight: Int,
     ): Pair<Double, Double> {
-        if (!checkXCollision(ourX, ourWidth, theirX, theirWidth) && !checkYCollision(
-                ourY,
-                ourHeight,
-                theirY,
-                theirHeight
-            )
-        ) {
-            return 0.0 to 0.0
+        return if (!checkXCollision(ourX, ourWidth, theirX, theirWidth) && !checkYCollision(ourY, ourHeight, theirY, theirHeight)) {
+            0.0 to 0.0
         } else {
             val ourMaxY = ourY + ourHeight
             val theirMaxY = theirY + theirHeight
@@ -39,11 +33,9 @@ object CollisionUtils2D {
             val bottomTranslation = theirMaxY - ourY
             val leftTranslation = -(ourMaxX - theirX)
             val rightTranslation = theirMaxX - ourX
-            val mtv = listOf(leftTranslation, rightTranslation).minBy { abs(it) } to listOf(
-                topTranslation,
-                bottomTranslation
-            ).minBy { abs(it) }
-            return if (abs(mtv.first) < abs(mtv.second)) mtv.first to 0.0 else 0.0 to mtv.second
+            val mtv =
+                listOf(leftTranslation, rightTranslation).minBy { abs(it) } to listOf(topTranslation, bottomTranslation).minBy { abs(it) }
+            if (abs(mtv.first) < abs(mtv.second)) mtv.first to 0.0 else 0.0 to mtv.second
         }
     }
 

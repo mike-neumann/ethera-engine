@@ -9,7 +9,5 @@ open class World2D(val file: File) {
     /**
      * 2D list containing all tile characters in the following order (parent list: y, sub list: x)
      */
-    val mask = file.readLines()
-        .map { it.toCharArray() }
-        .toMutableList()
+    val mask = file.readLines().map { it.toCharArray() }.toMutableList()
 }

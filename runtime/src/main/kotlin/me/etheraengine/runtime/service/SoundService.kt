@@ -84,8 +84,7 @@ class SoundService(val configurationService: ConfigurationService) {
 
     @Synchronized
     fun stopSound(key: String) {
-        val sounds = activeSounds
-            .filter { it.name == key }
+        val sounds = activeSounds.filter { it.name == key }
 
         for (sound in sounds) {
             sound.clip.stop()

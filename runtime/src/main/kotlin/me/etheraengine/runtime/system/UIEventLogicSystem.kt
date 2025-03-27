@@ -91,13 +91,8 @@ class UIEventLogicSystem(val cursor: Cursor) : LogicSystem, MouseListener, Mouse
         position.setLocation(x - 9, y - 30 - (dimensions.height / 2))
     }
 
-    override fun mouseDragged(e: MouseEvent) {
-        updateCursorPosition(e.x.toDouble(), e.y.toDouble())
-    }
-
-    override fun mouseMoved(e: MouseEvent) {
-        updateCursorPosition(e.x.toDouble(), e.y.toDouble())
-    }
+    override fun mouseDragged(e: MouseEvent) = updateCursorPosition(e.x.toDouble(), e.y.toDouble())
+    override fun mouseMoved(e: MouseEvent) = updateCursorPosition(e.x.toDouble(), e.y.toDouble())
 
     override fun mousePressed(e: MouseEvent) {
         when (e.button) {
