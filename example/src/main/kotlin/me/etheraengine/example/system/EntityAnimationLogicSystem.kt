@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 class EntityAnimationLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val entities =
-            scene.getEntities { it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Animations2D>() }
+            scene.getFilteredEntities { it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Animations2D>() }
 
         for (entity in entities) {
             val state = entity.getComponent<State>()!!

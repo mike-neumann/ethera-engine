@@ -16,59 +16,66 @@ import java.awt.event.*
  */
 @Component
 class UIEventLogicSystem(val cursor: Cursor) : LogicSystem, MouseListener, MouseMotionListener, KeyListener {
-    private var isLeftMouse = false
-    private var isSpace = false
-    private var isEnter = false
+    private var leftMouseDown = false
+    private var spaceDown = false
+    private var enterDown = false
+    private var hovering = false
+    private var clicking = false
+    private var dragging = false
 
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val cursorPosition = cursor.getComponent<Position2D>()!!
-        val uiElements = scene.getEntities { it is UIElement }
+        val uiElements = scene.getFilteredEntities { it is UIElement }
 
         for (uiElement in uiElements) {
             uiElement.getComponent<UIFocusable>()?.let {
-                val isMouseHovered = CollisionUtils2D.checkCollision(uiElement, cursor)
-                val isMouseInteracted = isMouseHovered && isLeftMouse
-                val isKeyboardHovered = it.isFocused
-                val isKeyboardInteracted = isKeyboardHovered && (isSpace || isEnter)
+                val mouseHovered = CollisionUtils2D.checkCollision(uiElement, cursor)
+                val mouseInteracted = mouseHovered && leftMouseDown
+                val focused = it.isFocused
+                val keyboardInteracted = focused && (spaceDown || enterDown)
                 // handle hover event is uiElement is hoverable
                 uiElement.getComponent<UIHoverable>()?.let {
-                    if ((isMouseHovered || isKeyboardHovered) && !it.isHovered) {
+                    if ((mouseHovered || focused) && !it.isHovered && !leftMouseDown) {
+                        hovering = true
                         it.isHovered = true
                         it.onHover(uiElement)
-                    } else if ((!isMouseHovered && !isKeyboardHovered) && it.isHovered) {
+                    } else if ((!mouseHovered && !focused) && it.isHovered && !leftMouseDown) {
+                        hovering = false
                         it.isHovered = false
                         it.offHover(uiElement)
                     }
                 }
                 // handle click event if uiElement is clickable
                 uiElement.getComponent<UIClickable>()?.let {
-                    if ((isMouseInteracted || isKeyboardInteracted) && !it.isClicked) {
+                    if ((mouseInteracted || keyboardInteracted) && !it.isClicked && !clicking) {
+                        clicking = true
                         it.isClicked = true
                         it.onClick(uiElement)
-                    } else if ((!isMouseInteracted && !isKeyboardInteracted) && it.isClicked) {
+                    } else if ((!leftMouseDown && !keyboardInteracted) && it.isClicked && clicking) {
+                        clicking = false
                         it.isClicked = false
                         it.offClick(uiElement)
                     }
                 }
                 // handle drag event if uiElement is draggable
                 uiElement.getComponent<UIDraggable>()?.let {
-                    if (isMouseInteracted && !it.isDragging) {
+                    if (mouseInteracted && !it.isDragging && !dragging) {
+                        dragging = true
                         it.fromX = cursorPosition.x
                         it.fromY = cursorPosition.y
                         it.toX = cursorPosition.x
                         it.toY = cursorPosition.y
                         it.isDragging = true
                         it.onDrag(uiElement, it.fromX, it.fromY, it.toX, it.toY)
-                    }
-
-                    if (isMouseInteracted && it.isDragging) {
+                    } else if (it.isDragging && dragging) {
                         it.toX = cursorPosition.x
                         it.toY = cursorPosition.y
                         it.isDragging = true
                         it.onDrag(uiElement, it.fromX, it.fromY, it.toX, it.toY)
                     }
 
-                    if (!isMouseInteracted && it.isDragging) {
+                    if (!leftMouseDown && it.isDragging && dragging) {
+                        dragging = false
                         it.isDragging = false
                         it.offDrag(uiElement, it.fromX, it.fromY, it.toX, it.toY)
                     }
@@ -96,27 +103,27 @@ class UIEventLogicSystem(val cursor: Cursor) : LogicSystem, MouseListener, Mouse
 
     override fun mousePressed(e: MouseEvent) {
         when (e.button) {
-            MouseEvent.BUTTON1 -> isLeftMouse = true
+            MouseEvent.BUTTON1 -> leftMouseDown = true
         }
     }
 
     override fun mouseReleased(e: MouseEvent) {
         when (e.button) {
-            MouseEvent.BUTTON1 -> isLeftMouse = false
+            MouseEvent.BUTTON1 -> leftMouseDown = false
         }
     }
 
     override fun keyPressed(e: KeyEvent) {
         when (e.keyCode) {
-            KeyEvent.VK_SPACE -> isSpace = true
-            KeyEvent.VK_ENTER -> isEnter = true
+            KeyEvent.VK_SPACE -> spaceDown = true
+            KeyEvent.VK_ENTER -> enterDown = true
         }
     }
 
     override fun keyReleased(e: KeyEvent) {
         when (e.keyCode) {
-            KeyEvent.VK_SPACE -> isSpace = false
-            KeyEvent.VK_ENTER -> isEnter = false
+            KeyEvent.VK_SPACE -> spaceDown = false
+            KeyEvent.VK_ENTER -> enterDown = false
         }
     }
 

@@ -7,17 +7,9 @@ import javax.imageio.ImageIO
 /**
  * Class to load a 2D spritesheet for later use for rendering via an animation system
  */
-open class Spritesheet2D(
-    val file: File,
-    val gridWidth: Int,
-    val gridHeight: Int,
-    val rows: Int,
-    val offset: Int = 0,
-) {
-    val image: BufferedImage = ImageIO.read(file)
-    val sprites: Array<BufferedImage>
-
-    init {
+open class Spritesheet2D(val file: File, val gridWidth: Int, val gridHeight: Int, val rows: Int, val offset: Int = 0) {
+    val image = ImageIO.read(file)!!
+    val sprites = let {
         val subImages = mutableListOf<BufferedImage>()
 
         for (row in 0 until rows) {
@@ -27,7 +19,6 @@ open class Spritesheet2D(
                 )
             }
         }
-
-        this.sprites = subImages.toTypedArray()
+        subImages.toTypedArray()
     }
 }

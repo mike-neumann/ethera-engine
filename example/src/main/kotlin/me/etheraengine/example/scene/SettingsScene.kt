@@ -22,10 +22,9 @@ class SettingsScene(
         addRenderingSystems(uiRenderingSystem)
         val xRenderOffset = 100.0
         val settingsLabel = UILabel(xRenderOffset, 100.0, "SETTINGS", 100f, Color.BLACK, Font.BOLD)
-        val soundSlider =
-            UISlider(xRenderOffset, 400.0, 150, 50, "SOUND", 30f, Color.BLACK, Font.PLAIN, 100.0, offClick = {
-                soundService.playSound("select.wav")
-            }, onChange = { _, _, newValue -> soundService.volume = newValue.toFloat() / 100.0f })
+        val soundSlider = UISlider(xRenderOffset, 400.0, 150, 50, "SOUND", 30f, Color.BLACK, Font.PLAIN, 100.0, offClick = {
+            soundService.playSound("select.wav")
+        }, onChange = { _, _, newValue -> soundService.volume = newValue.toFloat() / 100.0f })
         val testCheckbox = UICheckbox(
             xRenderOffset,
             460.0,

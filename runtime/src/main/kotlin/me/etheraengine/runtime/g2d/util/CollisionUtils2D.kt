@@ -62,19 +62,11 @@ object CollisionUtils2D {
     fun checkYCollision(ourY: Double, ourHeight: Int, theirY: Double, theirHeight: Int) =
         (theirY <= ourY + ourHeight || theirY + theirHeight <= ourY + ourHeight) && (theirY >= ourY || theirY + theirHeight >= ourY)
 
-    fun checkXCollision(
-        ourPosition: Position2D,
-        ourDimensions: Dimensions2D,
-        theirPosition: Position2D,
-        theirDimensions: Dimensions2D,
-    ) = checkXCollision(ourPosition.x, ourDimensions.width, theirPosition.x, theirDimensions.width)
+    fun checkXCollision(ourPosition: Position2D, ourDimensions: Dimensions2D, theirPosition: Position2D, theirDimensions: Dimensions2D) =
+        checkXCollision(ourPosition.x, ourDimensions.width, theirPosition.x, theirDimensions.width)
 
-    fun checkYCollision(
-        ourPosition: Position2D,
-        ourDimensions: Dimensions2D,
-        theirPosition: Position2D,
-        theirDimensions: Dimensions2D,
-    ) = checkYCollision(ourPosition.y, ourDimensions.height, theirPosition.y, theirDimensions.height)
+    fun checkYCollision(ourPosition: Position2D, ourDimensions: Dimensions2D, theirPosition: Position2D, theirDimensions: Dimensions2D) =
+        checkYCollision(ourPosition.y, ourDimensions.height, theirPosition.y, theirDimensions.height)
 
     fun checkCollision(
         ourX: Double,
@@ -85,34 +77,24 @@ object CollisionUtils2D {
         theirY: Double,
         theirWidth: Int,
         theirHeight: Int,
-    ) = checkXCollision(ourX, ourWidth, theirX, theirWidth) && checkYCollision(
-        ourY,
-        ourHeight,
-        theirY,
-        theirHeight
-    )
+    ) = checkXCollision(ourX, ourWidth, theirX, theirWidth) && checkYCollision(ourY, ourHeight, theirY, theirHeight)
 
-    fun checkCollision(
-        ourPosition: Position2D,
-        ourDimensions: Dimensions2D,
-        theirPosition: Position2D,
-        theirDimensions: Dimensions2D,
-    ) = checkCollision(
-        ourPosition.x,
-        ourPosition.y,
-        ourDimensions.width,
-        ourDimensions.height,
-        theirPosition.x,
-        theirPosition.y,
-        theirDimensions.width,
-        theirDimensions.height
-    )
+    fun checkCollision(ourPosition: Position2D, ourDimensions: Dimensions2D, theirPosition: Position2D, theirDimensions: Dimensions2D) =
+        checkCollision(
+            ourPosition.x,
+            ourPosition.y,
+            ourDimensions.width,
+            ourDimensions.height,
+            theirPosition.x,
+            theirPosition.y,
+            theirDimensions.width,
+            theirDimensions.height
+        )
 
-    fun checkCollision(our: Entity, their: Entity): Boolean {
-        val ourPosition = our.getComponent<Position2D>()!!
-        val ourDimension = our.getComponent<Dimensions2D>()!!
-        val theirPosition = their.getComponent<Position2D>()!!
-        val theirDimension = their.getComponent<Dimensions2D>()!!
-        return checkCollision(ourPosition, ourDimension, theirPosition, theirDimension)
-    }
+    fun checkCollision(our: Entity, their: Entity) = checkCollision(
+        our.getComponent<Position2D>()!!,
+        our.getComponent<Dimensions2D>()!!,
+        their.getComponent<Position2D>()!!,
+        their.getComponent<Dimensions2D>()!!
+    )
 }

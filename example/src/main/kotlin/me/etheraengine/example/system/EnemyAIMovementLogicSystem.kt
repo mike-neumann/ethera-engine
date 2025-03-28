@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 class EnemyAIMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val enemies =
-            scene.getEntities { it.hasComponent<EnemyAI>() && it.hasComponent<Position>() && it.hasComponent<Movement2D>() }
+            scene.getFilteredEntities { it.hasComponent<EnemyAI>() && it.hasComponent<Position>() && it.hasComponent<Movement2D>() }
 
         for (enemy in enemies) {
             val enemyAi = enemy.getComponent<EnemyAI>()!!

@@ -13,7 +13,7 @@ class EntityPositionMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val deltaSeconds = deltaTime / 1_000f
         val entities =
-            scene.getEntities { it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Movement2D>() }
+            scene.getFilteredEntities { it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Movement2D>() }
 
         for (entity in entities) {
             val state = entity.getComponent<State>()!!

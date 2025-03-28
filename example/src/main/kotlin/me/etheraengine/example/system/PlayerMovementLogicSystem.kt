@@ -11,7 +11,7 @@ import kotlin.math.sqrt
 @Component
 class PlayerMovementLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val players = scene.getEntities { it is Player }
+        val players = scene.getFilteredEntities { it is Player }
 
         for (player in players) {
             val playerMovement = player.getComponent<PlayerMovement>()!!

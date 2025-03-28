@@ -12,7 +12,7 @@ import java.awt.Graphics
 @Component
 class Sprite2DRenderingSystem : RenderingSystem {
     override fun render(scene: Scene, g: Graphics, now: Long, deltaTime: Long) {
-        val entities = scene.getEntities { it.hasComponent<Sprite2D>() && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() }
+        val entities = scene.getFilteredEntities { scene.camera2D.canSee(it) && it.hasComponent<Sprite2D>() && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() }
 
         for (entity in entities) {
             val sprite = entity.getComponent<Sprite2D>()!!

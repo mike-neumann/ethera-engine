@@ -47,18 +47,19 @@ open class Ethera(val configurationService: ConfigurationService, val screen: Sc
     }
 
     override fun run(vararg args: String) {
-        frame = JFrame(windowTitle)
-        frame.add(screen)
-        frame.size = Dimension(configurationService.width, configurationService.height)
-        frame.isVisible = true
-        frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-        frame.addFocusListener(screen)
-        frame.addKeyListener(screen)
-        frame.addMouseMotionListener(screen)
-        frame.addMouseListener(screen)
-        frame.addMouseWheelListener(screen)
-        // we want to manually handle ui, so we have to disable focus traversal
-        frame.focusTraversalKeysEnabled = false
+        frame = JFrame(windowTitle).apply {
+            add(screen)
+            size = Dimension(configurationService.width, configurationService.height)
+            isVisible = true
+            defaultCloseOperation = JFrame.EXIT_ON_CLOSE
+            addFocusListener(screen)
+            addKeyListener(screen)
+            addMouseMotionListener(screen)
+            addMouseListener(screen)
+            addMouseWheelListener(screen)
+            // we want to manually handle ui, so we have to disable focus traversal
+            focusTraversalKeysEnabled = false
+        }
         // set default font if specified in config
         if (configurationService.fontUrl != "") {
             screen.font = Font.createFont(Font.TRUETYPE_FONT, File(configurationService.fontUrl).toURI().toURL().openStream())

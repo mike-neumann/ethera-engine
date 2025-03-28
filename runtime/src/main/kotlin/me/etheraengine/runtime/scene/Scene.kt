@@ -3,6 +3,7 @@ package me.etheraengine.runtime.scene
 import jakarta.annotation.PostConstruct
 import me.etheraengine.runtime.entity.Cursor
 import me.etheraengine.runtime.entity.Entity
+import me.etheraengine.runtime.g2d.entity.component.Position2D
 import me.etheraengine.runtime.g2d.system.Animation2DRenderingSystem
 import me.etheraengine.runtime.g2d.system.Sprite2DRenderingSystem
 import me.etheraengine.runtime.g2d.world.Camera2D
@@ -30,7 +31,6 @@ open class Scene {
                 cleanup()
             }
         }
-    var camera2D: Camera2D? = null
 
     @Autowired
     lateinit var cursor: Cursor
@@ -49,20 +49,29 @@ open class Scene {
 
     @Autowired
     lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
-    private val renderingSystems = mutableListOf<RenderingSystem>()
-    private val logicSystems = mutableListOf<LogicSystem>()
-    private val entities = mutableListOf<Entity>()
-    private val keyListeners = mutableListOf<KeyListener>()
-    private val mouseListeners = mutableListOf<MouseListener>()
-    private val mouseWheelListeners = mutableListOf<MouseWheelListener>()
-    private val mouseMotionListeners = mutableListOf<MouseMotionListener>()
-    private val focusListeners = mutableListOf<FocusListener>()
-    var cachedEntities = 0
-    val cachedFilterResults = mutableMapOf<EntityFilter, List<Entity>>()
+    var camera2D = Camera2D(Position2D(0.0, 0.0))
+    private val _renderingSystems = mutableListOf<RenderingSystem>()
+    private val _logicSystems = mutableListOf<LogicSystem>()
+    private val _entities = mutableListOf<Entity>()
+    private val _keyListeners = mutableListOf<KeyListener>()
+    private val _mouseListeners = mutableListOf<MouseListener>()
+    private val _mouseWheelListeners = mutableListOf<MouseWheelListener>()
+    private val _mouseMotionListeners = mutableListOf<MouseMotionListener>()
+    private val _focusListeners = mutableListOf<FocusListener>()
+    val renderingSystems: List<RenderingSystem> get() = _renderingSystems
+    val logicSystems: List<LogicSystem> get() = _logicSystems
+    val entities: List<Entity> get() = _entities
+    val keyListeners: List<KeyListener> get() = _keyListeners
+    val mouseListeners: List<MouseListener> get() = _mouseListeners
+    val mouseWheelListeners: List<MouseWheelListener> get() = _mouseWheelListeners
+    val mouseMotionListeners: List<MouseMotionListener> get() = _mouseMotionListeners
+    val focusListeners: List<FocusListener> get() = _focusListeners
+    private var cachedEntities = 0
+    private val cachedFilterResults = mutableMapOf<EntityFilter, List<Entity>>()
 
     @PostConstruct
     fun init() {
-        addKeyListeners(uiFocusLogicSystem, uiEventLogicSystem)
+        addKeyListeners(uiFocusLogicSystem, uiEventLogicSystem, uiSliderValueLogicSystem)
         addMouseMotionListeners(uiEventLogicSystem)
         addMouseListeners(uiEventLogicSystem)
 
@@ -108,103 +117,103 @@ open class Scene {
     }
 
     fun cleanup() {
-        renderingSystems.clear()
-        logicSystems.clear()
-        entities.clear()
-        keyListeners.clear()
-        mouseListeners.clear()
-        mouseWheelListeners.clear()
-        mouseMotionListeners.clear()
-        focusListeners.clear()
+        _renderingSystems.clear()
+        _logicSystems.clear()
+        _entities.clear()
+        _keyListeners.clear()
+        _mouseListeners.clear()
+        _mouseWheelListeners.clear()
+        _mouseMotionListeners.clear()
+        _focusListeners.clear()
     }
 
     @Synchronized
     fun addRenderingSystems(vararg renderingSystems: RenderingSystem) {
         log.info("Registering {} rendering systems", renderingSystems.size)
         log.debug("{}", renderingSystems)
-        this.renderingSystems.addAll(renderingSystems)
+        this._renderingSystems.addAll(renderingSystems)
     }
 
     @Synchronized
     fun removeRenderingSystems(vararg renderingSystems: RenderingSystem) {
         log.info("Unregistering {} rendering systems", renderingSystems.size)
         log.debug("{}", renderingSystems)
-        this.renderingSystems.removeAll(renderingSystems)
+        this._renderingSystems.removeAll(renderingSystems)
     }
 
     @Synchronized
     fun addLogicSystems(vararg logicSystems: LogicSystem) {
         log.info("Registering {} logic systems", logicSystems.size)
         log.debug("{}", logicSystems)
-        this.logicSystems.addAll(logicSystems)
+        this._logicSystems.addAll(logicSystems)
     }
 
     @Synchronized
     fun removeLogicSystems(vararg logicSystems: LogicSystem) {
         log.info("Unregistering {} logic systems", logicSystems.size)
         log.debug("{}", logicSystems)
-        this.logicSystems.removeAll(logicSystems)
+        this._logicSystems.removeAll(logicSystems)
     }
 
     @Synchronized
     fun addEntities(vararg entities: Entity) {
         log.info("Registering {} entities", entities.size)
         log.debug("{}", entities)
-        this.entities.addAll(entities)
+        this._entities.addAll(entities)
     }
 
     @Synchronized
     fun removeEntities(vararg entities: Entity) {
         log.info("Unregistering {} entities", entities.size)
         log.debug("{}", entities)
-        this.entities.removeAll(entities)
+        this._entities.removeAll(entities)
     }
 
     @Synchronized
     fun addKeyListeners(vararg keyListeners: KeyListener) {
         log.info("Registering {} key listeners", keyListeners.size)
         log.debug("{}", keyListeners)
-        this.keyListeners.addAll(keyListeners)
+        this._keyListeners.addAll(keyListeners)
     }
 
     @Synchronized
     fun removeKeyListeners(vararg keyListeners: KeyListener) {
         log.info("Unregistering {} key listeners", keyListeners.size)
         log.debug("{}", keyListeners)
-        this.keyListeners.removeAll(keyListeners)
+        this._keyListeners.removeAll(keyListeners)
     }
 
     @Synchronized
     fun addMouseListeners(vararg mouseListeners: MouseListener) {
         log.info("Registering {} mouse listeners", mouseListeners.size)
         log.debug("{}", mouseListeners)
-        this.mouseListeners.addAll(mouseListeners)
+        this._mouseListeners.addAll(mouseListeners)
     }
 
     @Synchronized
     fun removeMouseListeners(vararg mouseListeners: MouseListener) {
         log.info("Unregistering {} mouse listeners", mouseListeners.size)
         log.debug("{}", mouseListeners)
-        this.mouseListeners.removeAll(mouseListeners)
+        this._mouseListeners.removeAll(mouseListeners)
     }
 
     @Synchronized
     fun addMouseMotionListeners(vararg mouseMotionListeners: MouseMotionListener) {
         log.info("Registering {} mouse motion listeners", mouseMotionListeners.size)
         log.debug("{}", mouseMotionListeners)
-        this.mouseMotionListeners.addAll(mouseMotionListeners)
+        this._mouseMotionListeners.addAll(mouseMotionListeners)
     }
 
     @Synchronized
     fun removeMouseMotionListeners(vararg mouseMotionListeners: MouseMotionListener) {
         log.info("Unregistering {} mouse motion listeners", mouseMotionListeners.size)
         log.debug("{}", mouseMotionListeners)
-        this.mouseMotionListeners.removeAll(mouseMotionListeners)
+        this._mouseMotionListeners.removeAll(mouseMotionListeners)
     }
 
     @Synchronized
     fun render(g: Graphics, now: Long, deltaTime: Long) {
-        for (renderingSystem in renderingSystems) {
+        for (renderingSystem in _renderingSystems) {
             renderingSystem.render(this, g, now, deltaTime)
         }
 
@@ -213,7 +222,7 @@ open class Scene {
 
     @Synchronized
     fun update(now: Long, deltaTime: Long) {
-        for (logicSystem in logicSystems) {
+        for (logicSystem in _logicSystems) {
             logicSystem.update(this, now, deltaTime)
         }
 
@@ -222,91 +231,91 @@ open class Scene {
 
     @Synchronized
     fun keyTyped(e: KeyEvent) {
-        for (keyListener in keyListeners) {
+        for (keyListener in _keyListeners) {
             keyListener.keyTyped(e)
         }
     }
 
     @Synchronized
     fun keyPressed(e: KeyEvent) {
-        for (keyListener in keyListeners) {
+        for (keyListener in _keyListeners) {
             keyListener.keyPressed(e)
         }
     }
 
     @Synchronized
     fun keyReleased(e: KeyEvent) {
-        for (keyListener in keyListeners) {
+        for (keyListener in _keyListeners) {
             keyListener.keyReleased(e)
         }
     }
 
     @Synchronized
     fun mouseClicked(e: MouseEvent) {
-        for (mouseListener in mouseListeners) {
+        for (mouseListener in _mouseListeners) {
             mouseListener.mouseClicked(e)
         }
     }
 
     @Synchronized
     fun mousePressed(e: MouseEvent) {
-        for (mouseListener in mouseListeners) {
+        for (mouseListener in _mouseListeners) {
             mouseListener.mousePressed(e)
         }
     }
 
     @Synchronized
     fun mouseReleased(e: MouseEvent) {
-        for (mouseListener in mouseListeners) {
+        for (mouseListener in _mouseListeners) {
             mouseListener.mouseReleased(e)
         }
     }
 
     @Synchronized
     fun mouseEntered(e: MouseEvent) {
-        for (mouseListener in mouseListeners) {
+        for (mouseListener in _mouseListeners) {
             mouseListener.mouseEntered(e)
         }
     }
 
     @Synchronized
     fun mouseExited(e: MouseEvent) {
-        for (mouseListener in mouseListeners) {
+        for (mouseListener in _mouseListeners) {
             mouseListener.mouseExited(e)
         }
     }
 
     @Synchronized
     fun mouseWheelMoved(e: MouseWheelEvent) {
-        for (mouseWheelListener in mouseWheelListeners) {
+        for (mouseWheelListener in _mouseWheelListeners) {
             mouseWheelListener.mouseWheelMoved(e)
         }
     }
 
     @Synchronized
     fun mouseDragged(e: MouseEvent) {
-        for (mouseMotionListener in mouseMotionListeners) {
+        for (mouseMotionListener in _mouseMotionListeners) {
             mouseMotionListener.mouseDragged(e)
         }
     }
 
     @Synchronized
     fun mouseMoved(e: MouseEvent) {
-        for (mouseMotionListener in mouseMotionListeners) {
+        for (mouseMotionListener in _mouseMotionListeners) {
             mouseMotionListener.mouseMoved(e)
         }
     }
 
     @Synchronized
     fun focusGained(e: FocusEvent) {
-        for (focusListener in focusListeners) {
+        for (focusListener in _focusListeners) {
             focusListener.focusGained(e)
         }
     }
 
     @Synchronized
     fun focusLost(e: FocusEvent) {
-        for (focusListener in focusListeners) {
+        for (focusListener in _focusListeners) {
             focusListener.focusLost(e)
         }
     }
@@ -317,14 +326,14 @@ open class Scene {
      */
     @Synchronized
     @JvmOverloads
-    fun getEntities(filter: EntityFilter = EntityFilter { true }): List<Entity> {
-        if (cachedEntities != entities.size) {
+    fun getFilteredEntities(filter: EntityFilter = EntityFilter { true }): List<Entity> {
+        if (cachedEntities != _entities.size) {
             // entities have changed, clear cache
             cachedFilterResults.clear()
-            cachedEntities = entities.size
+            cachedEntities = _entities.size
         }
         // cache and return filter results
-        return cachedFilterResults.computeIfAbsent(filter) { entities.filter(filter::filter) }
+        return cachedFilterResults.computeIfAbsent(filter) { _entities.filter(filter::filter) }
     }
 
     fun interface EntityFilter {

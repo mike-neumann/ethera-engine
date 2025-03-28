@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component
 @Component
 class EntityWorldCollisionLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val tiles = scene.getEntities { it is Tile } as List<Tile>
+        val tiles = scene.getFilteredEntities { it is Tile } as List<Tile>
         val entities =
-            scene.getEntities { it !in tiles && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() }
+            scene.getFilteredEntities { it !in tiles && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() }
 
         for (entity in entities) {
             val position = entity.getComponent<Position2D>()!!

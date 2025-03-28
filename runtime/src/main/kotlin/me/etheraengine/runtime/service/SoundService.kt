@@ -6,6 +6,7 @@ import me.etheraengine.runtime.sound.Sound
 import org.springframework.stereotype.Service
 import java.io.File
 import java.io.FileFilter
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.LinkedBlockingQueue
 import javax.sound.sampled.AudioSystem
 
@@ -15,7 +16,7 @@ import javax.sound.sampled.AudioSystem
 @Service
 class SoundService(val configurationService: ConfigurationService) {
     var volume = 1f
-    val activeSounds = mutableListOf<Sound>()
+    val activeSounds = ConcurrentLinkedQueue<Sound>()
     private val log = logger<SoundService>()
     private val sounds = mutableMapOf<String, File>()
     private val taskQueue = LinkedBlockingQueue<() -> Unit>()

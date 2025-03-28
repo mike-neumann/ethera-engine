@@ -17,6 +17,7 @@ import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.service.SoundService
 import org.springframework.stereotype.Component
 import java.awt.*
+import java.util.Random
 import kotlin.system.exitProcess
 
 @Component
@@ -42,7 +43,7 @@ class ExampleScene(
 
         addKeyListeners(exampleSceneKeyListener)
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
-        addRenderingSystems(bounds2DRenderingSystem, entityHealthHudRenderingSystem, uiRenderingSystem)
+        addRenderingSystems(/* bounds2DRenderingSystem , */entityHealthHudRenderingSystem, uiRenderingSystem)
         addLogicSystems(
             entityAttackLogicSystem,
             entityPositionMovementLogicSystem,
@@ -63,7 +64,7 @@ class ExampleScene(
             }
         }.flatten().toTypedArray()
         val enemies = (1..1).map {
-            val enemy = Enemy(1600.0, 400.0)
+            val enemy = Enemy(1600.0 + (Random().nextInt(100, 400)), 400.0)
             val enemyAi = enemy.getComponent<EnemyAI>()!!
 
             enemyAi.target = player
@@ -77,17 +78,11 @@ class ExampleScene(
         )
         // player needs to be added last (render layer principal)
         addEntities(*tiles, *enemies, player, *hud)
-        // TODO: comment back in
-        //soundService.playSound("main_loop.wav", loop = true)
+        soundService.playSound("main_loop.wav", loop = true)
     }
 
-    override fun onEnable() {
-        soundService.playSound("unpause.wav")
-    }
-
-    override fun onDisable() {
-        soundService.playSound("pause.wav")
-    }
+    override fun onEnable() = soundService.playSound("unpause.wav")
+    override fun onDisable() = soundService.playSound("pause.wav")
 
     override fun onUpdate(now: Long, deltaTime: Long) {
         val state = player.getComponent<State>()!!
@@ -101,9 +96,7 @@ class ExampleScene(
                 }
             }
 
-            EntityState.DESPAWN -> {
-                exitProcess(0)
-            }
+            EntityState.DESPAWN -> exitProcess(0)
         }
     }
 
@@ -111,7 +104,7 @@ class ExampleScene(
         // set camera offset so that the player is always in the middle
         val dimensions = player.getComponent<Dimensions2D>()!!
 
-        camera2D!!.offsetX = (Ethera.frame.width / 2.0) - dimensions.width / 2
-        camera2D!!.offsetY = (Ethera.frame.height / 2.0) - dimensions.height / 2
+        camera2D.offsetX = (Ethera.frame.width / 2.0) - dimensions.width / 2
+        camera2D.offsetY = (Ethera.frame.height / 2.0) - dimensions.height / 2
     }
 }

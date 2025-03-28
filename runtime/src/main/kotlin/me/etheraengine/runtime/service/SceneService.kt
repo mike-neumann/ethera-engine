@@ -45,8 +45,8 @@ class SceneService {
     fun update(now: Long, deltaTime: Long) = currentScene?.update(now, deltaTime)
 
     fun render(g: Graphics, now: Long, deltaTime: Long) = currentScene?.let {
-        it.camera2D?.translate(g)
+        it.camera2D.translate(g)
         it.render(g, now, deltaTime)
-        it.camera2D?.closeTranslation(g)
+        it.camera2D.closeTranslation(g)
     }
 }

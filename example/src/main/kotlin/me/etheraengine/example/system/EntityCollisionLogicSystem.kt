@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 class EntityCollisionLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val entities =
-            scene.getEntities { it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.getComponent<Collideable>()?.isCollideable == true }
+            scene.getFilteredEntities { it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.getComponent<Collideable>()?.isCollideable == true }
 
         for (entity in entities) {
             val position = entity.getComponent<Position2D>()!!
@@ -58,7 +58,7 @@ class EntityCollisionLogicSystem : LogicSystem {
         width: Int,
         height: Int,
     ): List<Entity> {
-        return scene.getEntities {
+        return scene.getFilteredEntities {
             it.hasComponent<Position>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Collideable>()
         }.filter {
             val position = it.getComponent<Position>()!!

@@ -13,7 +13,7 @@ import java.awt.Graphics
 @Component
 class Animation2DRenderingSystem : RenderingSystem {
     override fun render(scene: Scene, g: Graphics, now: Long, deltaTime: Long) {
-        val entities = scene.getEntities { it.hasComponent<Animations2D>() && it.hasComponent<Position2D>() }
+        val entities = scene.getFilteredEntities { scene.camera2D.canSee(it) && it.hasComponent<Animations2D>() && it.hasComponent<Position2D>() }
 
         for (entity in entities) {
             val animations = entity.getComponent<Animations2D>()!!

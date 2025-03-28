@@ -3,10 +3,11 @@ package me.etheraengine.runtime.entity.component
 open class State(state: String) {
     var lastState = state
         private set
-    var lockTime: Long = 0
+    var lockTime = 0L
         private set
-    var lockedTime: Long = 0
+    var lockedTime = 0L
         private set
+    val isLocked get() = System.currentTimeMillis() - lockTime <= lockedTime
     var state = state
         set(value) {
             if (value != field) {

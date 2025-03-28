@@ -19,7 +19,7 @@ class EnemyAIAttackLogicSystem(private val player: Player) : LogicSystem {
             playerPositionComponent.x + (playerDimensions.width / 2),
             playerPositionComponent.y + (playerDimensions.height / 2)
         )
-        val enemies = scene.getEntities { it is Enemy }
+        val enemies = scene.getFilteredEntities { it is Enemy }
 
         for (enemy in enemies) {
             val positionComponent = enemy.getComponent<Position>()!!

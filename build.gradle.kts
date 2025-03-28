@@ -2,8 +2,8 @@ plugins {
     `java-library`
     `maven-publish`
     application
-    kotlin("jvm") version "1.9.24"
-    kotlin("kapt") version "1.9.24"
+    kotlin("jvm")
+    kotlin("kapt")
 }
 
 subprojects {
@@ -44,9 +44,6 @@ subprojects {
 //        runtimeOnly("org.lwjgl:lwjgl:3.3.1:natives-macos-arm64")
 //        runtimeOnly("org.lwjgl:lwjgl-glfw:3.3.1:natives-macos-arm64")
 //        runtimeOnly("org.lwjgl:lwjgl-opengl:3.3.1:natives-macos-arm64")
-        // Testing Dependencies
-        testImplementation("org.springframework.boot:spring-boot-starter-test:3.3.1")
-        testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     }
 
     kotlin {
@@ -59,17 +56,8 @@ subprojects {
                 groupId = group.toString()
                 artifactId = project.name
                 version = version
-
                 from(components["java"])
             }
         }
-    }
-
-    tasks.withType<Test> {
-        useJUnitPlatform()
-    }
-
-    tasks.test {
-        useJUnitPlatform()
     }
 }

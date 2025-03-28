@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
 @Component
 class UIRenderingSystem : RenderingSystem {
     override fun render(scene: Scene, g: Graphics, now: Long, deltaTime: Long) {
-        val buttons = scene.getEntities { it is UIButton }
+        val buttons = scene.getFilteredEntities { it is UIButton }
 
         for (button in buttons) {
             val position = button.getComponent<Position2D>()!!
@@ -30,10 +30,9 @@ class UIRenderingSystem : RenderingSystem {
                     g.font = g.font.deriveFont(text.size + 5)
                 }
             }
-            // if the entity is clicked, reset the font size
             button.getComponent<UIClickable>()?.let {
                 if (it.isClicked) {
-                    g.font = g.font.deriveFont(text.size)
+                    g.font = g.font.deriveFont(text.size - 5)
                 }
             }
             // can be used to center text on the rendered UIButton (x-axis)
@@ -45,7 +44,7 @@ class UIRenderingSystem : RenderingSystem {
                 (position.y + (dimensions.height / 2) + (g.fontMetrics.height / 3)).toInt()
             )
         }
-        val labels = scene.getEntities { it is UILabel }
+        val labels = scene.getFilteredEntities { it is UILabel }
 
         for (label in labels) {
             val position = label.getComponent<Position2D>()!!
@@ -61,7 +60,7 @@ class UIRenderingSystem : RenderingSystem {
                 position.y.toInt()
             )
         }
-        val sliders = scene.getEntities { it is UISlider }
+        val sliders = scene.getFilteredEntities { it is UISlider }
 
         for (slider in sliders) {
             val position = slider.getComponent<Position2D>()!!
@@ -105,7 +104,7 @@ class UIRenderingSystem : RenderingSystem {
                 position.y.toInt() + dimensions.height
             )
         }
-        val checkboxes = scene.getEntities { it is UICheckbox }
+        val checkboxes = scene.getFilteredEntities { it is UICheckbox }
 
         for (checkbox in checkboxes) {
             val position = checkbox.getComponent<Position2D>()!!
@@ -142,7 +141,7 @@ class UIRenderingSystem : RenderingSystem {
             }
         }
 
-        scene.getEntities {
+        scene.getFilteredEntities {
             it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.hasComponent<UIFocusable>()
         }.forEach {
             val position = it.getComponent<Position2D>()!!

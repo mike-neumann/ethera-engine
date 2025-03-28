@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 class EntityAttackLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val entities =
-            scene.getEntities { it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Attack>() }
+            scene.getFilteredEntities { it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Attack>() }
 
         for (entity in entities) {
             val state = entity.getComponent<State>()!!
@@ -37,7 +37,7 @@ class EntityAttackLogicSystem : LogicSystem {
             }
             val damageDimensions = Dimensions2D(attack.range.toInt(), attack.range.toInt())
 
-            scene.getEntities {
+            scene.getFilteredEntities {
                 it != entity && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Health>() && CollisionUtils2D.checkCollision(
                     it.getComponent<Position2D>()!!,
                     it.getComponent<Dimensions2D>()!!,

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @Component
 class EntityStateLogicSystem(private val soundService: SoundService) : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val entities = scene.getEntities { it.hasComponent<State>() }
+        val entities = scene.getFilteredEntities { it.hasComponent<State>() }
         // must use forEach function call here, since current kotlin versions don't support non-local lambda continue / break statements
         entities.forEach { entity ->
             val state = entity.getComponent<State>()!!
@@ -69,7 +69,7 @@ class EntityStateLogicSystem(private val soundService: SoundService) : LogicSyst
             }
 
             entity.getComponent<Movement2D>()?.let {
-                if (it.isMoving()) {
+                if (it.isMoving) {
                     state.state = EntityState.WALK
                     val position = entity.getComponent<Position>()!!
 

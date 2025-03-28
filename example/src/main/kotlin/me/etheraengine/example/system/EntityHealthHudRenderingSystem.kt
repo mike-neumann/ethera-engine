@@ -13,7 +13,7 @@ import java.awt.Graphics
 class EntityHealthHudRenderingSystem : RenderingSystem {
     override fun render(scene: Scene, g: Graphics, now: Long, deltaTime: Long) {
         val entities =
-            scene.getEntities { it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Health>() }
+            scene.getFilteredEntities { it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Health>() }
 
         for (entity in entities) {
             val position = entity.getComponent<Position2D>()!!

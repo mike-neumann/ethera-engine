@@ -18,19 +18,19 @@ class UIFocusLogicSystem : LogicSystem, KeyListener {
 
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         // handle focus switch
-        val entities = scene.getEntities { it.hasComponent<UIFocusable>() }
+        val entities = scene.getFilteredEntities { it.hasComponent<UIFocusable>() }
 
         for (entity in entities) {
             val focusable = entity.getComponent<UIFocusable>()!!
 
             if (!focusable.isFocused) continue
-            val index = scene.getEntities().indexOf(entity)
+            val index = scene.getFilteredEntities().indexOf(entity)
 
             if (isUp || (isTab && isShift)) {
                 // search for previous focusable element
-                val previous = scene.getEntities()
+                val previous = scene.getFilteredEntities()
                     .reversed()
-                    .firstOrNull { scene.getEntities().indexOf(it) < index && it.hasComponent<UIFocusable>() }
+                    .firstOrNull { scene.getFilteredEntities().indexOf(it) < index && it.hasComponent<UIFocusable>() }
                     ?: continue
                 val previousFocusable = previous.getComponent<UIFocusable>()!!
 
@@ -43,7 +43,7 @@ class UIFocusLogicSystem : LogicSystem, KeyListener {
                 isShift = false
             } else if (isTab || isDown) {
                 // search for next focusable element
-                val next = scene.getEntities()
+                val next = scene.getFilteredEntities()
                     .filterIndexed { nextIndex, next -> nextIndex > index && next.hasComponent<UIFocusable>() }
                     .firstOrNull()
                     ?: continue
@@ -57,11 +57,11 @@ class UIFocusLogicSystem : LogicSystem, KeyListener {
                 isDown = false
             }
         }
-        val focusedEntities = scene.getEntities { it.hasComponent<UIFocusable>() && it.getComponent<UIFocusable>()!!.isFocused }
+        val focusedEntities = scene.getFilteredEntities { it.hasComponent<UIFocusable>() && it.getComponent<UIFocusable>()!!.isFocused }
 
         if (focusedEntities.isEmpty()) {
             // activate first non focused element
-            val first = scene.getEntities { it.hasComponent<UIFocusable>() }.firstOrNull() ?: return
+            val first = scene.getFilteredEntities { it.hasComponent<UIFocusable>() }.firstOrNull() ?: return
             val focusable = first.getComponent<UIFocusable>()!!
 
             if (isUp || isTab || isDown) {
