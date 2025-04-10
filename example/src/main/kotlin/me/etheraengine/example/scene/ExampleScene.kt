@@ -8,9 +8,8 @@ import me.etheraengine.example.world.ExampleWorld
 import me.etheraengine.example.world.Tile
 import me.etheraengine.runtime.Ethera
 import me.etheraengine.runtime.entity.UILabel
-import me.etheraengine.runtime.entity.component.State
+import me.etheraengine.runtime.entity.component.StateHolder
 import me.etheraengine.runtime.g2d.system.Bounds2DRenderingSystem
-import me.etheraengine.runtime.g2d.world.Camera2D
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.service.SoundService
 import org.springframework.stereotype.Component
@@ -37,8 +36,6 @@ class ExampleScene(
     private val bounds2DRenderingSystem: Bounds2DRenderingSystem,
 ) : Scene() {
     override fun onInitialize() {
-        camera2D = Camera2D(player.x, player.y)
-
         addKeyListeners(exampleSceneKeyListener)
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
         addRenderingSystems(/* bounds2DRenderingSystem , */entityHealthHudRenderingSystem, uiRenderingSystem)
@@ -83,9 +80,9 @@ class ExampleScene(
     override fun onDisable() = soundService.playSound("pause.wav")
 
     override fun onUpdate(now: Long, deltaTime: Long) {
-        val state = player.getComponent<State>()!!
+        val stateHolder = player.getComponent<StateHolder>()!!
 
-        when (state.state) {
+        when (stateHolder.state) {
             EntityState.DYING -> {
                 soundService.stopSound("main_loop.wav")
 
@@ -96,9 +93,7 @@ class ExampleScene(
 
             EntityState.DESPAWN -> exitProcess(0)
         }
-    }
 
-    override fun onRender(g: Graphics2D, now: Long, deltaTime: Long) {
         camera2D.x = player.x
         camera2D.y = player.y
         // set camera offset so that the player is always in the middle

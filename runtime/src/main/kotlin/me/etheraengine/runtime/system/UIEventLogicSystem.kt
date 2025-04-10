@@ -1,7 +1,6 @@
 package me.etheraengine.runtime.system
 
-import me.etheraengine.runtime.entity.Cursor
-import me.etheraengine.runtime.entity.UIElement
+import me.etheraengine.runtime.entity.*
 import me.etheraengine.runtime.entity.component.*
 import me.etheraengine.runtime.g2d.util.CollisionUtils2D.collidesWith
 import me.etheraengine.runtime.scene.Scene
@@ -21,69 +20,67 @@ class UIEventLogicSystem(val cursor: Cursor) : LogicSystem, MouseListener, Mouse
     private var clicking = false
     private var dragging = false
 
-    override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val uiElements = scene.getFilteredEntities { it is UIElement }
+    override fun update(entity: Entity, scene: Scene, now: Long, deltaTime: Long) {
+        if (entity !is UIElement) return
 
-        for (uiElement in uiElements) {
-            uiElement.getComponent<UIFocusable>()?.let {
-                val mouseHovered = uiElement collidesWith cursor
-                val mouseInteracted = mouseHovered && leftMouseDown
-                val focused = it.isFocused
-                val keyboardInteracted = focused && (spaceDown || enterDown)
-                // handle hover event is uiElement is hoverable
-                uiElement.getComponent<UIHoverable>()?.let {
-                    if ((mouseHovered || focused) && !it.isHovered && !leftMouseDown) {
-                        hovering = true
-                        it.isHovered = true
-                        it.onHover(uiElement)
-                    } else if ((!mouseHovered && !focused) && it.isHovered && !leftMouseDown) {
-                        hovering = false
-                        it.isHovered = false
-                        it.offHover(uiElement)
-                    }
-                }
-                // handle click event if uiElement is clickable
-                uiElement.getComponent<UIClickable>()?.let {
-                    if ((mouseInteracted || keyboardInteracted) && !it.isClicked && !clicking) {
-                        clicking = true
-                        it.isClicked = true
-                        it.onClick(uiElement)
-                    } else if ((!leftMouseDown && !keyboardInteracted) && it.isClicked && clicking) {
-                        clicking = false
-                        it.isClicked = false
-                        it.offClick(uiElement)
-                    }
-                }
-                // handle drag event if uiElement is draggable
-                uiElement.getComponent<UIDraggable>()?.let {
-                    if (mouseInteracted && !it.isDragging && !dragging) {
-                        dragging = true
-                        it.fromX = cursor.x
-                        it.fromY = cursor.y
-                        it.toX = cursor.x
-                        it.toY = cursor.y
-                        it.isDragging = true
-                        it.onDrag(uiElement, it.fromX, it.fromY, it.toX, it.toY)
-                    } else if (it.isDragging && dragging) {
-                        it.toX = cursor.x
-                        it.toY = cursor.y
-                        it.isDragging = true
-                        it.onDrag(uiElement, it.fromX, it.fromY, it.toX, it.toY)
-                    }
-
-                    if (!leftMouseDown && it.isDragging && dragging) {
-                        dragging = false
-                        it.isDragging = false
-                        it.offDrag(uiElement, it.fromX, it.fromY, it.toX, it.toY)
-                    }
+        entity.getComponent<UIFocusable>()?.let {
+            val mouseHovered = entity collidesWith cursor
+            val mouseInteracted = mouseHovered && leftMouseDown
+            val focused = it.focused
+            val keyboardInteracted = focused && (spaceDown || enterDown)
+            // handle hover event is uiElement is hoverable
+            entity.getComponent<UIHoverable>()?.let {
+                if ((mouseHovered || focused) && !it.hovered && !leftMouseDown) {
+                    hovering = true
+                    it.hovered = true
+                    it.onHover(entity)
+                } else if ((!mouseHovered && !focused) && it.hovered && !leftMouseDown) {
+                    hovering = false
+                    it.hovered = false
+                    it.offHover(entity)
                 }
             }
-
-            uiElement.getComponent<UIValue<Any>>()?.run {
-                if (value != lastValue) {
-                    lastValue = value
-                    onChange(uiElement, lastValue, value)
+            // handle click event if uiElement is clickable
+            entity.getComponent<UIClickable>()?.let {
+                if ((mouseInteracted || keyboardInteracted) && !it.clicked && !clicking) {
+                    clicking = true
+                    it.clicked = true
+                    it.onClick(entity)
+                } else if ((!leftMouseDown && !keyboardInteracted) && it.clicked && clicking) {
+                    clicking = false
+                    it.clicked = false
+                    it.offClick(entity)
                 }
+            }
+            // handle drag event if uiElement is draggable
+            entity.getComponent<UIDraggable>()?.let {
+                if (mouseInteracted && !it.dragging && !dragging) {
+                    dragging = true
+                    it.fromX = cursor.x
+                    it.fromY = cursor.y
+                    it.toX = cursor.x
+                    it.toY = cursor.y
+                    it.dragging = true
+                    it.onDrag(entity, it.fromX, it.fromY, it.toX, it.toY)
+                } else if (it.dragging && dragging) {
+                    it.toX = cursor.x
+                    it.toY = cursor.y
+                    it.dragging = true
+                    it.onDrag(entity, it.fromX, it.fromY, it.toX, it.toY)
+                }
+
+                if (!leftMouseDown && it.dragging && dragging) {
+                    dragging = false
+                    it.dragging = false
+                    it.offDrag(entity, it.fromX, it.fromY, it.toX, it.toY)
+                }
+            }
+        }
+
+        entity.getComponent<UIValueHolder<Any>>()?.run {
+            if (value != lastValue) {
+                lastValue = value
+                onChange(entity, lastValue, value)
             }
         }
     }

@@ -15,19 +15,19 @@ class UIRenderingSystem : RenderingSystem {
         val buttons = scene.getFilteredEntities { it is UIButton }
 
         for (button in buttons) {
-            val text = button.getComponent<UIText>()!!
+            val text = button.getComponent<UITextHolder>()!!
 
             g.color = text.color
             g.font = g.font.deriveFont(text.size)
             g.font = g.font.deriveFont(text.style)
             // if the entity hovered, scale up the font size a bit
             button.getComponent<UIHoverable>()?.let {
-                if (it.isHovered) {
+                if (it.hovered) {
                     g.font = g.font.deriveFont(text.size + 5)
                 }
             }
             button.getComponent<UIClickable>()?.let {
-                if (it.isClicked) {
+                if (it.clicked) {
                     g.font = g.font.deriveFont(text.size - 5)
                 }
             }
@@ -43,7 +43,7 @@ class UIRenderingSystem : RenderingSystem {
         val labels = scene.getFilteredEntities { it is UILabel }
 
         for (label in labels) {
-            val text = label.getComponent<UIText>()!!
+            val text = label.getComponent<UITextHolder>()!!
 
             g.color = text.color
             g.font = g.font.deriveFont(text.size)
@@ -53,8 +53,8 @@ class UIRenderingSystem : RenderingSystem {
         val sliders = scene.getFilteredEntities { it is UISlider }
 
         for (slider in sliders) {
-            val text = slider.getComponent<UIText>()!!
-            val value = slider.getComponent<UIValue<Double>>()!!
+            val text = slider.getComponent<UITextHolder>()!!
+            val valueHolder = slider.getComponent<UIValueHolder<Double>>()!!
 
             g.font = g.font.deriveFont(text.size)
             g.font = g.font.deriveFont(text.style)
@@ -71,7 +71,7 @@ class UIRenderingSystem : RenderingSystem {
             g.color = Color.GRAY
             // if the entity is hoverable, paint it white
             slider.getComponent<UIHoverable>()?.let {
-                if (it.isHovered) {
+                if (it.hovered) {
                     g.color = Color.WHITE
                 }
             }
@@ -87,7 +87,7 @@ class UIRenderingSystem : RenderingSystem {
 
             g.drawString(text.text, slider.x.toInt(), slider.y.toInt() + g.fontMetrics.height)
             g.drawString(
-                "${value.value.roundToInt()}%",
+                "${valueHolder.value.roundToInt()}%",
                 slider.x.toInt(),
                 slider.y.toInt() + slider.height
             )
@@ -95,7 +95,7 @@ class UIRenderingSystem : RenderingSystem {
         val checkboxes = scene.getFilteredEntities { it is UICheckbox }
 
         for (checkbox in checkboxes) {
-            val text = checkbox.getComponent<UIText>()!!
+            val text = checkbox.getComponent<UITextHolder>()!!
 
             g.color = text.color
             g.font = g.font.deriveFont(text.size)
@@ -109,9 +109,9 @@ class UIRenderingSystem : RenderingSystem {
                 (checkbox.x + checkbox.width + (checkbox.width / 4)).toInt(),
                 (checkbox.y + (checkbox.height / 2) + (g.fontMetrics.height / 3)).toInt()
             )
-            val value = checkbox.getComponent<UIValue<Boolean>>()!!
+            val valueHolder = checkbox.getComponent<UIValueHolder<Boolean>>()!!
 
-            if (!value.value) {
+            if (!valueHolder.value) {
                 g.fillRect(
                     (checkbox.x + 4).toInt(),
                     (checkbox.y + 4).toInt(),
@@ -121,13 +121,14 @@ class UIRenderingSystem : RenderingSystem {
                 )
             }
         }
+        val focusableEntities = scene.getFilteredEntities { it.hasComponent<UIFocusable>() }
 
-        scene.getFilteredEntities { it.hasComponent<UIFocusable>() }.forEach {
-            val focusable = it.getComponent<UIFocusable>()!!
+        for (entity in focusableEntities) {
+            val focusable = entity.getComponent<UIFocusable>()!!
 
-            if (focusable.isFocused) {
+            if (focusable.focused) {
                 g.color = Color.WHITE
-                g.drawRect(it.x.toInt(), it.y.toInt(), it.width, it.height)
+                g.drawRect(entity.x.toInt(), entity.y.toInt(), entity.width, entity.height)
             }
         }
     }

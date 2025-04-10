@@ -9,37 +9,33 @@ import org.springframework.stereotype.Component
 import kotlin.math.sqrt
 
 @Component
-class PlayerMovementLogicSystem : LogicSystem {
+class PlayerMovementLogicSystem(private val player: Player) : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val players = scene.getFilteredEntities { it is Player }
+        val playerMovement = player.getComponent<PlayerMovement>()!!
+        val movement = player.getComponent<Movement2D>()!!
 
-        for (player in players) {
-            val playerMovement = player.getComponent<PlayerMovement>()!!
-            val movement = player.getComponent<Movement2D>()!!
+        if (playerMovement.isMovingUp) {
+            movement.vy = -1.0
+        } else if (playerMovement.isMovingDown) {
+            movement.vy = 1.0
+        } else {
+            movement.vy = 0.0
+        }
 
-            if (playerMovement.isMovingUp) {
-                movement.vy = -1.0
-            } else if (playerMovement.isMovingDown) {
-                movement.vy = 1.0
-            } else {
-                movement.vy = 0.0
-            }
+        if (playerMovement.isMovingLeft) {
+            movement.vx = -1.0
+        } else if (playerMovement.isMovingRight) {
+            movement.vx = 1.0
+        } else {
+            movement.vx = 0.0
+        }
+        // normalize diagonal movement
+        val magnitude =
+            sqrt(movement.vx * movement.vx + movement.vy * movement.vy)
 
-            if (playerMovement.isMovingLeft) {
-                movement.vx = -1.0
-            } else if (playerMovement.isMovingRight) {
-                movement.vx = 1.0
-            } else {
-                movement.vx = 0.0
-            }
-            // normalize diagonal movement
-            val magnitude =
-                sqrt(movement.vx * movement.vx + movement.vy * movement.vy)
-
-            if (magnitude > 0) {
-                movement.vx /= magnitude
-                movement.vy /= magnitude
-            }
+        if (magnitude > 0) {
+            movement.vx /= magnitude
+            movement.vy /= magnitude
         }
     }
 }

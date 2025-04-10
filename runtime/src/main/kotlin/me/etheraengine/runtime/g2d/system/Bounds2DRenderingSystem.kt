@@ -1,5 +1,6 @@
 package me.etheraengine.runtime.g2d.system
 
+import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.RenderingSystem
 import org.springframework.stereotype.Component
@@ -12,11 +13,8 @@ import java.awt.Graphics2D
  */
 @Component
 class Bounds2DRenderingSystem : RenderingSystem {
-    override fun render(scene: Scene, g: Graphics2D, now: Long, deltaTime: Long) {
-        val entities = scene.getFilteredEntities { scene.camera2D.canSee(it) }
-
-        for (entity in entities) {
-            g.drawRect(entity.x.toInt(), entity.y.toInt(), entity.width, entity.height)
-        }
+    override fun render(entity: Entity, scene: Scene, g: Graphics2D, now: Long, deltaTime: Long) {
+        if (!scene.camera2D.canSee(entity)) return
+        g.drawRect(entity.x.toInt(), entity.y.toInt(), entity.width, entity.height)
     }
 }

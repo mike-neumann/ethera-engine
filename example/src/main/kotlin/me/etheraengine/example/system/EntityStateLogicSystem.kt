@@ -2,7 +2,8 @@ package me.etheraengine.example.system
 
 import me.etheraengine.example.entity.EntityState
 import me.etheraengine.example.entity.component.*
-import me.etheraengine.runtime.entity.component.State
+import me.etheraengine.runtime.entity.Entity
+import me.etheraengine.runtime.entity.component.StateHolder
 import me.etheraengine.runtime.g2d.entity.component.Movement2D
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.service.SoundService
@@ -11,76 +12,70 @@ import org.springframework.stereotype.Component
 
 @Component
 class EntityStateLogicSystem(private val soundService: SoundService) : LogicSystem {
-    override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val entities = scene.getFilteredEntities { it.hasComponent<State>() }
-        // must use forEach function call here, since current kotlin versions don't support non-local lambda continue / break statements
-        entities.forEach { entity ->
-            val state = entity.getComponent<State>()!!
+    override fun update(entity: Entity, scene: Scene, now: Long, deltaTime: Long) {
+        if (!entity.hasComponent<StateHolder>()) return
+        val stateHolder = entity.getComponent<StateHolder>()!!
+        if (System.currentTimeMillis() - stateHolder.lockedAt < stateHolder.lockedFor) return
 
-            if (System.currentTimeMillis() - state.lockedAt < state.lockedFor) {
-                return@forEach
+        stateHolder.unlock()
+
+        if (stateHolder.state == EntityState.DYING) {
+            stateHolder.state = EntityState.DEAD
+            soundService.playSound("despawn.wav")
+            stateHolder.lock(450)
+            return
+        }
+
+        if (stateHolder.state == EntityState.DEAD) {
+            stateHolder.state = EntityState.DESPAWN
+            return
+        }
+
+        if (stateHolder.state == EntityState.DESPAWN) {
+            entity.markedForRemoval = true
+            return
+        }
+
+        entity.getComponent<Health>()?.let {
+            if (it.health < it.lastHealth && stateHolder.state != EntityState.DAMAGE) {
+                it.lastHealth = it.health
+                stateHolder.state = EntityState.DAMAGE
+                soundService.playSound("damage.wav")
+                stateHolder.lock(600)
+                return
             }
 
-            state.unlock()
-
-            if (state.state == EntityState.DYING) {
-                state.state = EntityState.DEAD
-                soundService.playSound("despawn.wav")
-                state.lock(450)
-                return@forEach
+            if (it.health <= 0 && stateHolder.state != EntityState.DYING && stateHolder.state != EntityState.DEAD) {
+                stateHolder.state = EntityState.DYING
+                soundService.playSound("death.wav")
+                stateHolder.lock(4_000)
+                return
             }
+        }
 
-            if (state.state == EntityState.DEAD) {
-                state.state = EntityState.DESPAWN
-                return@forEach
+        entity.getComponent<AttackHolder>()?.let {
+            if (it.isAttacking && stateHolder.state != EntityState.ATTACK) {
+                it.isAttacking = false
+                it.lastAttackTime = System.currentTimeMillis()
+                stateHolder.state = EntityState.ATTACK
+                soundService.playSound("attack.wav")
+                stateHolder.lock(750)
+                return
             }
+        }
 
-            if (state.state == EntityState.DESPAWN) {
-                scene.removeEntities(entity)
-                return@forEach
-            }
+        entity.getComponent<Movement2D>()?.let {
+            if (it.isMoving) {
+                stateHolder.state = EntityState.WALK
+                val movementDirection = entity.getComponent<MovementDirection>()!!
 
-            entity.getComponent<Health>()?.let {
-                if (it.health < it.lastHealth && state.state != EntityState.DAMAGE) {
-                    it.lastHealth = it.health
-                    state.state = EntityState.DAMAGE
-                    soundService.playSound("damage.wav")
-                    state.lock(600)
-                    return@forEach
+                if (it.vx > 0f) {
+                    movementDirection.direction = Direction.RIGHT
+                } else if (it.vx < 0f) {
+                    movementDirection.direction = Direction.LEFT
                 }
-
-                if (it.health <= 0 && state.state != EntityState.DYING && state.state != EntityState.DEAD) {
-                    state.state = EntityState.DYING
-                    soundService.playSound("death.wav")
-                    state.lock(4_000)
-                    return@forEach
-                }
-            }
-
-            entity.getComponent<Attack>()?.let {
-                if (it.isAttacking && state.state != EntityState.ATTACK) {
-                    it.isAttacking = false
-                    it.lastAttackTime = System.currentTimeMillis()
-                    state.state = EntityState.ATTACK
-                    soundService.playSound("attack.wav")
-                    state.lock(750)
-                    return@forEach
-                }
-            }
-
-            entity.getComponent<Movement2D>()?.let {
-                if (it.isMoving) {
-                    state.state = EntityState.WALK
-                    val movementDirection = entity.getComponent<MovementDirection>()!!
-
-                    if (it.vx > 0f) {
-                        movementDirection.direction = Direction.RIGHT
-                    } else if (it.vx < 0f) {
-                        movementDirection.direction = Direction.LEFT
-                    }
-                } else {
-                    state.state = EntityState.IDLE
-                }
+            } else {
+                stateHolder.state = EntityState.IDLE
             }
         }
     }

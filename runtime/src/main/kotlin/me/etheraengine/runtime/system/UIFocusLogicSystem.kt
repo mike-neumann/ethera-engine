@@ -23,7 +23,7 @@ class UIFocusLogicSystem : KeyAdapter(), LogicSystem {
         for (entity in entities) {
             val focusable = entity.getComponent<UIFocusable>()!!
 
-            if (!focusable.isFocused) continue
+            if (!focusable.focused) continue
             val index = scene.getFilteredEntities().indexOf(entity)
 
             if (isUp || (isTab && isShift)) {
@@ -35,8 +35,8 @@ class UIFocusLogicSystem : KeyAdapter(), LogicSystem {
                 val previousFocusable = previous.getComponent<UIFocusable>()!!
 
                 focusable.offFocus(entity)
-                focusable.isFocused = false
-                previousFocusable.isFocused = true
+                focusable.focused = false
+                previousFocusable.focused = true
                 previousFocusable.onFocus(previous)
                 isUp = false
                 isTab = false
@@ -50,14 +50,14 @@ class UIFocusLogicSystem : KeyAdapter(), LogicSystem {
                 val nextFocusable = next.getComponent<UIFocusable>()!!
 
                 focusable.offFocus(entity)
-                focusable.isFocused = false
-                nextFocusable.isFocused = true
+                focusable.focused = false
+                nextFocusable.focused = true
                 nextFocusable.onFocus(next)
                 isTab = false
                 isDown = false
             }
         }
-        val focusedEntities = scene.getFilteredEntities { it.hasComponent<UIFocusable>() && it.getComponent<UIFocusable>()!!.isFocused }
+        val focusedEntities = scene.getFilteredEntities { it.hasComponent<UIFocusable>() && it.getComponent<UIFocusable>()!!.focused }
 
         if (focusedEntities.isEmpty()) {
             // activate first non focused element
@@ -68,7 +68,7 @@ class UIFocusLogicSystem : KeyAdapter(), LogicSystem {
                 isUp = false
                 isTab = false
                 isDown = false
-                focusable.isFocused = true
+                focusable.focused = true
                 focusable.onFocus(first)
             }
         }

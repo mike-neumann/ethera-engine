@@ -3,7 +3,7 @@ package me.etheraengine.flappybird.entity
 import me.etheraengine.flappybird.entity.component.PlayerMovement
 import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.entity.component.Rotatable
-import me.etheraengine.runtime.entity.component.State
+import me.etheraengine.runtime.entity.component.StateHolder
 import me.etheraengine.runtime.g2d.entity.component.Animations2D
 import me.etheraengine.runtime.g2d.graphics.Animation2D
 import me.etheraengine.runtime.g2d.graphics.Spritesheet2D
@@ -14,7 +14,7 @@ import org.springframework.util.ResourceUtils
 class Player : Entity(width = 50, height = 50) {
     init {
         addComponents(
-            State(State.JUMPING),
+            StateHolder(State.JUMPING),
             PlayerMovement(1.0),
             Rotatable(50.0),
             Animations2D(

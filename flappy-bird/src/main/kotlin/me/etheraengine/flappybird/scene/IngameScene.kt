@@ -2,11 +2,12 @@ package me.etheraengine.flappybird.scene
 
 import me.etheraengine.flappybird.entity.Pipe
 import me.etheraengine.flappybird.entity.Player
+import me.etheraengine.flappybird.entity.component.PlayerMovement
 import me.etheraengine.flappybird.listener.PlayerKeyListener
 import me.etheraengine.flappybird.service.FlappyConfigurationService
 import me.etheraengine.flappybird.system.*
 import me.etheraengine.runtime.Ethera
-import me.etheraengine.runtime.entity.component.State
+import me.etheraengine.runtime.entity.component.StateHolder
 import me.etheraengine.runtime.scene.Scene
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
@@ -19,21 +20,24 @@ class IngameScene(
     private val playerStateLogicSystem: PlayerStateLogicSystem,
     private val playerMovementSystem: PlayerMovementSystem,
     private val playerKeyListener: PlayerKeyListener,
+    private val playerAnimationLogicSystem: PlayerAnimationLogicSystem
 ) : Scene() {
     override fun onInitialize() {
         player.y = (Ethera.frame.height / 2).toDouble()
         camera2D.y = player.y
+        player.getComponent<PlayerMovement>()!!.vx = 1.8
+
 
         addKeyListeners(playerKeyListener)
-        addLogicSystems(playerMovementSystem, playerStateLogicSystem, obstacleCollisionSystem)
+        addLogicSystems(playerMovementSystem, playerStateLogicSystem, obstacleCollisionSystem, playerAnimationLogicSystem)
         addEntities(player)
     }
 
-    @Scheduled(initialDelay = 1_500, fixedRate = 1_500)
+    @Scheduled(initialDelay = 500, fixedRate = 2_000)
     fun generatePipes() {
-        val playerState = player.getComponent<State>()!!
+        val playerStateHolder = player.getComponent<StateHolder>()!!
 
-        if (playerState.state == Player.State.DEAD) return
+        if (playerStateHolder.state == Player.State.DEAD) return
         val newPipeX = player.x + (Ethera.frame.width.toDouble() / 2)
         val randomPipeCenterY = (200..(Ethera.frame.height - 350)).random()
         // top pipe
@@ -49,11 +53,10 @@ class IngameScene(
     }
 
     override fun onUpdate(now: Long, deltaTime: Long) {
-        val playerState = player.getComponent<State>()!!
+        val playerStateHolder = player.getComponent<StateHolder>()!!
 
-        if (playerState.state == Player.State.DEAD) return
+        if (playerStateHolder.state == Player.State.DEAD) return
 
-        player.x += 2.5
         camera2D.x = player.x
         // fix camera x offset to center player
         camera2D.offsetX = ((Ethera.frame.width / 2) - player.width / 2).toDouble()

@@ -1,5 +1,6 @@
 package me.etheraengine.runtime.g2d.system
 
+import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.g2d.entity.component.Sprite2D
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.RenderingSystem
@@ -11,20 +12,17 @@ import java.awt.Graphics2D
  */
 @Component
 class Sprite2DRenderingSystem : RenderingSystem {
-    override fun render(scene: Scene, g: Graphics2D, now: Long, deltaTime: Long) {
-        val entities = scene.getFilteredEntities { scene.camera2D.canSee(it) && it.hasComponent<Sprite2D>() }
+    override fun render(entity: Entity, scene: Scene, g: Graphics2D, now: Long, deltaTime: Long) {
+        if (!scene.camera2D.canSee(entity) || !entity.hasComponent<Sprite2D>()) return
+        val sprite = entity.getComponent<Sprite2D>()!!
 
-        for (entity in entities) {
-            val sprite = entity.getComponent<Sprite2D>()!!
-
-            g.drawImage(
-                sprite.image,
-                entity.x.toInt() + sprite.renderOffsetX,
-                entity.y.toInt() + sprite.renderOffsetY,
-                entity.width,
-                entity.height,
-                null
-            )
-        }
+        g.drawImage(
+            sprite.image,
+            entity.x.toInt() + sprite.renderOffsetX,
+            entity.y.toInt() + sprite.renderOffsetY,
+            entity.width,
+            entity.height,
+            null
+        )
     }
 }

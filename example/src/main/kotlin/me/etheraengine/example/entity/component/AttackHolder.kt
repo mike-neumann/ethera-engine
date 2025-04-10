@@ -1,6 +1,6 @@
 package me.etheraengine.example.entity.component
 
-data class Attack(
+data class AttackHolder(
     var damage: Double,
     var range: Double,
     var damageDelay: Long,

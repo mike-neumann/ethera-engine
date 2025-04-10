@@ -48,7 +48,7 @@ open class Scene {
 
     @Autowired
     lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
-    var camera2D = Camera2D()
+    val camera2D = Camera2D()
     private val _renderingSystems = mutableListOf<RenderingSystem>()
     private val _logicSystems = mutableListOf<LogicSystem>()
     private val _entities = mutableListOf<Entity>()
@@ -305,7 +305,7 @@ open class Scene {
     fun render(g: Graphics2D, now: Long, deltaTime: Long) {
         for (renderingSystem in _renderingSystems) {
             for (entity in _entities) {
-                renderingSystem.render(entity, this, g, now, deltaTime);
+                renderingSystem.render(entity, this, g, now, deltaTime)
             }
             renderingSystem.render(this, g, now, deltaTime)
         }
@@ -319,7 +319,7 @@ open class Scene {
 
         for (logicSystem in _logicSystems) {
             for (entity in _entities) {
-                logicSystem.update(entity, this, now, deltaTime);
+                logicSystem.update(entity, this, now, deltaTime)
             }
             logicSystem.update(this, now, deltaTime)
         }

@@ -1,6 +1,6 @@
 package me.etheraengine.runtime.entity.component
 
-open class State(state: String) {
+open class StateHolder(state: String) {
     var lastState = state
         private set
     var lockedAt = 0L

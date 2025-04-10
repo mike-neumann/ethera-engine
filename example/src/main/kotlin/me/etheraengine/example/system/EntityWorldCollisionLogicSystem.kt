@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 class EntityWorldCollisionLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val tiles = scene.getFilteredEntities { it is Tile } as List<Tile>
-        val entities = scene.getFilteredEntities { it !in tiles }
+        val entities = scene.getFilteredEntities { it !is Tile }
 
         for (entity in entities) {
             val nextCollidingTiles = tiles.filter { entity collidesWith it }

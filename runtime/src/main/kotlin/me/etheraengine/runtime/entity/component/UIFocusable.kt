@@ -8,5 +8,5 @@ typealias FocusEvent = (it: Entity) -> Unit
  * UI component, specifies that the attached entity is focusable
  */
 open class UIFocusable(var onFocus: FocusEvent = {}, var offFocus: FocusEvent = {}) {
-    var isFocused = false
+    var focused = false
 }

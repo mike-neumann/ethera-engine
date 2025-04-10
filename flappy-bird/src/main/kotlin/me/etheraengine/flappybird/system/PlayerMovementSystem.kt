@@ -3,7 +3,7 @@ package me.etheraengine.flappybird.system
 import me.etheraengine.flappybird.entity.Player
 import me.etheraengine.flappybird.entity.component.PlayerMovement
 import me.etheraengine.runtime.Ethera
-import me.etheraengine.runtime.entity.component.State
+import me.etheraengine.runtime.entity.component.StateHolder
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.LogicSystem
 import org.springframework.stereotype.Component
@@ -14,15 +14,19 @@ class PlayerMovementSystem(private val player: Player) : LogicSystem {
         val movement = player.getComponent<PlayerMovement>()!!
         // gravity
         movement.vy += 0.1
-        val state = player.getComponent<State>()!!
+        val stateHolder = player.getComponent<StateHolder>()!!
 
-        if (state.state == Player.State.JUMPING) {
-            state.state = Player.State.FALLING
+        if (stateHolder.state == Player.State.JUMPING) {
+            stateHolder.state = Player.State.FALLING
             movement.vy = -4.5
         }
 
         if (player.y >= Ethera.frame.height - 100) {
             movement.vy = 0.0
+        }
+
+        if (stateHolder.state == Player.State.DEAD) {
+            movement.vx *= .99
         }
 
         player.x += movement.vx * movement.speed

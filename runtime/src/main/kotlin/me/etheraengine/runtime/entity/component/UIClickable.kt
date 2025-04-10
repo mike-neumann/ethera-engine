@@ -16,5 +16,5 @@ open class UIClickable(
     val onClick: ClickEvent = {},
     val offClick: ClickEvent = {},
 ) {
-    var isClicked = false
+    var clicked = false
 }

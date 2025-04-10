@@ -20,7 +20,9 @@ class Animation2DRenderingSystem : RenderingSystem {
             // stop last animation
             animations.animations[animations.lastAnimation]?.isPlaying = false
 
-            if (!currentAnimation.isPlaying) currentAnimation.isPlaying = true
+            if (!currentAnimation.isPlaying) {
+                currentAnimation.isPlaying = true
+            }
 
             if (currentAnimation.currentSpriteIndex == currentAnimation.spritesheet.sprites.size) {
                 if (currentAnimation.shouldLoop) {
@@ -42,7 +44,9 @@ class Animation2DRenderingSystem : RenderingSystem {
             )
             val frameTime = System.currentTimeMillis() - currentAnimation.lastFrameAt
 
-            if (frameTime >= currentAnimation.frameDuration) currentAnimation.currentSpriteIndex++
+            if (frameTime >= currentAnimation.frameDuration) {
+                currentAnimation.currentSpriteIndex++
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package me.etheraengine.example.system
 
 import me.etheraengine.example.entity.component.EnemyAI
+import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.g2d.entity.component.Movement2D
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.LogicSystem
@@ -8,24 +9,18 @@ import org.springframework.stereotype.Component
 
 @Component
 class EnemyAIMovementLogicSystem : LogicSystem {
-    override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val enemies =
-            scene.getFilteredEntities { it.hasComponent<EnemyAI>() && it.hasComponent<Movement2D>() }
+    override fun update(entity: Entity, scene: Scene, now: Long, deltaTime: Long) {
+        if (!entity.hasComponent<EnemyAI>() || !entity.hasComponent<Movement2D>()) return
+        val enemyAi = entity.getComponent<EnemyAI>()!!
 
-        for (enemy in enemies) {
-            val enemyAi = enemy.getComponent<EnemyAI>()!!
+        if (enemyAi.target == null) return
+        val movement = entity.getComponent<Movement2D>()!!
+        val distanceX = enemyAi.target!!.x - entity.x
+        val distanceY = enemyAi.target!!.y - entity.y
+        val xMovement = distanceX / movement.speed
+        val yMovement = distanceY / movement.speed
 
-            if (enemyAi.target == null) {
-                continue
-            }
-            val enemyMovement = enemy.getComponent<Movement2D>()!!
-            val distanceX = enemyAi.target!!.x - enemy.x
-            val distanceY = enemyAi.target!!.y - enemy.y
-            val xMovement = distanceX / enemyMovement.speed
-            val yMovement = distanceY / enemyMovement.speed
-
-            enemyMovement.vx = Math.clamp(xMovement, -1.0, 1.0)
-            enemyMovement.vy = Math.clamp(yMovement, -1.0, 1.0)
-        }
+        movement.vx = Math.clamp(xMovement, -movement.tvx, movement.tvx)
+        movement.vy = Math.clamp(yMovement, -movement.tvy, movement.tvy)
     }
 }

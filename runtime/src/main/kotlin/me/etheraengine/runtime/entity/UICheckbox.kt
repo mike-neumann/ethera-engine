@@ -35,7 +35,7 @@ class UICheckbox(
     init {
         addComponents(
             UIHoverable(onHover, offHover),
-            UIClickable({ it.getComponent<UIValue<Boolean>>()!!.apply { this.value = !this.value } })
+            UIClickable({ it.getComponent<UIValueHolder<Boolean>>()!!.apply { this.value = !this.value } })
         )
     }
 }

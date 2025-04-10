@@ -2,7 +2,7 @@ package me.etheraengine.example.entity
 
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.runtime.entity.Entity
-import me.etheraengine.runtime.entity.component.State
+import me.etheraengine.runtime.entity.component.StateHolder
 import me.etheraengine.runtime.g2d.entity.component.Animations2D
 import me.etheraengine.runtime.g2d.entity.component.Movement2D
 import me.etheraengine.runtime.g2d.graphics.Animation2D
@@ -148,13 +148,13 @@ class Player : Entity(400.0, 400.0, 50, 35) {
 
     init {
         addComponents(
-            State(EntityState.IDLE),
+            StateHolder(EntityState.IDLE),
             MovementDirection(Direction.LEFT),
-            Movement2D(250.0),
+            Movement2D(1.5),
             PlayerMovement(),
-            Attack(1.0, 40.0, 250, 100, 40.0),
+            AttackHolder(1.0, 40.0, 250, 100, 40.0),
             Health(10.0, 500),
-            Collideable(true),
+            Collidable(),
             Animations2D(
                 EntityAnimation.IDLE_LEFT,
                 mapOf(

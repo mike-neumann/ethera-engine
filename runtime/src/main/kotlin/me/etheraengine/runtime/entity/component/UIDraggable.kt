@@ -8,7 +8,7 @@ typealias DragEvent = (it: Entity, fromX: Double, fromY: Double, toX: Double, to
  * UI component, specifies that the attached entity is draggable from position A to B
  */
 open class UIDraggable(val onDrag: DragEvent = { _, _, _, _, _ -> }, val offDrag: DragEvent = { _, _, _, _, _ -> }) {
-    var isDragging = false
+    var dragging = false
     var fromX = 0.0
     var fromY = 0.0
     var toX = 0.0

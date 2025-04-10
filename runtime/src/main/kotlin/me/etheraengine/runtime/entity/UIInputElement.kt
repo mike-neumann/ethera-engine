@@ -19,6 +19,6 @@ open class UIInputElement<T>(
     onChange: ChangeEvent<T> = { _, _, _ -> },
 ) : UIElement(x, y, width, height, text, textSize, textColor, textStyle, onFocus, offFocus) {
     init {
-        addComponents(UIValue(value, maxValue, onChange))
+        addComponents(UIValueHolder(value, maxValue, onChange))
     }
 }

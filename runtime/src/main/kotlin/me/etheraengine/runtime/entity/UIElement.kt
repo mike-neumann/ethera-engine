@@ -16,6 +16,6 @@ open class UIElement(
     offFocus: FocusEvent = {},
 ) : Entity(x, y, width, height) {
     init {
-        addComponents(UIFocusable(onFocus, offFocus), UIText(text, textSize, textColor, textStyle))
+        addComponents(UIFocusable(onFocus, offFocus), UITextHolder(text, textSize, textColor, textStyle))
     }
 }

@@ -47,8 +47,8 @@ open class UISlider(
      * Gets the sliders draggable pin x position by the current value its holding
      */
     fun getPinXPositionForCurrentValue(pinWidth: Double) = let {
-        val value = getComponent<UIValue<Double>>()!!
-        val valueX = x + value.value / 100 * value.maxValue / 100 * width
+        val valueHolder = getComponent<UIValueHolder<Double>>()!!
+        val valueX = x + valueHolder.value / 100 * valueHolder.maxValue / 100 * width
         if (valueX + pinWidth > x + width) (x + width) - pinWidth else valueX
     }
 }

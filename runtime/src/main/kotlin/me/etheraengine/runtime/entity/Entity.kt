@@ -4,6 +4,9 @@ package me.etheraengine.runtime.entity
  * Base entity class in the ECS pattern, entities contain Components that store individual values like position, movement, speed, attack, etc.
  */
 open class Entity(var x: Double = 0.0, var y: Double = 0.0, var width: Int = 0, var height: Int = 0) {
+    /**
+     * marks this entity for removal when the next logic tick occurs
+     */
     var markedForRemoval = false
     private val components = mutableMapOf<Class<*>, Any>()
     private var cachedComponents = 0

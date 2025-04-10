@@ -1,5 +1,6 @@
 package me.etheraengine.runtime.system
 
+import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.entity.UISlider
 import me.etheraengine.runtime.entity.component.*
 import me.etheraengine.runtime.scene.Scene
@@ -15,28 +16,25 @@ class UISliderValueLogicSystem : KeyAdapter(), LogicSystem {
     private var leftKeyDown = false
     private var rightKeyDown = false
 
-    override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val sliders = scene.getFilteredEntities { it is UISlider && it.hasComponent<UIDraggable>() && it.hasComponent<UIValue<Double>>() }
+    override fun update(entity: Entity, scene: Scene, now: Long, deltaTime: Long) {
+        if (entity !is UISlider || !entity.hasComponent<UIDraggable>() || !entity.hasComponent<UIValueHolder<Double>>()) return
+        val draggable = entity.getComponent<UIDraggable>()!!
+        val valueHolder = entity.getComponent<UIValueHolder<Double>>()!!
 
-        for (slider in sliders) {
-            val draggable = slider.getComponent<UIDraggable>()!!
-            val value = slider.getComponent<UIValue<Double>>()!!
+        if (draggable.dragging) {
+            val draggedDistance = draggable.toX - entity.x
+            val newValue = Math.clamp((draggedDistance / entity.width * 100) / 100 * valueHolder.maxValue, 0.0, valueHolder.maxValue)
+            val oldValue = valueHolder.value
 
-            if (draggable.isDragging) {
-                val draggedDistance = draggable.toX - slider.x
-                val newValue = Math.clamp((draggedDistance / slider.width * 100) / 100 * value.maxValue, 0.0, value.maxValue)
-                val oldValue = value.value
+            valueHolder.value = newValue
+            valueHolder.onChange(entity, oldValue, newValue)
+        }
+        val focusable = entity.getComponent<UIFocusable>()!!
 
-                value.value = newValue
-                value.onChange(slider, oldValue, newValue)
-            }
-            val focusable = slider.getComponent<UIFocusable>()!!
-
-            if (focusable.isFocused && leftKeyDown && !rightKeyDown) {
-                value.value = Math.clamp(value.value - 1, 0.0, value.maxValue)
-            } else if (focusable.isFocused && rightKeyDown && !leftKeyDown) {
-                value.value = Math.clamp(value.value + 1, 0.0, value.maxValue)
-            }
+        if (focusable.focused && leftKeyDown && !rightKeyDown) {
+            valueHolder.value = Math.clamp(valueHolder.value - 1, 0.0, valueHolder.maxValue)
+        } else if (focusable.focused && rightKeyDown && !leftKeyDown) {
+            valueHolder.value = Math.clamp(valueHolder.value + 1, 0.0, valueHolder.maxValue)
         }
     }
 
