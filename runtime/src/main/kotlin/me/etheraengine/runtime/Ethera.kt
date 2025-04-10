@@ -1,6 +1,5 @@
 package me.etheraengine.runtime
 
-import me.etheraengine.runtime.banner.EtheraBanner
 import me.etheraengine.runtime.service.ConfigurationService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -34,9 +33,7 @@ open class Ethera(val configurationService: ConfigurationService, val screen: Sc
             }
 
             windowTitle = title
-            context = SpringApplicationBuilder().sources(Ethera::class.java, type)
-                .banner(EtheraBanner())
-                .run()
+            context = SpringApplicationBuilder().sources(Ethera::class.java, type).run()
             return context.getBean(type)
         }
 

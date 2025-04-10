@@ -1,8 +1,6 @@
 package me.etheraengine.runtime.entity
 
 import me.etheraengine.runtime.entity.component.*
-import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
-import me.etheraengine.runtime.g2d.entity.component.Position2D
 import java.awt.Color
 
 open class UIElement(
@@ -16,13 +14,8 @@ open class UIElement(
     textStyle: Int,
     onFocus: FocusEvent = {},
     offFocus: FocusEvent = {},
-) : Entity() {
+) : Entity(x, y, width, height) {
     init {
-        addComponents(
-            UIFocusable(onFocus, offFocus),
-            Position2D(x, y),
-            Dimensions2D(width, height),
-            UIText(text, textSize, textColor, textStyle)
-        )
+        addComponents(UIFocusable(onFocus, offFocus), UIText(text, textSize, textColor, textStyle))
     }
 }

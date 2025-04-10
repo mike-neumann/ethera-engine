@@ -2,8 +2,7 @@ package me.etheraengine.runtime
 
 import me.etheraengine.runtime.service.SceneService
 import org.springframework.stereotype.Component
-import java.awt.Graphics
-import java.awt.Toolkit
+import java.awt.*
 import java.awt.event.*
 import javax.swing.JPanel
 
@@ -23,7 +22,7 @@ class Screen(val sceneService: SceneService) : JPanel(), FocusListener, KeyListe
         super.paintComponent(g)
         val now = System.currentTimeMillis()
 
-        sceneService.render(g, now, now - lastFrameTime)
+        sceneService.render(g as Graphics2D, now, now - lastFrameTime)
 
         Toolkit.getDefaultToolkit().sync()
         lastFrameTime = System.currentTimeMillis()

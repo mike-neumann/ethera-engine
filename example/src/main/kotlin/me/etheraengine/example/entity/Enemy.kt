@@ -3,15 +3,15 @@ package me.etheraengine.example.entity
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.entity.component.State
-import me.etheraengine.runtime.g2d.entity.component.*
+import me.etheraengine.runtime.g2d.entity.component.Animations2D
+import me.etheraengine.runtime.g2d.entity.component.Movement2D
 
-class Enemy(x: Double, y: Double) : Entity() {
+class Enemy(x: Double, y: Double) : Entity(x, y, 50, 35) {
     init {
         addComponents(
             State(EntityState.IDLE),
+            MovementDirection(Direction.LEFT),
             Movement2D(300.0, 20.0, 20.0),
-            Position(x, y),
-            Dimensions2D(50, 35),
             Attack(1.0, 60.0, 250, 100, 40.0),
             Health(5.0, 100),
             EnemyAI(null),

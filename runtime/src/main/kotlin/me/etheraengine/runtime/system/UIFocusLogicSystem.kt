@@ -3,14 +3,14 @@ package me.etheraengine.runtime.system
 import me.etheraengine.runtime.entity.component.UIFocusable
 import me.etheraengine.runtime.scene.Scene
 import org.springframework.stereotype.Component
+import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import java.awt.event.KeyListener
 
 /**
  * System responsible for managing the focused state of ui entities
  */
 @Component
-class UIFocusLogicSystem : LogicSystem, KeyListener {
+class UIFocusLogicSystem : KeyAdapter(), LogicSystem {
     private var isTab = false
     private var isShift = false
     private var isUp = false
@@ -91,6 +91,4 @@ class UIFocusLogicSystem : LogicSystem, KeyListener {
             KeyEvent.VK_DOWN -> isDown = false
         }
     }
-
-    override fun keyTyped(e: KeyEvent) {}
 }

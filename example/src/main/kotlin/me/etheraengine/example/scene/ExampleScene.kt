@@ -2,7 +2,6 @@ package me.etheraengine.example.scene
 
 import me.etheraengine.example.entity.*
 import me.etheraengine.example.entity.component.EnemyAI
-import me.etheraengine.example.entity.component.Position
 import me.etheraengine.example.listener.ExampleSceneKeyListener
 import me.etheraengine.example.system.*
 import me.etheraengine.example.world.ExampleWorld
@@ -10,14 +9,13 @@ import me.etheraengine.example.world.Tile
 import me.etheraengine.runtime.Ethera
 import me.etheraengine.runtime.entity.UILabel
 import me.etheraengine.runtime.entity.component.State
-import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
 import me.etheraengine.runtime.g2d.system.Bounds2DRenderingSystem
 import me.etheraengine.runtime.g2d.world.Camera2D
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.service.SoundService
 import org.springframework.stereotype.Component
 import java.awt.*
-import java.util.Random
+import java.util.*
 import kotlin.system.exitProcess
 
 @Component
@@ -39,7 +37,7 @@ class ExampleScene(
     private val bounds2DRenderingSystem: Bounds2DRenderingSystem,
 ) : Scene() {
     override fun onInitialize() {
-        camera2D = Camera2D(player.getComponent<Position>()!!)
+        camera2D = Camera2D(player.x, player.y)
 
         addKeyListeners(exampleSceneKeyListener)
         // Uncomment bounds2DRenderingSystem, if you want to see each entity's bounds / hitbox
@@ -100,11 +98,11 @@ class ExampleScene(
         }
     }
 
-    override fun onRender(g: Graphics, now: Long, deltaTime: Long) {
+    override fun onRender(g: Graphics2D, now: Long, deltaTime: Long) {
+        camera2D.x = player.x
+        camera2D.y = player.y
         // set camera offset so that the player is always in the middle
-        val dimensions = player.getComponent<Dimensions2D>()!!
-
-        camera2D.offsetX = (Ethera.frame.width / 2.0) - dimensions.width / 2
-        camera2D.offsetY = (Ethera.frame.height / 2.0) - dimensions.height / 2
+        camera2D.offsetX = (Ethera.frame.width / 2.0) - player.width / 2
+        camera2D.offsetY = (Ethera.frame.height / 2.0) - player.height / 2
     }
 }

@@ -10,7 +10,7 @@ import kotlin.math.log10
  * Engine responsible for handling sound related tasks
  */
 @Component
-open class SoundEngine(val etheraConfig: EtheraConfig, val soundService: SoundService) : Engine("SoundEngine", 0) {
+open class SoundEngine(val etheraConfig: EtheraConfig, val soundService: SoundService) : Engine("SoundEngine", 100) {
     override fun onTick(now: Long, deltaTime: Long) {
         for (activeSound in soundService.activeSounds) {
             val floatControl = activeSound.clip.getControl(FloatControl.Type.MASTER_GAIN) as FloatControl

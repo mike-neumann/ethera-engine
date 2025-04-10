@@ -4,7 +4,7 @@ import me.etheraengine.runtime.Ethera
 import me.etheraengine.runtime.logger
 import me.etheraengine.runtime.scene.Scene
 import org.springframework.stereotype.Service
-import java.awt.Graphics
+import java.awt.Graphics2D
 
 /**
  * Service to manage the currently active scene, and switch between different ones
@@ -23,14 +23,14 @@ class SceneService {
     @PublishedApi
     internal fun switchScene(scene: Scene) {
         currentScene?.let {
-            log.info("Disabling scene {}", it::class.java.simpleName)
+            log.debug("Disabling scene {}", it::class.java.simpleName)
             it.onDisable()
         }
 
         currentScene = scene
 
         currentScene?.let {
-            log.info("Enabling scene {}", it::class.java.simpleName)
+            log.debug("Enabling scene {}", it::class.java.simpleName)
 
             if (!it.isInitialized) {
                 it.isInitialized = true
@@ -44,7 +44,7 @@ class SceneService {
     fun switchToPreviousScene() = lastScene?.let { switchScene(it) }
     fun update(now: Long, deltaTime: Long) = currentScene?.update(now, deltaTime)
 
-    fun render(g: Graphics, now: Long, deltaTime: Long) = currentScene?.let {
+    fun render(g: Graphics2D, now: Long, deltaTime: Long) = currentScene?.let {
         it.camera2D.translate(g)
         it.render(g, now, deltaTime)
         it.camera2D.closeTranslation(g)

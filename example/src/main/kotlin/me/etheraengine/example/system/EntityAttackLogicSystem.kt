@@ -3,7 +3,7 @@ package me.etheraengine.example.system
 import me.etheraengine.example.entity.EntityState
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.runtime.entity.component.State
-import me.etheraengine.runtime.g2d.entity.component.*
+import me.etheraengine.runtime.g2d.entity.component.Movement2D
 import me.etheraengine.runtime.g2d.util.CollisionUtils2D
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.LogicSystem
@@ -13,36 +13,25 @@ import org.springframework.stereotype.Component
 class EntityAttackLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val entities =
-            scene.getFilteredEntities { it.hasComponent<State>() && it.hasComponent<Position>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Attack>() }
+            scene.getFilteredEntities { it.hasComponent<State>() && it.hasComponent<Attack>() }
 
         for (entity in entities) {
             val state = entity.getComponent<State>()!!
-            val entityPosition = entity.getComponent<Position>()!!
-            val entityDimensions = entity.getComponent<Dimensions2D>()!!
             val attack = entity.getComponent<Attack>()!!
 
             if (state.state != EntityState.ATTACK || now - attack.lastAttackTime < attack.damageDelay || now - attack.lastAttackTime - attack.damageDelay > attack.damageTimeRange) {
                 continue
             }
-            val damagePosition = when (entityPosition.direction) {
-                Direction.LEFT -> Position(
-                    entityPosition.x - attack.range,
-                    entityPosition.y
-                )
-
-                Direction.RIGHT -> Position(
-                    entityPosition.x + entityDimensions.width,
-                    entityPosition.y
-                )
+            val movementDirection = entity.getComponent<MovementDirection>()!!
+            val (damageX, damageY) = when (movementDirection.direction) {
+                Direction.LEFT -> entity.x - attack.range to entity.y
+                Direction.RIGHT -> entity.x + entity.width to entity.y
             }
-            val damageDimensions = Dimensions2D(attack.range.toInt(), attack.range.toInt())
 
             scene.getFilteredEntities {
-                it != entity && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Health>() && CollisionUtils2D.checkCollision(
-                    it.getComponent<Position2D>()!!,
-                    it.getComponent<Dimensions2D>()!!,
-                    damagePosition,
-                    damageDimensions
+                it != entity && it.hasComponent<Health>() && CollisionUtils2D.collidesWith(
+                    it.x, it.y, it.width, it.height,
+                    damageX, damageY, attack.range.toInt(), attack.range.toInt()
                 )
             }.forEach {
                 val health = it.getComponent<Health>()!!
@@ -56,7 +45,7 @@ class EntityAttackLogicSystem : LogicSystem {
 
                 if (movement != null) {
                     // apply some knockback
-                    movement.vx = when (entityPosition.direction) {
+                    movement.vx = when (movementDirection.direction) {
                         Direction.LEFT -> -attack.knockback
                         Direction.RIGHT -> attack.knockback
                     }

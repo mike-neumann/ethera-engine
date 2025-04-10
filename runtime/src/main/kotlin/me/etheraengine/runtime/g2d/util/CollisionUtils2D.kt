@@ -1,8 +1,6 @@
 package me.etheraengine.runtime.g2d.util
 
 import me.etheraengine.runtime.entity.Entity
-import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
-import me.etheraengine.runtime.g2d.entity.component.Position2D
 import kotlin.math.abs
 
 /**
@@ -12,7 +10,7 @@ object CollisionUtils2D {
     /**
      * Calculates the MTV (Minimum Translation Vector) for the given coordinates, representing the translation values needed to move one object out of the other as a Pair<X, Y>
      */
-    fun getMinimumTranslationVector(
+    fun mtv(
         ourX: Double,
         ourY: Double,
         ourWidth: Int,
@@ -21,54 +19,37 @@ object CollisionUtils2D {
         theirY: Double,
         theirWidth: Int,
         theirHeight: Int,
-    ): Pair<Double, Double> {
-        return if (!checkXCollision(ourX, ourWidth, theirX, theirWidth) && !checkYCollision(ourY, ourHeight, theirY, theirHeight)) {
-            0.0 to 0.0
-        } else {
-            val ourMaxY = ourY + ourHeight
-            val theirMaxY = theirY + theirHeight
-            val ourMaxX = ourX + ourWidth
-            val theirMaxX = theirX + theirWidth
-            val topTranslation = -(ourMaxY - theirY)
-            val bottomTranslation = theirMaxY - ourY
-            val leftTranslation = -(ourMaxX - theirX)
-            val rightTranslation = theirMaxX - ourX
-            val mtv =
-                listOf(leftTranslation, rightTranslation).minBy { abs(it) } to listOf(topTranslation, bottomTranslation).minBy { abs(it) }
-            if (abs(mtv.first) < abs(mtv.second)) mtv.first to 0.0 else 0.0 to mtv.second
-        }
+    ) = if (!collidesWith(ourX, ourY, ourWidth, ourHeight, theirX, theirY, theirWidth, theirHeight)) {
+        0.0 to 0.0
+    } else {
+        val ourMaxY = ourY + ourHeight
+        val theirMaxY = theirY + theirHeight
+        val ourMaxX = ourX + ourWidth
+        val theirMaxX = theirX + theirWidth
+        val topTranslation = -(ourMaxY - theirY)
+        val bottomTranslation = theirMaxY - ourY
+        val leftTranslation = -(ourMaxX - theirX)
+        val rightTranslation = theirMaxX - ourX
+        val (x, y) = listOf(leftTranslation, rightTranslation).minBy { abs(it) } to listOf(
+            topTranslation,
+            bottomTranslation
+        ).minBy { abs(it) }
+        if (abs(x) < abs(y)) x to 0.0 else 0.0 to y
     }
 
-    fun getMinimumTranslationVector(our: Entity, their: Entity): Pair<Double, Double> {
-        val ourPosition = our.getComponent<Position2D>()!!
-        val ourDimensions = our.getComponent<Dimensions2D>()!!
-        val theirPosition = their.getComponent<Position2D>()!!
-        val theirDimensions = their.getComponent<Dimensions2D>()!!
-        return getMinimumTranslationVector(
-            ourPosition.x,
-            ourPosition.y,
-            ourDimensions.width,
-            ourDimensions.height,
-            theirPosition.x,
-            theirPosition.y,
-            theirDimensions.width,
-            theirDimensions.height
-        )
-    }
+    infix fun Entity.mtv(their: Entity) = mtv(x, y, width, height, their.x, their.y, their.width, their.height)
 
-    fun checkXCollision(ourX: Double, ourWidth: Int, theirX: Double, theirWidth: Int) =
+    fun collisionX(ourX: Double, ourWidth: Int, theirX: Double, theirWidth: Int) =
         (theirX <= ourX + ourWidth || theirX + theirWidth <= ourX + ourWidth) && (theirX >= ourX || theirX + theirWidth >= ourX)
 
-    fun checkYCollision(ourY: Double, ourHeight: Int, theirY: Double, theirHeight: Int) =
+    infix fun Entity.collisionX(their: Entity) = collisionX(x, width, their.x, their.width)
+
+    fun collisionY(ourY: Double, ourHeight: Int, theirY: Double, theirHeight: Int) =
         (theirY <= ourY + ourHeight || theirY + theirHeight <= ourY + ourHeight) && (theirY >= ourY || theirY + theirHeight >= ourY)
 
-    fun checkXCollision(ourPosition: Position2D, ourDimensions: Dimensions2D, theirPosition: Position2D, theirDimensions: Dimensions2D) =
-        checkXCollision(ourPosition.x, ourDimensions.width, theirPosition.x, theirDimensions.width)
+    infix fun Entity.collisionY(their: Entity) = collisionY(y, height, their.y, their.height)
 
-    fun checkYCollision(ourPosition: Position2D, ourDimensions: Dimensions2D, theirPosition: Position2D, theirDimensions: Dimensions2D) =
-        checkYCollision(ourPosition.y, ourDimensions.height, theirPosition.y, theirDimensions.height)
-
-    fun checkCollision(
+    fun collidesWith(
         ourX: Double,
         ourY: Double,
         ourWidth: Int,
@@ -77,24 +58,7 @@ object CollisionUtils2D {
         theirY: Double,
         theirWidth: Int,
         theirHeight: Int,
-    ) = checkXCollision(ourX, ourWidth, theirX, theirWidth) && checkYCollision(ourY, ourHeight, theirY, theirHeight)
+    ) = collisionX(ourX, ourWidth, theirX, theirWidth) && collisionY(ourY, ourHeight, theirY, theirHeight)
 
-    fun checkCollision(ourPosition: Position2D, ourDimensions: Dimensions2D, theirPosition: Position2D, theirDimensions: Dimensions2D) =
-        checkCollision(
-            ourPosition.x,
-            ourPosition.y,
-            ourDimensions.width,
-            ourDimensions.height,
-            theirPosition.x,
-            theirPosition.y,
-            theirDimensions.width,
-            theirDimensions.height
-        )
-
-    fun checkCollision(our: Entity, their: Entity) = checkCollision(
-        our.getComponent<Position2D>()!!,
-        our.getComponent<Dimensions2D>()!!,
-        their.getComponent<Position2D>()!!,
-        their.getComponent<Dimensions2D>()!!
-    )
+    infix fun Entity.collidesWith(their: Entity) = collidesWith(x, y, width, height, their.x, their.y, their.width, their.height)
 }

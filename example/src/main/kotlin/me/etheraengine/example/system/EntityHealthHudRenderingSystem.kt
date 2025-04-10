@@ -1,36 +1,32 @@
 package me.etheraengine.example.system
 
 import me.etheraengine.example.entity.component.Health
-import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
-import me.etheraengine.runtime.g2d.entity.component.Position2D
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.RenderingSystem
 import org.springframework.stereotype.Component
 import java.awt.Color
-import java.awt.Graphics
+import java.awt.Graphics2D
 
 @Component
 class EntityHealthHudRenderingSystem : RenderingSystem {
-    override fun render(scene: Scene, g: Graphics, now: Long, deltaTime: Long) {
+    override fun render(scene: Scene, g: Graphics2D, now: Long, deltaTime: Long) {
         val entities =
-            scene.getFilteredEntities { it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() && it.hasComponent<Health>() }
+            scene.getFilteredEntities { it.hasComponent<Health>() }
 
         for (entity in entities) {
-            val position = entity.getComponent<Position2D>()!!
-            val dimensions = entity.getComponent<Dimensions2D>()!!
             val health = entity.getComponent<Health>()!!
 
             g.color = Color.RED
             g.drawRect(
-                position.x.toInt(),
-                position.y.toInt() - 40,
-                dimensions.width,
+                entity.x.toInt(),
+                entity.y.toInt() - 40,
+                entity.width,
                 10
             )
             g.fillRect(
-                position.x.toInt(),
-                position.y.toInt() - 40,
-                ((health.health / health.maxHealth * 100) / 100 * dimensions.width).toInt(),
+                entity.x.toInt(),
+                entity.y.toInt() - 40,
+                ((health.health / health.maxHealth * 100) / 100 * entity.width).toInt(),
                 10
             )
         }

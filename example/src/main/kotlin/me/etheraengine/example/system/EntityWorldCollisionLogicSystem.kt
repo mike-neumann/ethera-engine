@@ -1,9 +1,8 @@
 package me.etheraengine.example.system
 
 import me.etheraengine.example.world.Tile
-import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
-import me.etheraengine.runtime.g2d.entity.component.Position2D
-import me.etheraengine.runtime.g2d.util.CollisionUtils2D
+import me.etheraengine.runtime.g2d.util.CollisionUtils2D.collidesWith
+import me.etheraengine.runtime.g2d.util.CollisionUtils2D.mtv
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.LogicSystem
 import org.springframework.stereotype.Component
@@ -12,66 +11,18 @@ import org.springframework.stereotype.Component
 class EntityWorldCollisionLogicSystem : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val tiles = scene.getFilteredEntities { it is Tile } as List<Tile>
-        val entities =
-            scene.getFilteredEntities { it !in tiles && it.hasComponent<Position2D>() && it.hasComponent<Dimensions2D>() }
+        val entities = scene.getFilteredEntities { it !in tiles }
 
         for (entity in entities) {
-            val position = entity.getComponent<Position2D>()!!
-            val dimensions = entity.getComponent<Dimensions2D>()!!
-            val nextCollidingTiles =
-                getCollidingTiles(
-                    tiles,
-                    position.x,
-                    position.y,
-                    dimensions.width,
-                    dimensions.height
-                )
+            val nextCollidingTiles = tiles.filter { entity collidesWith it }
             val nextNotPassableCollidingTiles = nextCollidingTiles.filter { !it.tileType.isPassable }
 
             for (nextNotPassableCollidingTile in nextNotPassableCollidingTiles) {
-                val tilePosition = nextNotPassableCollidingTile.getComponent<Position2D>()!!
-                val tileDimensions = nextNotPassableCollidingTile.getComponent<Dimensions2D>()!!
-                val mtv = CollisionUtils2D.getMinimumTranslationVector(
-                    position.x,
-                    position.y,
-                    dimensions.width,
-                    dimensions.height,
-                    tilePosition.x,
-                    tilePosition.y,
-                    tileDimensions.width,
-                    tileDimensions.height
-                )
+                val (tX, tY) = entity mtv nextNotPassableCollidingTile
 
-                position.setLocation(
-                    position.x + mtv.first,
-                    position.y + mtv.second
-                )
+                entity.x += tX
+                entity.y += tY
             }
         }
-    }
-
-    private fun getCollidingTiles(
-        tiles: List<Tile>,
-        x: Double,
-        y: Double,
-        width: Int,
-        height: Int,
-    ): List<Tile> {
-        return tiles
-            .filter {
-                val position = it.getComponent<Position2D>()!!
-                val dimensions = it.getComponent<Dimensions2D>()!!
-
-                CollisionUtils2D.checkCollision(
-                    position.x,
-                    position.y,
-                    dimensions.width,
-                    dimensions.height,
-                    x,
-                    y,
-                    width,
-                    height
-                )
-            }
     }
 }

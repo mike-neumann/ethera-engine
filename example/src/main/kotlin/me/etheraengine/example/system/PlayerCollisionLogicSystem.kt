@@ -2,7 +2,7 @@ package me.etheraengine.example.system
 
 import me.etheraengine.example.entity.Player
 import me.etheraengine.runtime.Ethera
-import me.etheraengine.runtime.g2d.entity.component.*
+import me.etheraengine.runtime.g2d.entity.component.Movement2D
 import me.etheraengine.runtime.scene.Scene
 import me.etheraengine.runtime.system.LogicSystem
 import org.springframework.stereotype.Component
@@ -14,36 +14,22 @@ class PlayerCollisionLogicSystem : LogicSystem {
 
         for (player in players) {
             val movement = player.getComponent<Movement2D>()!!
-            val position = player.getComponent<Position2D>()!!
-            val dimensions = player.getComponent<Dimensions2D>()!!
             // top collision
-            if (position.y < 0) {
-                position.setLocation(
-                    0.0,
-                    position.x
-                )
+            if (player.y < 0) {
+                player.y = 0.0
             }
             // bottom collision
-            if (position.y + dimensions.height > Ethera.frame.height) {
+            if (player.y + player.height > Ethera.frame.height) {
                 movement.vy = 0.0
-                position.setLocation(
-                    Ethera.frame.height - dimensions.height.toDouble(),
-                    position.x
-                )
+                player.y = Ethera.frame.height - player.height.toDouble()
             }
             // right collision
-            if (position.x + dimensions.width > Ethera.frame.width) {
-                position.setLocation(
-                    position.y,
-                    Ethera.frame.width - dimensions.width.toDouble()
-                )
+            if (player.x + player.width > Ethera.frame.width) {
+                player.x = Ethera.frame.width - player.width.toDouble()
             }
             // left collision
-            if (position.x < 0) {
-                position.setLocation(
-                    position.y,
-                    0.0
-                )
+            if (player.x < 0) {
+                player.x = 0.0
             }
         }
     }

@@ -26,7 +26,7 @@ abstract class Engine(name: String, val tickDuration: Int) : Thread(name), Comma
 
     final override fun run(vararg args: String) {
         start()
-        log.info("$name started")
+        log.debug("$name started")
     }
 
     abstract fun onTick(now: Long, deltaTime: Long)

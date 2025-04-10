@@ -3,7 +3,6 @@ package me.etheraengine.runtime.scene
 import jakarta.annotation.PostConstruct
 import me.etheraengine.runtime.entity.Cursor
 import me.etheraengine.runtime.entity.Entity
-import me.etheraengine.runtime.g2d.entity.component.Position2D
 import me.etheraengine.runtime.g2d.system.Animation2DRenderingSystem
 import me.etheraengine.runtime.g2d.system.Sprite2DRenderingSystem
 import me.etheraengine.runtime.g2d.world.Camera2D
@@ -12,7 +11,7 @@ import me.etheraengine.runtime.scene.Scene.EntityFilter
 import me.etheraengine.runtime.system.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.awt.Graphics
+import java.awt.Graphics2D
 import java.awt.event.*
 
 /**
@@ -49,7 +48,7 @@ open class Scene {
 
     @Autowired
     lateinit var animation2DRenderingSystem: Animation2DRenderingSystem
-    var camera2D = Camera2D(Position2D(0.0, 0.0))
+    var camera2D = Camera2D()
     private val _renderingSystems = mutableListOf<RenderingSystem>()
     private val _logicSystems = mutableListOf<LogicSystem>()
     private val _entities = mutableListOf<Entity>()
@@ -100,7 +99,7 @@ open class Scene {
     /**
      * Called every frame that is requested by the rendering engine
      */
-    open fun onRender(g: Graphics, now: Long, deltaTime: Long) {}
+    open fun onRender(g: Graphics2D, now: Long, deltaTime: Long) {}
 
     /**
      * Called every logic tick that is requested by the logic engine
@@ -129,104 +128,86 @@ open class Scene {
 
     @Synchronized
     fun addRenderingSystems(vararg renderingSystems: RenderingSystem) {
-        log.info("Registering {} rendering systems", renderingSystems.size)
+        log.debug("Registering {} rendering systems", renderingSystems.size)
         log.debug("{}", renderingSystems)
         this._renderingSystems.addAll(renderingSystems)
     }
 
     @Synchronized
     fun removeRenderingSystems(vararg renderingSystems: RenderingSystem) {
-        log.info("Unregistering {} rendering systems", renderingSystems.size)
+        log.debug("Unregistering {} rendering systems", renderingSystems.size)
         log.debug("{}", renderingSystems)
-        this._renderingSystems.removeAll(renderingSystems)
+        this._renderingSystems.removeAll(renderingSystems.toSet())
     }
 
     @Synchronized
     fun addLogicSystems(vararg logicSystems: LogicSystem) {
-        log.info("Registering {} logic systems", logicSystems.size)
+        log.debug("Registering {} logic systems", logicSystems.size)
         log.debug("{}", logicSystems)
         this._logicSystems.addAll(logicSystems)
     }
 
     @Synchronized
     fun removeLogicSystems(vararg logicSystems: LogicSystem) {
-        log.info("Unregistering {} logic systems", logicSystems.size)
+        log.debug("Unregistering {} logic systems", logicSystems.size)
         log.debug("{}", logicSystems)
-        this._logicSystems.removeAll(logicSystems)
+        this._logicSystems.removeAll(logicSystems.toSet())
     }
 
     @Synchronized
     fun addEntities(vararg entities: Entity) {
-        log.info("Registering {} entities", entities.size)
+        log.debug("Registering {} entities", entities.size)
         log.debug("{}", entities)
         this._entities.addAll(entities)
     }
 
     @Synchronized
     fun removeEntities(vararg entities: Entity) {
-        log.info("Unregistering {} entities", entities.size)
+        log.debug("Unregistering {} entities", entities.size)
         log.debug("{}", entities)
-        this._entities.removeAll(entities)
+        this._entities.removeAll(entities.toSet())
     }
 
     @Synchronized
     fun addKeyListeners(vararg keyListeners: KeyListener) {
-        log.info("Registering {} key listeners", keyListeners.size)
+        log.debug("Registering {} key listeners", keyListeners.size)
         log.debug("{}", keyListeners)
         this._keyListeners.addAll(keyListeners)
     }
 
     @Synchronized
     fun removeKeyListeners(vararg keyListeners: KeyListener) {
-        log.info("Unregistering {} key listeners", keyListeners.size)
+        log.debug("Unregistering {} key listeners", keyListeners.size)
         log.debug("{}", keyListeners)
-        this._keyListeners.removeAll(keyListeners)
+        this._keyListeners.removeAll(keyListeners.toSet())
     }
 
     @Synchronized
     fun addMouseListeners(vararg mouseListeners: MouseListener) {
-        log.info("Registering {} mouse listeners", mouseListeners.size)
+        log.debug("Registering {} mouse listeners", mouseListeners.size)
         log.debug("{}", mouseListeners)
         this._mouseListeners.addAll(mouseListeners)
     }
 
     @Synchronized
     fun removeMouseListeners(vararg mouseListeners: MouseListener) {
-        log.info("Unregistering {} mouse listeners", mouseListeners.size)
+        log.debug("Unregistering {} mouse listeners", mouseListeners.size)
         log.debug("{}", mouseListeners)
-        this._mouseListeners.removeAll(mouseListeners)
+        this._mouseListeners.removeAll(mouseListeners.toSet())
     }
 
     @Synchronized
     fun addMouseMotionListeners(vararg mouseMotionListeners: MouseMotionListener) {
-        log.info("Registering {} mouse motion listeners", mouseMotionListeners.size)
+        log.debug("Registering {} mouse motion listeners", mouseMotionListeners.size)
         log.debug("{}", mouseMotionListeners)
         this._mouseMotionListeners.addAll(mouseMotionListeners)
     }
 
     @Synchronized
     fun removeMouseMotionListeners(vararg mouseMotionListeners: MouseMotionListener) {
-        log.info("Unregistering {} mouse motion listeners", mouseMotionListeners.size)
+        log.debug("Unregistering {} mouse motion listeners", mouseMotionListeners.size)
         log.debug("{}", mouseMotionListeners)
-        this._mouseMotionListeners.removeAll(mouseMotionListeners)
-    }
-
-    @Synchronized
-    fun render(g: Graphics, now: Long, deltaTime: Long) {
-        for (renderingSystem in _renderingSystems) {
-            renderingSystem.render(this, g, now, deltaTime)
-        }
-
-        onRender(g, now, deltaTime)
-    }
-
-    @Synchronized
-    fun update(now: Long, deltaTime: Long) {
-        for (logicSystem in _logicSystems) {
-            logicSystem.update(this, now, deltaTime)
-        }
-
-        onUpdate(now, deltaTime)
+        this._mouseMotionListeners.removeAll(mouseMotionListeners.toSet())
     }
 
     @Synchronized
@@ -318,6 +299,32 @@ open class Scene {
         for (focusListener in _focusListeners) {
             focusListener.focusLost(e)
         }
+    }
+
+    @Synchronized
+    fun render(g: Graphics2D, now: Long, deltaTime: Long) {
+        for (renderingSystem in _renderingSystems) {
+            for (entity in _entities) {
+                renderingSystem.render(entity, this, g, now, deltaTime);
+            }
+            renderingSystem.render(this, g, now, deltaTime)
+        }
+
+        onRender(g, now, deltaTime)
+    }
+
+    @Synchronized
+    fun update(now: Long, deltaTime: Long) {
+        _entities.removeAll { it.markedForRemoval }
+
+        for (logicSystem in _logicSystems) {
+            for (entity in _entities) {
+                logicSystem.update(entity, this, now, deltaTime);
+            }
+            logicSystem.update(this, now, deltaTime)
+        }
+
+        onUpdate(now, deltaTime)
     }
 
     /**

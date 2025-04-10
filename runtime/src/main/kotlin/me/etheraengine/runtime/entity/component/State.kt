@@ -3,11 +3,11 @@ package me.etheraengine.runtime.entity.component
 open class State(state: String) {
     var lastState = state
         private set
-    var lockTime = 0L
+    var lockedAt = 0L
         private set
-    var lockedTime = 0L
+    var lockedFor = 0L
         private set
-    val isLocked get() = System.currentTimeMillis() - lockTime <= lockedTime
+    val isLocked get() = System.currentTimeMillis() - lockedAt <= lockedFor
     var state = state
         set(value) {
             if (value != field) {
@@ -22,15 +22,15 @@ open class State(state: String) {
      * NOTE: State changes may only occur when state is unlocked, locked states will remain for the amount of millis provided after calling this function
      */
     fun lock(millis: Long) {
-        lockTime = System.currentTimeMillis()
-        lockedTime = millis
+        lockedAt = System.currentTimeMillis()
+        lockedFor = millis
     }
 
     /**
      * Unlocks this state
      */
     fun unlock() {
-        lockTime = 0
-        lockedTime = 0
+        lockedAt = 0
+        lockedFor = 0
     }
 }

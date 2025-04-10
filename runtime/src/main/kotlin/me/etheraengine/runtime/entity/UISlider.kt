@@ -1,8 +1,6 @@
 package me.etheraengine.runtime.entity
 
 import me.etheraengine.runtime.entity.component.*
-import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
-import me.etheraengine.runtime.g2d.entity.component.Position2D
 import java.awt.Color
 
 open class UISlider(
@@ -48,11 +46,9 @@ open class UISlider(
     /**
      * Gets the sliders draggable pin x position by the current value its holding
      */
-    fun getPinXPositionForCurrentValue(pinWidth: Double): Double {
-        val position = getComponent<Position2D>()!!
-        val dimensions = getComponent<Dimensions2D>()!!
+    fun getPinXPositionForCurrentValue(pinWidth: Double) = let {
         val value = getComponent<UIValue<Double>>()!!
-        val valueX = position.x + value.value / 100 * value.maxValue / 100 * dimensions.width
-        return if (valueX + pinWidth > position.x + dimensions.width) (position.x + dimensions.width) - pinWidth else valueX
+        val valueX = x + value.value / 100 * value.maxValue / 100 * width
+        if (valueX + pinWidth > x + width) (x + width) - pinWidth else valueX
     }
 }

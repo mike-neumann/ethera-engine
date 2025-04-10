@@ -3,14 +3,15 @@ package me.etheraengine.example.entity
 import me.etheraengine.example.entity.component.*
 import me.etheraengine.runtime.entity.Entity
 import me.etheraengine.runtime.entity.component.State
-import me.etheraengine.runtime.g2d.entity.component.*
+import me.etheraengine.runtime.g2d.entity.component.Animations2D
+import me.etheraengine.runtime.g2d.entity.component.Movement2D
 import me.etheraengine.runtime.g2d.graphics.Animation2D
 import me.etheraengine.runtime.g2d.graphics.Spritesheet2D
 import org.springframework.stereotype.Component
 import org.springframework.util.ResourceUtils
 
 @Component
-class Player : Entity() {
+class Player : Entity(400.0, 400.0, 50, 35) {
     class Animation {
         class IdleLeft : Animation2D(
             Spritesheet2D(
@@ -148,10 +149,9 @@ class Player : Entity() {
     init {
         addComponents(
             State(EntityState.IDLE),
+            MovementDirection(Direction.LEFT),
             Movement2D(250.0),
             PlayerMovement(),
-            Position(400.0, 400.0),
-            Dimensions2D(50, 35),
             Attack(1.0, 40.0, 250, 100, 40.0),
             Health(10.0, 500),
             Collideable(true),

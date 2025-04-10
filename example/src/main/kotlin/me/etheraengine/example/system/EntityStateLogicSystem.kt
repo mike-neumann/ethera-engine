@@ -17,7 +17,7 @@ class EntityStateLogicSystem(private val soundService: SoundService) : LogicSyst
         entities.forEach { entity ->
             val state = entity.getComponent<State>()!!
 
-            if (System.currentTimeMillis() - state.lockTime < state.lockedTime) {
+            if (System.currentTimeMillis() - state.lockedAt < state.lockedFor) {
                 return@forEach
             }
 
@@ -71,12 +71,12 @@ class EntityStateLogicSystem(private val soundService: SoundService) : LogicSyst
             entity.getComponent<Movement2D>()?.let {
                 if (it.isMoving) {
                     state.state = EntityState.WALK
-                    val position = entity.getComponent<Position>()!!
+                    val movementDirection = entity.getComponent<MovementDirection>()!!
 
                     if (it.vx > 0f) {
-                        position.direction = Direction.RIGHT
+                        movementDirection.direction = Direction.RIGHT
                     } else if (it.vx < 0f) {
-                        position.direction = Direction.LEFT
+                        movementDirection.direction = Direction.LEFT
                     }
                 } else {
                     state.state = EntityState.IDLE

@@ -37,7 +37,7 @@ class SoundService(val configurationService: ConfigurationService) {
 
     @Synchronized
     fun getSound(key: String) = sounds.computeIfAbsent(key) {
-        log.info("Loading sound {}", key)
+        log.debug("Loading sound {}", key)
         val file = File("${configurationService.soundsUrl}/$key")
         // First call to cache the next calls
         AudioSystem.getAudioInputStream(file)

@@ -3,9 +3,7 @@ package me.etheraengine.runtime.system
 import me.etheraengine.runtime.entity.Cursor
 import me.etheraengine.runtime.entity.UIElement
 import me.etheraengine.runtime.entity.component.*
-import me.etheraengine.runtime.g2d.entity.component.Dimensions2D
-import me.etheraengine.runtime.g2d.entity.component.Position2D
-import me.etheraengine.runtime.g2d.util.CollisionUtils2D
+import me.etheraengine.runtime.g2d.util.CollisionUtils2D.collidesWith
 import me.etheraengine.runtime.scene.Scene
 import org.springframework.stereotype.Component
 import java.awt.event.*
@@ -24,12 +22,11 @@ class UIEventLogicSystem(val cursor: Cursor) : LogicSystem, MouseListener, Mouse
     private var dragging = false
 
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
-        val cursorPosition = cursor.getComponent<Position2D>()!!
         val uiElements = scene.getFilteredEntities { it is UIElement }
 
         for (uiElement in uiElements) {
             uiElement.getComponent<UIFocusable>()?.let {
-                val mouseHovered = CollisionUtils2D.checkCollision(uiElement, cursor)
+                val mouseHovered = uiElement collidesWith cursor
                 val mouseInteracted = mouseHovered && leftMouseDown
                 val focused = it.isFocused
                 val keyboardInteracted = focused && (spaceDown || enterDown)
@@ -61,15 +58,15 @@ class UIEventLogicSystem(val cursor: Cursor) : LogicSystem, MouseListener, Mouse
                 uiElement.getComponent<UIDraggable>()?.let {
                     if (mouseInteracted && !it.isDragging && !dragging) {
                         dragging = true
-                        it.fromX = cursorPosition.x
-                        it.fromY = cursorPosition.y
-                        it.toX = cursorPosition.x
-                        it.toY = cursorPosition.y
+                        it.fromX = cursor.x
+                        it.fromY = cursor.y
+                        it.toX = cursor.x
+                        it.toY = cursor.y
                         it.isDragging = true
                         it.onDrag(uiElement, it.fromX, it.fromY, it.toX, it.toY)
                     } else if (it.isDragging && dragging) {
-                        it.toX = cursorPosition.x
-                        it.toY = cursorPosition.y
+                        it.toX = cursor.x
+                        it.toY = cursor.y
                         it.isDragging = true
                         it.onDrag(uiElement, it.fromX, it.fromY, it.toX, it.toY)
                     }
@@ -82,20 +79,18 @@ class UIEventLogicSystem(val cursor: Cursor) : LogicSystem, MouseListener, Mouse
                 }
             }
 
-            uiElement.getComponent<UIValue<Any>>()?.let {
-                if (it.value != it.lastValue) {
-                    it.lastValue = it.value
-                    it.onChange(uiElement, it.lastValue, it.value)
+            uiElement.getComponent<UIValue<Any>>()?.run {
+                if (value != lastValue) {
+                    lastValue = value
+                    onChange(uiElement, lastValue, value)
                 }
             }
         }
     }
 
     private fun updateCursorPosition(x: Double, y: Double) {
-        val position = cursor.getComponent<Position2D>()!!
-        val dimensions = cursor.getComponent<Dimensions2D>()!!
-
-        position.setLocation(x - 9, y - 30 - (dimensions.height / 2))
+        cursor.x = x - 9
+        cursor.y = y - 30 - (cursor.height / 2)
     }
 
     override fun mouseDragged(e: MouseEvent) = updateCursorPosition(e.x.toDouble(), e.y.toDouble())
