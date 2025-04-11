@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component
 class PlayerMovementSystem(private val player: Player) : LogicSystem {
     override fun update(scene: Scene, now: Long, deltaTime: Long) {
         val movement = player.getComponent<PlayerMovement>()!!
-        // gravity
-        movement.vy += 0.1
         val stateHolder = player.getComponent<StateHolder>()!!
 
         if (stateHolder.state == Player.State.JUMPING) {

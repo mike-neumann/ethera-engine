@@ -211,91 +211,91 @@ open class Scene {
     }
 
     @Synchronized
-    fun keyTyped(e: KeyEvent) {
+    fun typeKey(e: KeyEvent) {
         for (keyListener in _keyListeners) {
             keyListener.keyTyped(e)
         }
     }
 
     @Synchronized
-    fun keyPressed(e: KeyEvent) {
+    fun pressKey(e: KeyEvent) {
         for (keyListener in _keyListeners) {
             keyListener.keyPressed(e)
         }
     }
 
     @Synchronized
-    fun keyReleased(e: KeyEvent) {
+    fun releaseKey(e: KeyEvent) {
         for (keyListener in _keyListeners) {
             keyListener.keyReleased(e)
         }
     }
 
     @Synchronized
-    fun mouseClicked(e: MouseEvent) {
+    fun clickMouse(e: MouseEvent) {
         for (mouseListener in _mouseListeners) {
             mouseListener.mouseClicked(e)
         }
     }
 
     @Synchronized
-    fun mousePressed(e: MouseEvent) {
+    fun pressMouse(e: MouseEvent) {
         for (mouseListener in _mouseListeners) {
             mouseListener.mousePressed(e)
         }
     }
 
     @Synchronized
-    fun mouseReleased(e: MouseEvent) {
+    fun releaseMouse(e: MouseEvent) {
         for (mouseListener in _mouseListeners) {
             mouseListener.mouseReleased(e)
         }
     }
 
     @Synchronized
-    fun mouseEntered(e: MouseEvent) {
+    fun enterMouse(e: MouseEvent) {
         for (mouseListener in _mouseListeners) {
             mouseListener.mouseEntered(e)
         }
     }
 
     @Synchronized
-    fun mouseExited(e: MouseEvent) {
+    fun exitMouse(e: MouseEvent) {
         for (mouseListener in _mouseListeners) {
             mouseListener.mouseExited(e)
         }
     }
 
     @Synchronized
-    fun mouseWheelMoved(e: MouseWheelEvent) {
+    fun moveMouseWheel(e: MouseWheelEvent) {
         for (mouseWheelListener in _mouseWheelListeners) {
             mouseWheelListener.mouseWheelMoved(e)
         }
     }
 
     @Synchronized
-    fun mouseDragged(e: MouseEvent) {
+    fun dragMouse(e: MouseEvent) {
         for (mouseMotionListener in _mouseMotionListeners) {
             mouseMotionListener.mouseDragged(e)
         }
     }
 
     @Synchronized
-    fun mouseMoved(e: MouseEvent) {
+    fun moveMouse(e: MouseEvent) {
         for (mouseMotionListener in _mouseMotionListeners) {
             mouseMotionListener.mouseMoved(e)
         }
     }
 
     @Synchronized
-    fun focusGained(e: FocusEvent) {
+    fun gainFocus(e: FocusEvent) {
         for (focusListener in _focusListeners) {
             focusListener.focusGained(e)
         }
     }
 
     @Synchronized
-    fun focusLost(e: FocusEvent) {
+    fun loseFocus(e: FocusEvent) {
         for (focusListener in _focusListeners) {
             focusListener.focusLost(e)
         }
@@ -303,13 +303,14 @@ open class Scene {
 
     @Synchronized
     fun render(g: Graphics2D, now: Long, deltaTime: Long) {
+        camera2D.translate(g)
         for (renderingSystem in _renderingSystems) {
             for (entity in _entities) {
                 renderingSystem.render(entity, this, g, now, deltaTime)
             }
             renderingSystem.render(this, g, now, deltaTime)
         }
-
+        camera2D.closeTranslation(g)
         onRender(g, now, deltaTime)
     }
 

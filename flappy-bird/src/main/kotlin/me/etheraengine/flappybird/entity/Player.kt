@@ -14,7 +14,7 @@ import org.springframework.util.ResourceUtils
 class Player : Entity(width = 50, height = 50) {
     init {
         addComponents(
-            StateHolder(State.JUMPING),
+            StateHolder(State.FALLING),
             PlayerMovement(1.0),
             Rotatable(50.0),
             Animations2D(

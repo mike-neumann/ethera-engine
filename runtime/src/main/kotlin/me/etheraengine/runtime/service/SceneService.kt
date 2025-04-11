@@ -43,10 +43,5 @@ class SceneService {
     inline fun <reified T : Scene> switchScene() = switchScene(Ethera.context.getBean(T::class.java))
     fun switchToPreviousScene() = lastScene?.let { switchScene(it) }
     fun update(now: Long, deltaTime: Long) = currentScene?.update(now, deltaTime)
-
-    fun render(g: Graphics2D, now: Long, deltaTime: Long) = currentScene?.let {
-        it.camera2D.translate(g)
-        it.render(g, now, deltaTime)
-        it.camera2D.closeTranslation(g)
-    }
+    fun render(g: Graphics2D, now: Long, deltaTime: Long) = currentScene?.render(g, now, deltaTime)
 }

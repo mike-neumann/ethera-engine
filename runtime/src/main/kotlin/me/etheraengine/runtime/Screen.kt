@@ -28,17 +28,17 @@ class Screen(val sceneService: SceneService) : JPanel(), FocusListener, KeyListe
         lastFrameTime = System.currentTimeMillis()
     }
 
-    override fun keyTyped(e: KeyEvent): Unit = run { sceneService.currentScene?.keyTyped(e) }
-    override fun keyPressed(e: KeyEvent): Unit = run { sceneService.currentScene?.keyPressed(e) }
-    override fun keyReleased(e: KeyEvent): Unit = run { sceneService.currentScene?.keyReleased(e) }
-    override fun mouseClicked(e: MouseEvent): Unit = run { sceneService.currentScene?.mouseClicked(e) }
-    override fun mousePressed(e: MouseEvent): Unit = run { sceneService.currentScene?.mousePressed(e) }
-    override fun mouseReleased(e: MouseEvent): Unit = run { sceneService.currentScene?.mouseReleased(e) }
-    override fun mouseEntered(e: MouseEvent): Unit = run { sceneService.currentScene?.mouseEntered(e) }
-    override fun mouseExited(e: MouseEvent): Unit = run { sceneService.currentScene?.mouseExited(e) }
-    override fun mouseWheelMoved(e: MouseWheelEvent): Unit = run { sceneService.currentScene?.mouseWheelMoved(e) }
-    override fun mouseDragged(e: MouseEvent): Unit = run { sceneService.currentScene?.mouseDragged(e) }
-    override fun mouseMoved(e: MouseEvent): Unit = run { sceneService.currentScene?.mouseMoved(e) }
-    override fun focusGained(e: FocusEvent): Unit = run { sceneService.currentScene?.focusGained(e) }
-    override fun focusLost(e: FocusEvent): Unit = run { sceneService.currentScene?.focusLost(e) }
+    override fun keyTyped(e: KeyEvent): Unit = run { sceneService.currentScene?.typeKey(e) }
+    override fun keyPressed(e: KeyEvent): Unit = run { sceneService.currentScene?.pressKey(e) }
+    override fun keyReleased(e: KeyEvent): Unit = run { sceneService.currentScene?.releaseKey(e) }
+    override fun mouseClicked(e: MouseEvent): Unit = run { sceneService.currentScene?.clickMouse(e) }
+    override fun mousePressed(e: MouseEvent): Unit = run { sceneService.currentScene?.pressMouse(e) }
+    override fun mouseReleased(e: MouseEvent): Unit = run { sceneService.currentScene?.releaseMouse(e) }
+    override fun mouseEntered(e: MouseEvent): Unit = run { sceneService.currentScene?.enterMouse(e) }
+    override fun mouseExited(e: MouseEvent): Unit = run { sceneService.currentScene?.exitMouse(e) }
+    override fun mouseWheelMoved(e: MouseWheelEvent): Unit = run { sceneService.currentScene?.moveMouseWheel(e) }
+    override fun mouseDragged(e: MouseEvent): Unit = run { sceneService.currentScene?.dragMouse(e) }
+    override fun mouseMoved(e: MouseEvent): Unit = run { sceneService.currentScene?.moveMouse(e) }
+    override fun focusGained(e: FocusEvent): Unit = run { sceneService.currentScene?.gainFocus(e) }
+    override fun focusLost(e: FocusEvent): Unit = run { sceneService.currentScene?.loseFocus(e) }
 }
