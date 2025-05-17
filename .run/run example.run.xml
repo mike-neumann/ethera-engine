@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="run example" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="ethera.example.main" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="me.etheraengine.example.ExampleGame" />
-    <method v="2">
-      <option name="Make" enabled="true" />
-    </method>
-  </configuration>
-</component>

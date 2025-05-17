@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.spring)
     alias(libs.plugins.spring.dependencyManagement)
     alias(libs.plugins.spring.boot)
-    `java-library`
-    `maven-publish`
-    application
+    alias(libs.plugins.javaLibrary)
+    alias(libs.plugins.application)
+    alias(libs.plugins.mavenPublish)
 }
 
 repositories {
@@ -17,10 +18,13 @@ subprojects {
     group = "me.etheraengine"
     version = "1.0-SNAPSHOT"
 
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.kotlin.kapt")
+    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+    apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "org.springframework.boot")
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
-    apply(plugin = "application")
-    apply(plugin = "kotlin")
 
     repositories {
         mavenLocal()
