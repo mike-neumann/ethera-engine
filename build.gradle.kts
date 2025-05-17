@@ -1,9 +1,16 @@
 plugins {
+    alias(libs.plugins.jvm)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.spring.dependencyManagement)
+    alias(libs.plugins.spring.boot)
     `java-library`
     `maven-publish`
     application
-    kotlin("jvm")
-    kotlin("kapt")
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
 }
 
 subprojects {
@@ -21,11 +28,10 @@ subprojects {
     }
 
     dependencies {
-        api("org.springframework.boot:spring-boot-starter:3.3.1")
+        api(rootProject.libs.bundles.api)
 //        implementation("org.lwjgl:lwjgl:3.3.1")
 //        implementation("org.lwjgl:lwjgl-opengl:3.3.1")
 //        implementation("org.lwjgl:lwjgl-glfw:3.3.1")
-//        implementation("me.xra1ny.essentia:essentia-configure:1.0")
 //        implementation("com.badlogicgames.gdx:gdx-box2d:1.11.0")
 //
 //        // LWJGL Natives (Ensure proper OpenGL support across platforms)
